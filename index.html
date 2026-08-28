@@ -1,589 +1,370 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sanvi Admin Portal</title>
+<!-- ================= MASTER SHEET ================= -->
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-  font-family:Arial,Helvetica,sans-serif;
-  background:#f4f6f8;
-  color:#17202a;
-}
-button,input,select{font:inherit}
-button{cursor:pointer}
-
-.login{
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:20px;
-}
-.login-box{
-  width:100%;
-  max-width:400px;
-  background:white;
-  padding:30px;
-  border-radius:18px;
-  box-shadow:0 10px 35px #0002;
-}
-.logo{
-  text-align:center;
-  font-size:32px;
-  font-weight:bold;
-  margin-bottom:8px;
-}
-.subtitle{
-  text-align:center;
-  color:#68737d;
-  margin-bottom:25px;
-}
-label{
-  display:block;
-  margin:14px 0 7px;
-  font-weight:bold;
-}
-input,select{
-  width:100%;
-  padding:12px;
-  border:1px solid #d7dce1;
-  border-radius:9px;
-  outline:none;
-}
-input:focus,select:focus{border-color:#246bfd}
-
-.btn{
-  border:0;
-  border-radius:9px;
-  padding:12px 18px;
-  background:#246bfd;
-  color:white;
-  font-weight:bold;
-}
-.btn.full{width:100%;margin-top:20px}
-.btn.secondary{background:#68737d}
-.btn.danger{background:#dc3545}
-.btn.success{background:#198754}
-
-.forgot{
-  text-align:right;
-  margin-top:12px;
-  color:#246bfd;
-  cursor:pointer;
+.master-sheet {
+  padding: 18px;
+  background: #f5f7fb;
+  border-radius: 14px;
+  margin-top: 20px;
 }
 
-.app{display:none;min-height:100vh}
-.sidebar{
-  position:fixed;
-  left:0;
-  top:0;
-  bottom:0;
-  width:245px;
-  background:#111827;
-  color:white;
-  padding:22px 15px;
-}
-.brand{
-  font-size:24px;
-  font-weight:bold;
-  padding:10px 12px 25px;
-}
-.nav button{
-  width:100%;
-  background:transparent;
-  color:#d1d5db;
-  border:0;
-  text-align:left;
-  padding:13px;
-  margin:3px 0;
-  border-radius:8px;
-}
-.nav button:hover,.nav button.active{
-  background:#2563eb;
-  color:white;
+.master-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
 }
 
-.main{
-  margin-left:245px;
-  padding:25px;
-}
-.topbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:25px;
-}
-.menu-btn{display:none}
-
-.page{display:none}
-.page.active{display:block}
-
-.cards{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:18px;
-}
-.card{
-  background:white;
-  border-radius:14px;
-  padding:20px;
-  box-shadow:0 3px 15px #0000000d;
-}
-.card small{color:#69737d}
-.card h2{margin-top:8px}
-
-.panel{
-  background:white;
-  padding:20px;
-  border-radius:14px;
-  margin-top:20px;
-  box-shadow:0 3px 15px #0000000d;
-}
-.panel-head{
-  display:flex;
-  justify-content:space-between;
-  gap:15px;
-  align-items:center;
-  margin-bottom:18px;
-}
-.search{max-width:300px}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-}
-th,td{
-  padding:13px 10px;
-  border-bottom:1px solid #e5e7eb;
-  text-align:left;
-}
-th{background:#f8fafc}
-
-.badge{
-  padding:5px 9px;
-  border-radius:20px;
-  font-size:12px;
-  background:#e8f0ff;
-  color:#245bd7;
+.master-head h2 {
+  margin: 0;
+  font-size: 22px;
 }
 
-.stats{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:15px;
-  margin-top:15px;
-}
-.stat-box{
-  padding:18px;
-  background:#f8fafc;
-  border-radius:10px;
+.master-controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
-.notice{
-  padding:14px;
-  background:#fff3cd;
-  border-radius:9px;
-  margin-top:15px;
+.master-controls input,
+.master-controls select,
+.master-controls button {
+  padding: 10px 12px;
+  border: 1px solid #d5dbe5;
+  border-radius: 8px;
+  font-size: 14px;
 }
 
-@media(max-width:900px){
-  .sidebar{
-    transform:translateX(-100%);
-    transition:.25s;
-    z-index:10;
+.master-controls button {
+  background: #17202a;
+  color: white;
+  cursor: pointer;
+  border: none;
+}
+
+.master-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  background: white;
+  border-radius: 10px;
+}
+
+.master-table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 900px;
+}
+
+.master-table th,
+.master-table td {
+  border: 1px solid #b9c3d0;
+  text-align: left;
+  padding: 6px;
+}
+
+.master-table th {
+  background: #eef2f7;
+  font-size: 12px;
+}
+
+.master-table td {
+  height: 55px;
+  min-width: 85px;
+  vertical-align: top;
+  position: relative;
+}
+
+.master-number {
+  font-size: 11px;
+  color: #687386;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.master-input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 0;
+  outline: none;
+  font-size: 17px;
+  font-weight: 600;
+  background: transparent;
+}
+
+.master-total {
+  background: #f0f3f7;
+  font-weight: bold;
+  text-align: center !important;
+  vertical-align: middle !important;
+  min-width: 80px;
+}
+
+.master-summary {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  padding: 12px;
+  font-weight: bold;
+  background: white;
+  border-top: 2px solid #cbd3df;
+}
+
+@media (max-width: 600px) {
+  .master-sheet {
+    padding: 10px;
   }
-  .sidebar.open{transform:translateX(0)}
-  .main{margin-left:0;padding:15px}
-  .menu-btn{
-    display:block;
-    background:#111827;
-    color:white;
-    border:0;
-    border-radius:8px;
-    padding:9px 12px;
-  }
-  .cards{grid-template-columns:repeat(2,1fr)}
-}
 
-@media(max-width:600px){
-  .cards{grid-template-columns:1fr}
-  .topbar{gap:10px}
-  .topbar h1{font-size:22px}
-  .panel{overflow-x:auto}
-  table{min-width:650px}
-  .stats{grid-template-columns:1fr}
+  .master-head h2 {
+    font-size: 18px;
+  }
+
+  .master-controls input,
+  .master-controls select,
+  .master-controls button {
+    width: 100%;
+  }
+
+  .master-table {
+    min-width: 850px;
+  }
 }
 </style>
-</head>
 
-<body>
+<section class="master-sheet" id="masterSheet">
 
-<!-- LOGIN -->
-<section class="login" id="loginPage">
-  <div class="login-box">
-    <div class="logo">SANVI</div>
-    <div class="subtitle">Staff / Admin Portal</div>
+  <div class="master-head">
+    <h2>Ruff Master Sheet</h2>
 
-    <label>Username</label>
-    <input id="username" type="text" placeholder="Enter username">
+    <div class="master-controls">
+      <input type="date" id="masterDate">
 
-    <label>Password</label>
-    <input id="password" type="password" placeholder="Enter password">
+      <select id="masterCategory">
+        <option>DL</option>
+        <option>Record</option>
+        <option>History</option>
+        <option>Other</option>
+      </select>
 
-    <button class="btn full" onclick="login()">Login</button>
-
-    <div class="forgot" onclick="forgotPassword()">
-      Forgot Username / Password?
-    </div>
-
-    <div class="notice">
-      Demo login: <b>admin</b> / <b>admin123</b>
+      <button onclick="saveMasterSheet()">Save</button>
+      <button onclick="clearMasterSheet()">Clear</button>
     </div>
   </div>
-</section>
 
-<!-- APPLICATION -->
-<section class="app" id="app">
+  <div class="master-table-wrap">
 
-  <aside class="sidebar" id="sidebar">
-    <div class="brand">SANVI</div>
+    <table class="master-table">
+      <thead>
+        <tr>
+          <th>1–10</th>
+          <th>11–20</th>
+          <th>21–30</th>
+          <th>31–40</th>
+          <th>41–50</th>
+          <th>51–60</th>
+          <th>61–70</th>
+          <th>71–80</th>
+          <th>81–90</th>
+          <th>91–100</th>
+          <th>101–110</th>
+          <th>111–120</th>
+          <th>Total</th>
+        </tr>
+      </thead>
 
-    <nav class="nav">
-      <button class="active" onclick="showPage('dashboard',this)">📊 Dashboard</button>
-      <button onclick="showPage('staff',this)">👥 Staff Management</button>
-      <button onclick="showPage('users',this)">👤 User Management</button>
-      <button onclick="showPage('records',this)">📁 Records</button>
-      <button onclick="showPage('results',this)">📋 Results / History</button>
-      <button onclick="showPage('reports',this)">📈 Reports</button>
-      <button onclick="showPage('punter',this)">🌐 Punter Portal</button>
-      <button onclick="logout()">🚪 Logout</button>
-    </nav>
-  </aside>
+      <tbody id="masterBody"></tbody>
+    </table>
 
-  <main class="main">
+  </div>
 
-    <div class="topbar">
-      <button class="menu-btn" onclick="toggleMenu()">☰</button>
-      <h1 id="pageTitle">Dashboard</h1>
-      <span>Admin ▾</span>
-    </div>
+  <div class="master-summary">
+    <span>Grand Total:</span>
+    <span id="grandTotal">0</span>
+  </div>
 
-    <!-- DASHBOARD -->
-    <div class="page active" id="dashboard">
-
-      <div class="cards">
-        <div class="card">
-          <small>Total Staff</small>
-          <h2 id="staffCount">12</h2>
-        </div>
-
-        <div class="card">
-          <small>Total Users</small>
-          <h2 id="userCount">248</h2>
-        </div>
-
-        <div class="card">
-          <small>Total Records</small>
-          <h2>1,284</h2>
-        </div>
-
-        <div class="card">
-          <small>Reports</small>
-          <h2>36</h2>
-        </div>
-      </div>
-
-      <div class="panel">
-        <h2>Admin Dashboard</h2>
-        <div class="stats">
-          <div class="stat-box">
-            <b>System Status</b>
-            <p>Online</p>
-          </div>
-          <div class="stat-box">
-            <b>Last Update</b>
-            <p>Today</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STAFF -->
-    <div class="page" id="staff">
-      <div class="panel">
-        <div class="panel-head">
-          <h2>Staff Management</h2>
-          <button class="btn" onclick="addStaff()">+ Add Staff</button>
-        </div>
-
-        <input class="search" onkeyup="filterTable('staffTable',this.value)"
-               placeholder="Search staff...">
-
-        <table id="staffTable">
-          <tr>
-            <th>Name</th><th>Username</th><th>Role</th><th>Status</th>
-          </tr>
-          <tr>
-            <td>Admin User</td>
-            <td>admin</td>
-            <td>Administrator</td>
-            <td><span class="badge">Active</span></td>
-          </tr>
-          <tr>
-            <td>Staff One</td>
-            <td>staff01</td>
-            <td>Staff</td>
-            <td><span class="badge">Active</span></td>
-          </tr>
-          <tr>
-            <td>Staff Two</td>
-            <td>staff02</td>
-            <td>Staff</td>
-            <td><span class="badge">Inactive</span></td>
-          </tr>
-        </table>
-      </div>
-    </div>
-
-    <!-- USERS -->
-    <div class="page" id="users">
-      <div class="panel">
-        <div class="panel-head">
-          <h2>User Management</h2>
-          <button class="btn" onclick="addUser()">+ Add User</button>
-        </div>
-
-        <input class="search" onkeyup="filterTable('userTable',this.value)"
-               placeholder="Search users...">
-
-        <table id="userTable">
-          <tr>
-            <th>Name</th><th>Username</th><th>Status</th><th>Created</th>
-          </tr>
-          <tr>
-            <td>Demo User</td>
-            <td>user001</td>
-            <td><span class="badge">Active</span></td>
-            <td>Today</td>
-          </tr>
-          <tr>
-            <td>Test User</td>
-            <td>user002</td>
-            <td><span class="badge">Active</span></td>
-            <td>Yesterday</td>
-          </tr>
-        </table>
-      </div>
-    </div>
-
-    <!-- RECORDS -->
-    <div class="page" id="records">
-      <div class="panel">
-        <div class="panel-head">
-          <h2>Records</h2>
-          <select onchange="filterStatus(this.value)">
-            <option value="">All Status</option>
-            <option>Active</option>
-            <option>Pending</option>
-            <option>Closed</option>
-          </select>
-        </div>
-
-        <input class="search" onkeyup="filterTable('recordTable',this.value)"
-               placeholder="Search records...">
-
-        <table id="recordTable">
-          <tr>
-            <th>ID</th><th>User</th><th>Date</th><th>Status</th>
-          </tr>
-          <tr>
-            <td>#1001</td><td>user001</td><td>29 Aug 2026</td>
-            <td><span class="badge">Active</span></td>
-          </tr>
-          <tr>
-            <td>#1002</td><td>user002</td><td>28 Aug 2026</td>
-            <td><span class="badge">Closed</span></td>
-          </tr>
-          <tr>
-            <td>#1003</td><td>user003</td><td>27 Aug 2026</td>
-            <td><span class="badge">Pending</span></td>
-          </tr>
-        </table>
-      </div>
-    </div>
-
-    <!-- RESULTS -->
-    <div class="page" id="results">
-      <div class="panel">
-        <h2>Results / History</h2>
-        <br>
-
-        <table>
-          <tr>
-            <th>Date</th>
-            <th>Reference</th>
-            <th>Status</th>
-          </tr>
-          <tr>
-            <td>29 Aug 2026</td>
-            <td>REF-1001</td>
-            <td><span class="badge">Completed</span></td>
-          </tr>
-          <tr>
-            <td>28 Aug 2026</td>
-            <td>REF-1002</td>
-            <td><span class="badge">Completed</span></td>
-          </tr>
-          <tr>
-            <td>27 Aug 2026</td>
-            <td>REF-1003</td>
-            <td><span class="badge">Archived</span></td>
-          </tr>
-        </table>
-      </div>
-    </div>
-
-    <!-- REPORTS -->
-    <div class="page" id="reports">
-      <div class="panel">
-        <h2>Reports</h2>
-        <br>
-
-        <label>Report Type</label>
-        <select>
-          <option>Daily Report</option>
-          <option>Weekly Report</option>
-          <option>Monthly Report</option>
-          <option>User Activity</option>
-          <option>Staff Activity</option>
-        </select>
-
-        <label>From Date</label>
-        <input type="date">
-
-        <label>To Date</label>
-        <input type="date">
-
-        <button class="btn" style="margin-top:18px"
-                onclick="generateReport()">
-          Generate Report
-        </button>
-      </div>
-    </div>
-
-    <!-- PUNTER PLACEHOLDER -->
-    <div class="page" id="punter">
-      <div class="panel">
-        <h2>Punter Portal</h2>
-        <p style="margin-top:12px;color:#68737d">
-          Punter portal placeholder. User-facing features can be connected
-          here later.
-        </p>
-
-        <div class="notice">
-          This is currently a UI placeholder only.
-        </div>
-      </div>
-    </div>
-
-  </main>
 </section>
 
 <script>
-function login(){
-  const user=document.getElementById("username").value.trim();
-  const pass=document.getElementById("password").value;
+(function () {
 
-  if(user==="admin" && pass==="admin123"){
-    document.getElementById("loginPage").style.display="none";
-    document.getElementById("app").style.display="block";
-  }else{
-    alert("Invalid login. Demo: admin / admin123");
+  const body = document.getElementById("masterBody");
+  const grandTotal = document.getElementById("grandTotal");
+  const dateInput = document.getElementById("masterDate");
+
+  // Current date
+  const today = new Date();
+  dateInput.value = today.toISOString().split("T")[0];
+
+  // Create 120 cells
+  // 10 columns per row
+  // Additional rows continue until 120
+  for (let row = 0; row < 10; row++) {
+
+    const tr = document.createElement("tr");
+
+    for (let col = 0; col < 12; col++) {
+
+      const number = (row * 12) + col + 1;
+
+      const td = document.createElement("td");
+
+      if (number <= 120) {
+
+        td.innerHTML = `
+          <span class="master-number">${number}</span>
+          <input
+            type="number"
+            min="0"
+            class="master-input"
+            data-number="${number}"
+            placeholder=""
+            oninput="calculateMasterTotal()"
+          >
+        `;
+
+      } else {
+
+        td.innerHTML = "";
+      }
+
+      tr.appendChild(td);
+    }
+
+    const totalTd = document.createElement("td");
+    totalTd.className = "master-total";
+    totalTd.id = "rowTotal" + row;
+    totalTd.innerText = "0";
+
+    tr.appendChild(totalTd);
+
+    body.appendChild(tr);
   }
+
+})();
+
+
+function calculateMasterTotal() {
+
+  let grand = 0;
+
+  document.querySelectorAll(".master-table tbody tr").forEach(
+    (row, rowIndex) => {
+
+      let rowTotal = 0;
+
+      row.querySelectorAll(".master-input").forEach(input => {
+
+        const value = Number(input.value);
+
+        if (!isNaN(value)) {
+          rowTotal += value;
+        }
+
+      });
+
+      const totalBox = document.getElementById(
+        "rowTotal" + rowIndex
+      );
+
+      if (totalBox) {
+        totalBox.innerText = rowTotal;
+      }
+
+      grand += rowTotal;
+    }
+  );
+
+  document.getElementById("grandTotal").innerText = grand;
 }
 
-function forgotPassword(){
-  const email=prompt("Enter registered email/username:");
-  if(email){
-    alert("Password reset request created for: "+email);
-  }
-}
 
-function logout(){
-  document.getElementById("app").style.display="none";
-  document.getElementById("loginPage").style.display="flex";
-  document.getElementById("password").value="";
-}
+function saveMasterSheet() {
 
-function toggleMenu(){
-  document.getElementById("sidebar").classList.toggle("open");
-}
+  const values = {};
 
-function showPage(id,btn){
-  document.querySelectorAll(".page").forEach(p=>{
-    p.classList.remove("active");
+  document.querySelectorAll(".master-input").forEach(input => {
+
+    values[input.dataset.number] = input.value;
+
   });
 
-  document.getElementById(id).classList.add("active");
-
-  document.querySelectorAll(".nav button").forEach(b=>{
-    b.classList.remove("active");
-  });
-
-  btn.classList.add("active");
-
-  const titles={
-    dashboard:"Dashboard",
-    staff:"Staff Management",
-    users:"User Management",
-    records:"Records",
-    results:"Results / History",
-    reports:"Reports",
-    punter:"Punter Portal"
+  const data = {
+    date: document.getElementById("masterDate").value,
+    category: document.getElementById("masterCategory").value,
+    values: values
   };
 
-  document.getElementById("pageTitle").innerText=titles[id];
+  localStorage.setItem(
+    "sanvi_master_sheet",
+    JSON.stringify(data)
+  );
 
-  document.getElementById("sidebar").classList.remove("open");
+  alert("Master Sheet saved successfully.");
 }
 
-function filterTable(tableId,value){
-  value=value.toLowerCase();
 
-  const table=document.getElementById(tableId);
-  const rows=table.getElementsByTagName("tr");
+function loadMasterSheet() {
 
-  for(let i=1;i<rows.length;i++){
-    rows[i].style.display=
-      rows[i].innerText.toLowerCase().includes(value) ? "" : "none";
+  const saved = localStorage.getItem("sanvi_master_sheet");
+
+  if (!saved) return;
+
+  try {
+
+    const data = JSON.parse(saved);
+
+    if (data.date) {
+      document.getElementById("masterDate").value = data.date;
+    }
+
+    if (data.category) {
+      document.getElementById("masterCategory").value =
+        data.category;
+    }
+
+    if (data.values) {
+
+      document.querySelectorAll(".master-input").forEach(input => {
+
+        const number = input.dataset.number;
+
+        if (data.values[number] !== undefined) {
+          input.value = data.values[number];
+        }
+
+      });
+
+    }
+
+    calculateMasterTotal();
+
+  } catch (error) {
+
+    console.log("Unable to load saved sheet.");
+
   }
 }
 
-function filterStatus(value){
-  alert(value ? "Showing: "+value : "Showing all records");
+
+function clearMasterSheet() {
+
+  if (!confirm("Clear all entries?")) return;
+
+  document.querySelectorAll(".master-input").forEach(input => {
+    input.value = "";
+  });
+
+  calculateMasterTotal();
+
+  localStorage.removeItem("sanvi_master_sheet");
 }
 
-function addStaff(){
-  const name=prompt("Staff name:");
-  if(name){
-    alert("Staff '"+name+"' added to demo list.");
-  }
-}
 
-function addUser(){
-  const name=prompt("User name:");
-  if(name){
-    alert("User '"+name+"' added to demo list.");
-  }
-}
+// Load saved data
+setTimeout(loadMasterSheet, 100);
 
-function generateReport(){
-  alert("Demo report generated successfully.");
-}
 </script>
 
-</body>
-  </html>
+<!-- ================= END MASTER SHEET ================= -->
