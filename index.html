@@ -1,370 +1,1660 @@
-<!-- ================= MASTER SHEET ================= -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SANVI Admin</title>
 
 <style>
-.master-sheet {
-  padding: 18px;
-  background: #f5f7fb;
-  border-radius: 14px;
-  margin-top: 20px;
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#eef5fa;
+ color:#18324b
+}
+button,input,select{font:inherit}
+button{
+ border:0;
+ border-radius:7px;
+ padding:10px 14px;
+ cursor:pointer
+}
+.primary{background:#159447;color:white}
+.blue{background:#16679d;color:white}
+.danger{background:#c94a4a;color:white}
+.light{background:#e8f0f6;color:#18324b}
+
+#login{
+ min-height:100vh;
+ display:grid;
+ place-items:center;
+ padding:20px
+}
+.loginbox{
+ width:min(420px,100%);
+ background:white;
+ padding:30px;
+ border-radius:18px;
+ box-shadow:0 10px 35px #0002
+}
+.logo{
+ text-align:center;
+ font-size:30px;
+ font-weight:900;
+ color:#16679d
+}
+.tag{
+ text-align:center;
+ color:#70859a;
+ margin:5px 0 25px
+}
+label{
+ font-weight:bold;
+ font-size:13px
+}
+input,select{
+ width:100%;
+ padding:11px;
+ margin:6px 0 12px;
+ border:1px solid #cbd9e5;
+ border-radius:7px;
+ background:white
+}
+.hint{
+ background:#fff6d8;
+ padding:10px;
+ border-radius:7px;
+ font-size:13px;
+ margin-top:14px
 }
 
-.master-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 15px;
+#app{display:none}
+
+.top{
+ height:62px;
+ background:#0e4f7a;
+ color:white;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ padding:0 18px;
+ position:sticky;
+ top:0;
+ z-index:20
+}
+.top .logo{
+ color:white;
+ font-size:21px
 }
 
-.master-head h2 {
-  margin: 0;
-  font-size: 22px;
+.wrap{
+ max-width:1250px;
+ margin:auto;
+ padding:18px
 }
 
-.master-controls {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+.layout{
+ display:grid;
+ grid-template-columns:225px 1fr;
+ gap:18px
 }
 
-.master-controls input,
-.master-controls select,
-.master-controls button {
-  padding: 10px 12px;
-  border: 1px solid #d5dbe5;
-  border-radius: 8px;
-  font-size: 14px;
+aside{
+ background:white;
+ border-radius:12px;
+ padding:10px;
+ height:max-content;
+ box-shadow:0 2px 12px #0001
 }
 
-.master-controls button {
-  background: #17202a;
-  color: white;
-  cursor: pointer;
-  border: none;
+aside button{
+ display:block;
+ width:100%;
+ text-align:left;
+ margin:3px 0;
+ background:#f1f6fa;
+ color:#0e4f7a
 }
 
-.master-table-wrap {
-  width: 100%;
-  overflow-x: auto;
-  background: white;
-  border-radius: 10px;
+aside button.active{
+ background:#dcecf8;
+ border-left:4px solid #159447;
+ font-weight:bold
 }
 
-.master-table {
-  border-collapse: collapse;
-  width: 100%;
-  min-width: 900px;
+.page{display:none}
+.page.active{display:block}
+
+.card{
+ background:white;
+ border-radius:12px;
+ padding:18px;
+ margin-bottom:18px;
+ box-shadow:0 2px 12px #0001
 }
 
-.master-table th,
-.master-table td {
-  border: 1px solid #b9c3d0;
-  text-align: left;
-  padding: 6px;
+.stats{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:12px
 }
 
-.master-table th {
-  background: #eef2f7;
-  font-size: 12px;
+.stat{
+ background:#edf6ff;
+ border-left:5px solid #16679d;
+ padding:16px;
+ border-radius:10px
 }
 
-.master-table td {
-  height: 55px;
-  min-width: 85px;
-  vertical-align: top;
-  position: relative;
+.stat b{
+ display:block;
+ font-size:25px;
+ margin-top:7px
 }
 
-.master-number {
-  font-size: 11px;
-  color: #687386;
-  font-weight: bold;
-  display: block;
-  margin-bottom: 5px;
+.gridform{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:12px
 }
 
-.master-input {
-  width: 100%;
-  box-sizing: border-box;
-  border: 0;
-  outline: none;
-  font-size: 17px;
-  font-weight: 600;
-  background: transparent;
+.toolbar{
+ display:flex;
+ gap:9px;
+ flex-wrap:wrap
 }
 
-.master-total {
-  background: #f0f3f7;
-  font-weight: bold;
-  text-align: center !important;
-  vertical-align: middle !important;
-  min-width: 80px;
+.toolbar>*{
+ flex:1;
+ min-width:140px
 }
 
-.master-summary {
-  display: flex;
-  justify-content: flex-end;
-  gap: 20px;
-  padding: 12px;
-  font-weight: bold;
-  background: white;
-  border-top: 2px solid #cbd3df;
+table{
+ width:100%;
+ border-collapse:collapse
 }
 
-@media (max-width: 600px) {
-  .master-sheet {
-    padding: 10px;
-  }
+th,td{
+ padding:9px;
+ border-bottom:1px solid #e0e8ef;
+ text-align:left
+}
 
-  .master-head h2 {
-    font-size: 18px;
-  }
+th{
+ background:#16679d;
+ color:white
+}
 
-  .master-controls input,
-  .master-controls select,
-  .master-controls button {
-    width: 100%;
-  }
+.scroll{
+ overflow:auto
+}
 
-  .master-table {
-    min-width: 850px;
-  }
+.notice{
+ padding:11px;
+ background:#eef8f1;
+ border-left:4px solid #159447;
+ border-radius:6px;
+ margin-bottom:14px;
+ font-size:13px
+}
+
+/* 120 CELL GRID */
+
+.mastergrid{
+ display:grid;
+ grid-template-columns:repeat(10,minmax(65px,1fr));
+ border:1px solid #d65a5a
+}
+
+.box{
+ height:78px;
+ border:1px solid #d65a5a;
+ background:white;
+ padding:6px;
+ cursor:pointer
+}
+
+.box:hover{
+ background:#f2fbf6
+}
+
+.lbl{
+ font-size:12px;
+ color:#963838;
+ font-weight:800
+}
+
+.val{
+ font-size:18px;
+ font-weight:800;
+ margin-top:12px
+}
+
+.box.sel{
+ outline:3px solid #159447;
+ outline-offset:-3px
+}
+
+@media(max-width:850px){
+
+ .layout{
+  grid-template-columns:1fr
+ }
+
+ aside{
+  display:flex;
+  overflow:auto;
+  gap:5px
+ }
+
+ aside button{
+  min-width:max-content
+ }
+
+ .stats{
+  grid-template-columns:repeat(2,1fr)
+ }
+
+ .gridform{
+  grid-template-columns:1fr
+ }
+
+ .mastergrid{
+  grid-template-columns:repeat(5,minmax(68px,1fr))
+ }
+
+ .top{
+  height:58px
+ }
 }
 </style>
+</head>
 
-<section class="master-sheet" id="masterSheet">
+<body>
 
-  <div class="master-head">
-    <h2>Ruff Master Sheet</h2>
+<div id="login">
 
-    <div class="master-controls">
-      <input type="date" id="masterDate">
+<div class="loginbox">
 
-      <select id="masterCategory">
-        <option>DL</option>
-        <option>Record</option>
-        <option>History</option>
-        <option>Other</option>
-      </select>
+<div class="logo">SANVI</div>
 
-      <button onclick="saveMasterSheet()">Save</button>
-      <button onclick="clearMasterSheet()">Clear</button>
-    </div>
-  </div>
+<div class="tag">
+ADMIN RECORD MANAGEMENT
+</div>
 
-  <div class="master-table-wrap">
+<label>Username</label>
 
-    <table class="master-table">
-      <thead>
-        <tr>
-          <th>1–10</th>
-          <th>11–20</th>
-          <th>21–30</th>
-          <th>31–40</th>
-          <th>41–50</th>
-          <th>51–60</th>
-          <th>61–70</th>
-          <th>71–80</th>
-          <th>81–90</th>
-          <th>91–100</th>
-          <th>101–110</th>
-          <th>111–120</th>
-          <th>Total</th>
-        </tr>
-      </thead>
+<input
+ id="u"
+ placeholder="Username"
+>
 
-      <tbody id="masterBody"></tbody>
-    </table>
+<label>Password</label>
 
-  </div>
+<input
+ id="p"
+ type="password"
+ placeholder="Password"
+>
 
-  <div class="master-summary">
-    <span>Grand Total:</span>
-    <span id="grandTotal">0</span>
-  </div>
+<button
+ class="primary"
+ style="width:100%"
+ onclick="login()"
+>
+LOGIN
+</button>
+
+<div
+ id="err"
+ style="color:#c94a4a;text-align:center;margin-top:10px"
+></div>
+
+<div class="hint">
+Demo Login:
+<b>admin</b> /
+<b>admin123</b>
+</div>
+
+</div>
+</div>
+
+<div id="app">
+
+<header class="top">
+
+<div>
+
+<div class="logo">
+SANVI
+</div>
+
+<small>
+ADMIN RECORD MANAGEMENT
+</small>
+
+</div>
+
+<button
+ class="light"
+ onclick="logout()"
+>
+Logout
+</button>
+
+</header>
+
+<div class="wrap">
+
+<div class="layout">
+
+<aside>
+
+<button
+ class="active"
+ onclick="page('dash',this)"
+>
+⌂ Dashboard
+</button>
+
+<button
+ onclick="page('master',this)"
+>
+▣ Master
+</button>
+
+<button
+ onclick="page('records',this)"
+>
+▤ Record Master
+</button>
+
+<button
+ onclick="page('grid',this)"
+>
+▦ 1–120 Grid
+</button>
+
+<button
+ onclick="page('reports',this)"
+>
+▥ Reports
+</button>
+
+<button
+ onclick="page('ledger',this)"
+>
+₹ Ledger
+</button>
+
+</aside>
+
+<main>
+
+<section
+ id="dash"
+ class="page active"
+>
+
+<div class="card">
+
+<h2>
+Dashboard
+</h2>
+
+<div class="stats">
+
+<div class="stat">
+Customers
+<b id="c1">0</b>
+</div>
+
+<div class="stat">
+Agents
+<b id="c2">0</b>
+</div>
+
+<div class="stat">
+Companies
+<b id="c3">0</b>
+</div>
+
+<div class="stat">
+Records
+<b id="c4">0</b>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+
+<h3>
+Recent Records
+</h3>
+
+<div id="recent">
+No records yet.
+</div>
+
+</div>
 
 </section>
 
+<section
+ id="master"
+ class="page"
+>
+
+<div class="card">
+
+<h2>
+Master
+</h2>
+
+<div class="gridform">
+
+<div>
+
+<h3>
+Customers
+</h3>
+
+<input
+ id="customer"
+ placeholder="Customer name"
+>
+
+<button
+ class="primary"
+ onclick="add('customers','customer')"
+>
+Add
+</button>
+
+<ul id="customers"></ul>
+
+</div>
+
+<div>
+
+<h3>
+Agents
+</h3>
+
+<input
+ id="agent"
+ placeholder="Agent name"
+>
+
+<button
+ class="primary"
+ onclick="add('agents','agent')"
+>
+Add
+</button>
+
+<ul id="agents"></ul>
+
+</div>
+
+<div>
+
+<h3>
+Companies
+</h3>
+
+<input
+ id="company"
+ placeholder="Company name"
+>
+
+<button
+ class="primary"
+ onclick="add('companies','company')"
+>
+Add
+</button>
+
+<ul id="companies"></ul>
+
+</div>
+
+</div>
+
+</div>
+
+  </section>
+  <section id="records" class="page">
+
+<div class="card">
+
+<h2>Game / Record Master</h2>
+
+<div class="gridform">
+
+<div>
+<label>Date</label>
+<input id="rd" type="date">
+</div>
+
+<div>
+<label>Title</label>
+<input id="rt" placeholder="Record title">
+</div>
+
+<div>
+<label>Number / Result</label>
+<input id="rv" placeholder="Record value">
+</div>
+
+</div>
+
+<button
+ class="primary"
+ onclick="saveRecord()"
+>
+Save Record
+</button>
+
+</div>
+
+
+<div class="card">
+
+<h3>Records / History</h3>
+
+<div
+ class="scroll"
+ id="recordsTable"
+>
+No records yet.
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= 120 GRID ================= -->
+
+<section id="grid" class="page">
+
+<div class="card">
+
+<h2>
+1–120 Master Grid
+</h2>
+
+<div class="notice">
+Record-entry grid: A1–A0, B1–B0, C1–C0 … L1–L0.
+</div>
+
+<div class="toolbar">
+
+<div>
+<label>Date</label>
+<input
+ id="gd"
+ type="date"
+>
+</div>
+
+<button
+ class="blue"
+ onclick="loadGrid()"
+>
+Load
+</button>
+
+<button
+ class="blue"
+ onclick="clearGrid()"
+>
+Clear Date
+</button>
+
+</div>
+
+
+<div
+ id="mg"
+ class="mastergrid"
+>
+</div>
+
+
+<div
+ class="toolbar"
+ style="margin-top:12px"
+>
+
+<div>
+<label>Selected Cell</label>
+
+<input
+ id="sel"
+ placeholder="Select a cell"
+ readonly
+>
+</div>
+
+<div>
+<label>Record Value</label>
+
+<input
+ id="gv"
+ placeholder="Enter value"
+>
+</div>
+
+<button
+ class="primary"
+ onclick="saveCell()"
+>
+Save Cell
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= REPORTS ================= -->
+
+<section id="reports" class="page">
+
+<div class="card">
+
+<h2>
+Daily / Monthly Reports
+</h2>
+
+<div class="toolbar">
+
+<div>
+<label>Date</label>
+
+<input
+ id="repd"
+ type="date"
+>
+</div>
+
+<button
+ class="blue"
+ onclick="daily()"
+>
+Daily Report
+</button>
+
+<button
+ class="blue"
+ onclick="monthly()"
+>
+Monthly Report
+</button>
+
+</div>
+
+<div id="out"></div>
+
+</div>
+
+</section>
+
+
+<!-- ================= LEDGER ================= -->
+
+<section id="ledger" class="page">
+
+<div class="card">
+
+<h2>
+Ledger & Payment Records
+</h2>
+
+<div class="gridform">
+
+<div>
+<label>Party / Customer</label>
+
+<input
+ id="pn"
+ placeholder="Party name"
+>
+</div>
+
+<div>
+<label>Amount</label>
+
+<input
+ id="pa"
+ type="number"
+ placeholder="Amount"
+>
+</div>
+
+<div>
+<label>Note</label>
+
+<input
+ id="px"
+ placeholder="Payment note"
+>
+</div>
+
+</div>
+
+<button
+ class="primary"
+ onclick="pay()"
+>
+Add Payment
+</button>
+
+</div>
+
+
+<div class="card">
+
+<div
+ class="scroll"
+ id="payTable"
+>
+No payment records yet.
+</div>
+
+</div>
+
+</section>
+
+
+</main>
+
+</div>
+
+</div>
+
+</div>
+
+
 <script>
-(function () {
 
-  const body = document.getElementById("masterBody");
-  const grandTotal = document.getElementById("grandTotal");
-  const dateInput = document.getElementById("masterDate");
+/* ================= DATABASE ================= */
 
-  // Current date
-  const today = new Date();
-  dateInput.value = today.toISOString().split("T")[0];
+const K = "sanvi_record_manager";
 
-  // Create 120 cells
-  // 10 columns per row
-  // Additional rows continue until 120
-  for (let row = 0; row < 10; row++) {
+let db = JSON.parse(
+ localStorage.getItem(K) ||
+ '{"customers":[],"agents":[],"companies":[],"records":[],"payments":[],"grid":{}}'
+);
 
-    const tr = document.createElement("tr");
+let selected = "";
 
-    for (let col = 0; col < 12; col++) {
-
-      const number = (row * 12) + col + 1;
-
-      const td = document.createElement("td");
-
-      if (number <= 120) {
-
-        td.innerHTML = `
-          <span class="master-number">${number}</span>
-          <input
-            type="number"
-            min="0"
-            class="master-input"
-            data-number="${number}"
-            placeholder=""
-            oninput="calculateMasterTotal()"
-          >
-        `;
-
-      } else {
-
-        td.innerHTML = "";
-      }
-
-      tr.appendChild(td);
-    }
-
-    const totalTd = document.createElement("td");
-    totalTd.className = "master-total";
-    totalTd.id = "rowTotal" + row;
-    totalTd.innerText = "0";
-
-    tr.appendChild(totalTd);
-
-    body.appendChild(tr);
-  }
-
-})();
+const today =
+ new Date().toISOString().slice(0,10);
 
 
-function calculateMasterTotal() {
+/* ================= DEFAULT DATES ================= */
 
-  let grand = 0;
+document.getElementById("rd").value = today;
 
-  document.querySelectorAll(".master-table tbody tr").forEach(
-    (row, rowIndex) => {
+document.getElementById("gd").value = today;
 
-      let rowTotal = 0;
+document.getElementById("repd").value = today;
 
-      row.querySelectorAll(".master-input").forEach(input => {
 
-        const value = Number(input.value);
+/* ================= SAVE DATABASE ================= */
 
-        if (!isNaN(value)) {
-          rowTotal += value;
-        }
+function save(){
 
-      });
+ localStorage.setItem(
+  K,
+  JSON.stringify(db)
+ );
 
-      const totalBox = document.getElementById(
-        "rowTotal" + rowIndex
-      );
+ render();
 
-      if (totalBox) {
-        totalBox.innerText = rowTotal;
-      }
-
-      grand += rowTotal;
-    }
-  );
-
-  document.getElementById("grandTotal").innerText = grand;
 }
 
 
-function saveMasterSheet() {
+/* ================= LOGIN ================= */
 
-  const values = {};
+function login(){
 
-  document.querySelectorAll(".master-input").forEach(input => {
+ if(
+  document.getElementById("u").value === "admin" &&
+  document.getElementById("p").value === "admin123"
+ ){
 
-    values[input.dataset.number] = input.value;
+  document.getElementById("login").style.display =
+   "none";
+
+  document.getElementById("app").style.display =
+   "block";
+
+  render();
+
+ }else{
+
+  document.getElementById("err").textContent =
+   "Invalid username or password";
+
+ }
+
+}
+
+
+/* ================= LOGOUT ================= */
+
+function logout(){
+
+ document.getElementById("app").style.display =
+  "none";
+
+ document.getElementById("login").style.display =
+  "grid";
+
+}
+
+
+/* ================= PAGE NAVIGATION ================= */
+
+function page(id,button){
+
+ document
+  .querySelectorAll(".page")
+  .forEach(function(x){
+
+   x.classList.remove("active");
 
   });
 
-  const data = {
-    date: document.getElementById("masterDate").value,
-    category: document.getElementById("masterCategory").value,
-    values: values
-  };
 
-  localStorage.setItem(
-    "sanvi_master_sheet",
-    JSON.stringify(data)
-  );
-
-  alert("Master Sheet saved successfully.");
-}
+ document
+  .getElementById(id)
+  .classList.add("active");
 
 
-function loadMasterSheet() {
+ document
+  .querySelectorAll("aside button")
+  .forEach(function(x){
 
-  const saved = localStorage.getItem("sanvi_master_sheet");
+   x.classList.remove("active");
 
-  if (!saved) return;
-
-  try {
-
-    const data = JSON.parse(saved);
-
-    if (data.date) {
-      document.getElementById("masterDate").value = data.date;
-    }
-
-    if (data.category) {
-      document.getElementById("masterCategory").value =
-        data.category;
-    }
-
-    if (data.values) {
-
-      document.querySelectorAll(".master-input").forEach(input => {
-
-        const number = input.dataset.number;
-
-        if (data.values[number] !== undefined) {
-          input.value = data.values[number];
-        }
-
-      });
-
-    }
-
-    calculateMasterTotal();
-
-  } catch (error) {
-
-    console.log("Unable to load saved sheet.");
-
-  }
-}
-
-
-function clearMasterSheet() {
-
-  if (!confirm("Clear all entries?")) return;
-
-  document.querySelectorAll(".master-input").forEach(input => {
-    input.value = "";
   });
 
-  calculateMasterTotal();
 
-  localStorage.removeItem("sanvi_master_sheet");
+ button.classList.add("active");
+
+
+ if(id === "grid"){
+
+  loadGrid();
+
+ }
+
 }
 
 
-// Load saved data
-setTimeout(loadMasterSheet, 100);
+/* ================= MASTER ADD ================= */
+
+function add(type,id){
+
+ let value =
+  document.getElementById(id).value.trim();
+
+ if(!value){
+
+  alert("Please enter a name");
+
+  return;
+
+ }
+
+ db[type].push(value);
+
+ document.getElementById(id).value = "";
+
+ save();
+
+}
+
+
+/* ================= MASTER DELETE ================= */
+
+function remove(type,index){
+
+ if(
+  confirm("Delete this record?")
+ ){
+
+  db[type].splice(index,1);
+
+  save();
+
+ }
+
+}
+
+
+/* ================= MASTER LIST ================= */
+
+function list(type,id){
+
+ document.getElementById(id).innerHTML =
+  db[type].map(function(x,i){
+
+   return `
+   <li style="margin:7px 0">
+    ${esc(x)}
+    <button
+     class="danger"
+     onclick="remove('${type}',${i})"
+     style="padding:4px 8px"
+    >
+     ×
+    </button>
+   </li>
+   `;
+
+  }).join("");
+
+}
+
+
+/* ================= RECORD SAVE ================= */
+
+function saveRecord(){
+
+ let date =
+  document.getElementById("rd").value;
+
+ let title =
+  document.getElementById("rt").value.trim();
+
+ let value =
+  document.getElementById("rv").value.trim();
+
+
+ if(!date || !title){
+
+  alert(
+   "Date and title are required"
+  );
+
+  return;
+
+ }
+
+
+ db.records.unshift({
+
+  id:Date.now(),
+
+  date:date,
+
+  title:title,
+
+  value:value
+
+ });
+
+
+ document.getElementById("rt").value = "";
+
+ document.getElementById("rv").value = "";
+
+ save();
+
+}
+
+
+/* ================= RECORD DELETE ================= */
+
+function delRec(id){
+
+ if(
+  confirm("Delete this record?")
+ ){
+
+  db.records =
+   db.records.filter(function(x){
+
+    return x.id !== id;
+
+   });
+
+  save();
+
+ }
+
+}
+
+
+/* ================= RECORD TABLE ================= */
+
+function renderRecords(){
+
+ if(!db.records.length){
+
+  document.getElementById("recordsTable").innerHTML =
+   "No records yet.";
+
+  document.getElementById("recent").innerHTML =
+   "No records yet.";
+
+  return;
+
+ }
+
+
+ let html = `
+
+ <table>
+
+ <tr>
+
+ <th>Date</th>
+
+ <th>Title</th>
+
+ <th>Number / Result</th>
+
+ <th>Action</th>
+
+ </tr>
+
+ `;
+
+
+ db.records.forEach(function(r){
+
+  html += `
+
+  <tr>
+
+  <td>${esc(r.date)}</td>
+
+  <td>${esc(r.title)}</td>
+
+  <td>${esc(r.value)}</td>
+
+  <td>
+
+  <button
+   class="danger"
+   onclick="delRec(${r.id})"
+  >
+   Delete
+  </button>
+
+  </td>
+
+  </tr>
+
+  `;
+
+ });
+
+
+ html += "</table>";
+
+
+ document.getElementById("recordsTable").innerHTML =
+  html;
+
+
+ document.getElementById("recent").innerHTML =
+  html;
+
+}
+
+
+/* ================= BUILD 120 GRID ================= */
+
+function buildGrid(){
+
+ let grid =
+  document.getElementById("mg");
+
+ grid.innerHTML = "";
+
+
+ let letters =
+  "ABCDEFGHIJKL".split("");
+
+
+ letters.forEach(function(letter){
+
+  for(
+   let n = 1;
+   n <= 10;
+   n++
+  ){
+
+   let label =
+    letter +
+    (
+     n === 10
+      ? "0"
+      : n
+    );
+
+
+   let box =
+    document.createElement("div");
+
+
+   box.className = "box";
+
+   box.dataset.label = label;
+
+
+   box.innerHTML = `
+
+   <div class="lbl">
+    ${label}
+   </div>
+
+   <div class="val">
+   </div>
+
+   `;
+
+
+   box.onclick = function(){
+
+    selectCell(box);
+
+   };
+
+
+   grid.appendChild(box);
+
+  }
+
+ });
+
+}
+
+
+/* ================= LOAD GRID ================= */
+
+function loadGrid(){
+
+ buildGrid();
+
+
+ let date =
+  document.getElementById("gd").value;
+
+
+ let values =
+  db.grid[date] || {};
+
+
+ document
+  .querySelectorAll(".box")
+  .forEach(function(box){
+
+   let label =
+    box.dataset.label;
+
+   box.querySelector(".val").textContent =
+    values[label] || "";
+
+  });
+
+}
+
+
+/* ================= SELECT CELL ================= */
+
+function selectCell(box){
+
+ document
+  .querySelectorAll(".box")
+  .forEach(function(x){
+
+   x.classList.remove("sel");
+
+  });
+
+
+ box.classList.add("sel");
+
+
+ selected =
+  box.dataset.label;
+
+
+ document.getElementById("sel").value =
+  selected;
+
+
+ let date =
+  document.getElementById("gd").value;
+
+
+ let values =
+  db.grid[date] || {};
+
+
+ document.getElementById("gv").value =
+  values[selected] || "";
+
+}
+
+
+/* ================= SAVE GRID CELL ================= */
+
+function saveCell(){
+
+ if(!selected){
+
+  alert(
+   "Please select a grid cell first"
+  );
+
+  return;
+
+ }
+
+
+ let date =
+  document.getElementById("gd").value;
+
+
+ if(!db.grid[date]){
+
+  db.grid[date] = {};
+
+ }
+
+
+ db.grid[date][selected] =
+  document.getElementById("gv").value.trim();
+
+
+ save();
+
+ loadGrid();
+
+}
+
+
+/* ================= CLEAR GRID ================= */
+
+function clearGrid(){
+
+ let date =
+  document.getElementById("gd").value;
+
+
+ if(
+  !confirm(
+   "Clear all grid values for this date?"
+  )
+ ){
+
+  return;
+
+ }
+
+
+ delete db.grid[date];
+
+ selected = "";
+
+ document.getElementById("sel").value = "";
+
+ document.getElementById("gv").value = "";
+
+ save();
+
+ loadGrid();
+
+}
+
+
+/* ================= PAYMENT ================= */
+
+function pay(){
+
+ let name =
+  document.getElementById("pn").value.trim();
+
+ let amount =
+  document.getElementById("pa").value;
+
+ let note =
+  document.getElementById("px").value.trim();
+
+
+ if(!name || !amount){
+
+  alert(
+   "Party and amount are required"
+  );
+
+  return;
+
+ }
+
+
+ db.payments.unshift({
+
+  id:Date.now(),
+
+  date:today,
+
+  name:name,
+
+  amount:amount,
+
+  note:note
+
+ });
+
+
+ document.getElementById("pn").value = "";
+
+ document.getElementById("pa").value = "";
+
+ document.getElementById("px").value = "";
+
+ save();
+
+}
+
+
+/* ================= PAYMENT DELETE ================= */
+
+function delPay(id){
+
+ if(
+  confirm("Delete payment record?")
+ ){
+
+  db.payments =
+   db.payments.filter(function(x){
+
+    return x.id !== id;
+
+   });
+
+  save();
+
+ }
+
+}
+
+
+/* ================= PAYMENT TABLE ================= */
+
+function renderPay(){
+
+ if(!db.payments.length){
+
+  document.getElementById("payTable").innerHTML =
+   "No payment records yet.";
+
+  return;
+
+ }
+
+
+ let html = `
+
+ <table>
+
+ <tr>
+
+ <th>Date</th>
+
+ <th>Party</th>
+
+ <th>Amount</th>
+
+ <th>Note</th>
+
+ <th>Action</th>
+
+ </tr>
+
+ `;
+
+
+ db.payments.forEach(function(p){
+
+  html += `
+
+  <tr>
+
+  <td>${esc(p.date)}</td>
+
+  <td>${esc(p.name)}</td>
+
+  <td>${esc(p.amount)}</td>
+
+  <td>${esc(p.note)}</td>
+
+  <td>
+
+  <button
+   class="danger"
+   onclick="delPay(${p.id})"
+  >
+   Delete
+  </button>
+
+  </td>
+
+  </tr>
+
+  `;
+
+ });
+
+
+ html += "</table>";
+
+
+ document.getElementById("payTable").innerHTML =
+  html;
+
+}
+
+
+/* ================= DAILY REPORT ================= */
+
+function daily(){
+
+ let date =
+  document.getElementById("repd").value;
+
+
+ let records =
+  db.records.filter(function(x){
+
+   return x.date === date;
+
+  });
+
+
+ document.getElementById("out").innerHTML = `
+
+ <div class="card">
+
+ <h3>
+ Daily Report — ${esc(date)}
+ </h3>
+
+ <p>
+ Total Records:
+ <b>${records.length}</b>
+ </p>
+
+ ${
+  records.length
+  ?
+  records.map(function(x){
+
+   return `
+   ${esc(x.title)}
+   — ${esc(x.value)}
+   <br>
+   `;
+
+  }).join("")
+  :
+  "No records."
+
+ }
+
+ </div>
+
+ `;
+
+}
+
+
+/* ================= MONTHLY REPORT ================= */
+
+function monthly(){
+
+ let month =
+  document
+   .getElementById("repd")
+   .value
+   .slice(0,7);
+
+
+ let records =
+  db.records.filter(function(x){
+
+   return x.date.startsWith(month);
+
+  });
+
+
+ document.getElementById("out").innerHTML = `
+
+ <div class="card">
+
+ <h3>
+ Monthly Report — ${esc(month)}
+ </h3>
+
+ <p>
+ Total Records:
+ <b>${records.length}</b>
+ </p>
+
+ ${
+  records.length
+  ?
+  records.map(function(x){
+
+   return `
+   ${esc(x.date)}
+   —
+   ${esc(x.title)}
+   —
+   ${esc(x.value)}
+   <br>
+   `;
+
+  }).join("")
+  :
+  "No records."
+
+ }
+
+ </div>
+
+ `;
+
+}
+
+
+/* ================= ESCAPE TEXT ================= */
+
+function esc(value){
+
+ return String(value ?? "")
+  .replace(
+   /[&<>"']/g,
+   function(m){
+
+    return {
+
+     "&":"&amp;",
+
+     "<":"&lt;",
+
+     ">":"&gt;",
+
+     '"':"&quot;",
+
+     "'":"&#39;"
+
+    }[m];
+
+   }
+  );
+
+}
+
+
+/* ================= RENDER ================= */
+
+function render(){
+
+ document.getElementById("c1").textContent =
+  db.customers.length;
+
+ document.getElementById("c2").textContent =
+  db.agents.length;
+
+ document.getElementById("c3").textContent =
+  db.companies.length;
+
+ document.getElementById("c4").textContent =
+  db.records.length;
+
+
+ list(
+  "customers",
+  "customers"
+ );
+
+
+ list(
+  "agents",
+  "agents"
+ );
+
+
+ list(
+  "companies",
+  "companies"
+ );
+
+
+ renderRecords();
+
+ renderPay();
+
+ loadGrid();
+
+}
 
 </script>
-
-<!-- ================= END MASTER SHEET ================= -->
+</body>
+  </html>
