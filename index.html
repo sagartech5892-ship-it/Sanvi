@@ -334,23 +334,44 @@ function logout(){
 
 }
 
-function show(id){
-
-    document.querySelectorAll(".page").forEach(x=>{
-        x.classList.add("hidden");
+    function show(id) {
+    document.querySelectorAll(".page").forEach(function(page) {
+        page.style.display = "none";
     });
 
-    document.getElementById(id).classList.remove("hidden");
+    const page = document.getElementById(id);
 
-    if(id==="draws") renderDraws();
-    if(id==="jantri") renderDrawSelect();
-    if(id==="party") renderParties();
-    if(id==="clients") renderClients();
-    if(id==="hisab") showHisab();
-    if(id==="reports") showAllReport();
+    if (!page) {
+        alert("Page नहीं मिली: " + id);
+        return;
+    }
 
-}
+    page.style.display = "block";
 
+    if (id === "draws" && typeof renderDraws === "function") {
+        renderDraws();
+    }
+
+    if (id === "jantri" && typeof renderDrawSelect === "function") {
+        renderDrawSelect();
+    }
+
+    if (id === "party" && typeof renderParties === "function") {
+        renderParties();
+    }
+
+    if (id === "clients" && typeof renderClients === "function") {
+        renderClients();
+    }
+
+    if (id === "hisab" && typeof showHisab === "function") {
+        showHisab();
+    }
+
+    if (id === "reports" && typeof showAllReport === "function") {
+        showAllReport();
+    }
+    }
 function createDraw(){
 
     const name=document.getElementById("drawName").value.trim();
