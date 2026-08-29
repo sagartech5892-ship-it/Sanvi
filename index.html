@@ -1433,7 +1433,942 @@ function fillDrawSelects(){
 
         return `
         <option value="${x.id}">
-          ${esc(x.name)} —
-          </script>
+          ${esc(x.name)} —          ${esc(x.date)}
+        </option>
+        `;
+
+      }).join("");
+
+
+  if(recordDraw){
+    recordDraw.innerHTML = html;
+  }
+
+  if(jantriDraw){
+    jantriDraw.innerHTML = html;
+  }
+
+}
+
+
+/* =========================
+   RECORDS
+========================= */
+
+function addRecord(){
+
+  if(isLocked()) return;
+
+  const drawId = Number(
+    $("recordDraw").value
+  );
+
+  const draw = data.draws.find(
+    x => x.id === drawId
+  );
+
+  if(!draw){
+    alert("Event / Draw select करें।");
+    return;
+  }
+
+  if(draw.closed){
+    alert("यह Draw बंद है।");
+    return;
+  }
+
+  const party =
+    $("recordParty").value.trim();
+
+  const client =
+    $("recordClient").value.trim();
+
+  if(!party && !client){
+    alert("Party या Client भरें।");
+    return;
+  }
+
+  data.records.push({
+    id: Date.now(),
+    drawId: drawId,
+    date: $("recordDate").value || today(),
+    party: party,
+    client: client,
+    reference: $("recordReference").value.trim(),
+    note: $("recordNote").value.trim()
+  });
+
+  $("recordParty").value = "";
+  $("recordClient").value = "";
+  $("recordReference").value = "";
+  $("recordNote").value = "";
+
+  saveData();
+}
+
+
+function renderRecords(){
+
+  const table = $("recordTable");
+
+  if(!table) return;
+
+  const search =
+    ($("recordSearch")?.value || "")
+    .toLowerCase();
+
+  const rows = data.records.filter(function(x){
+
+    return JSON.stringify(x)
+      .toLowerCase()
+      .includes(search);
+
+  });
+
+  table.innerHTML =
+    rows.map(function(x){
+
+      const draw = data.draws.find(
+        d => d.id === x.drawId
+      );
+
+      return `
+      <tr>
+
+        <td>${esc(x.date)}</td>
+
+        <td>${esc(draw?.name || "Unknown")}</td>
+
+        <td>${esc(x.party)}</td>
+
+        <td>${esc(x.client)}</td>
+
+        <td>${esc(x.reference)}</td>
+
+        <td>${esc(x.note)}</td>
+
+        <td>
+          <button
+            class="btn-danger"
+            onclick="deleteItem('records',${x.id})">
+            Delete
+          </button>
+        </td>
+
+      </tr>
+      `;
+
+    }).join("") ||
+
+    `<tr>
+      <td colspan="7">
+        कोई Record नहीं मिला।
+      </td>
+    </tr>`;
+}
+
+
+/* =========================
+   JANTRI
+========================= */
+
+function addJantri(){
+
+  if(isLocked()) return;
+
+  const drawId =
+    Number($("jantriDraw").value);
+
+  const title =
+    $("jantriTitle").value.trim();
+
+  if(!title){
+    alert("Entry Title भरें।");
+    return;
+  }
+
+  data.jantri.push({
+
+    id: Date.now(),
+
+    drawId: drawId,
+
+    date:
+      $("jantriDate").value || today(),
+
+    title: title,
+
+    value:
+      $("jantriValue").value.trim(),
+
+    party:
+      $("jantriParty").value.trim(),
+
+    note:
+      $("jantriNote").value.trim()
+
+  });
+
+  $("jantriTitle").value = "";
+  $("jantriValue").value = "";
+  $("jantriParty").value = "";
+  $("jantriNote").value = "";
+
+  saveData();
+}
+
+
+function renderJantri(){
+
+  const table = $("jantriTable");
+
+  if(!table) return;
+
+  const search =
+    ($("jantriSearch")?.value || "")
+    .toLowerCase();
+
+  const rows =
+    data.jantri.filter(function(x){
+
+      return JSON.stringify(x)
+        .toLowerCase()
+        .includes(search);
+
+    });
+
+  table.innerHTML =
+    rows.map(function(x){
+
+      const draw =
+        data.draws.find(
+          d => d.id === x.drawId
+        );
+
+      return `
+      <tr>
+
+        <td>${esc(x.date)}</td>
+
+        <td>${esc(draw?.name || "")}</td>
+
+        <td>${esc(x.title)}</td>
+
+        <td>${esc(x.value)}</td>
+
+        <td>${esc(x.party)}</td>
+
+        <td>${esc(x.note)}</td>
+
+        <td>
+          <button
+            class="btn-danger"
+            onclick="deleteItem('jantri',${x.id})">
+            Delete
+          </button>
+        </td>
+
+      </tr>
+      `;
+
+    }).join("") ||
+
+    `<tr>
+      <td colspan="7">
+        कोई Jantri entry नहीं मिली।
+      </td>
+    </tr>`;
+}
+
+
+/* =========================
+   PARTY
+========================= */
+
+function addParty(){
+
+  if(isLocked()) return;
+
+  const name =
+    $("partyName").value.trim();
+
+  if(!name){
+    alert("Party Name भरें।");
+    return;
+  }
+
+  data.parties.push({
+
+    id: Date.now(),
+
+    name: name,
+
+    phone:
+      $("partyPhone").value.trim(),
+
+    note:
+      $("partyNote").value.trim()
+
+  });
+
+  $("partyName").value = "";
+  $("partyPhone").value = "";
+  $("partyNote").value = "";
+
+  saveData();
+}
+
+
+function renderParties(){
+
+  const table = $("partyTable");
+
+  if(!table) return;
+
+  const search =
+    ($("partySearch")?.value || "")
+    .toLowerCase();
+
+  const rows =
+    data.parties.filter(function(x){
+
+      return (
+        x.name + " " +
+        x.phone + " " +
+        x.note
+      )
+      .toLowerCase()
+      .includes(search);
+
+    });
+
+  table.innerHTML =
+    rows.map(function(x){
+
+      return `
+      <tr>
+
+        <td>${esc(x.name)}</td>
+
+        <td>${esc(x.phone)}</td>
+
+        <td>${esc(x.note)}</td>
+
+        <td>
+          <button
+            class="btn-danger"
+            onclick="deleteItem('parties',${x.id})">
+            Delete
+          </button>
+        </td>
+
+      </tr>
+      `;
+
+    }).join("") ||
+
+    `<tr>
+      <td colspan="4">
+        कोई Party नहीं मिली।
+      </td>
+    </tr>`;
+}
+
+
+/* =========================
+   CLIENT
+========================= */
+
+function addClient(){
+
+  if(isLocked()) return;
+
+  const name =
+    $("clientName").value.trim();
+
+  if(!name){
+    alert("Client Name भरें।");
+    return;
+  }
+
+  data.clients.push({
+
+    id: Date.now(),
+
+    name: name,
+
+    phone:
+      $("clientPhone").value.trim(),
+
+    note:
+      $("clientNote").value.trim()
+
+  });
+
+  $("clientName").value = "";
+  $("clientPhone").value = "";
+  $("clientNote").value = "";
+
+  saveData();
+}
+
+
+function renderClients(){
+
+  const table = $("clientTable");
+
+  if(!table) return;
+
+  const search =
+    ($("clientSearch")?.value || "")
+    .toLowerCase();
+
+  const rows =
+    data.clients.filter(function(x){
+
+      return (
+        x.name + " " +
+        x.phone + " " +
+        x.note
+      )
+      .toLowerCase()
+      .includes(search);
+
+    });
+
+  table.innerHTML =
+    rows.map(function(x){
+
+      return `
+      <tr>
+
+        <td>${esc(x.name)}</td>
+
+        <td>${esc(x.phone)}</td>
+
+        <td>${esc(x.note)}</td>
+
+        <td>
+          <button
+            class="btn-danger"
+            onclick="deleteItem('clients',${x.id})">
+            Delete
+          </button>
+        </td>
+
+      </tr>
+      `;
+
+    }).join("") ||
+
+    `<tr>
+      <td colspan="4">
+        कोई Client नहीं मिला।
+      </td>
+    </tr>`;
+}
+
+
+/* =========================
+   HISAB
+========================= */
+
+function addHisab(){
+
+  if(isLocked()) return;
+
+  const amount =
+    Number($("hisabAmount").value);
+
+  if(!amount){
+    alert("Amount भरें।");
+    return;
+  }
+
+  data.hisab.push({
+
+    id: Date.now(),
+
+    date:
+      $("hisabDate").value || today(),
+
+    party:
+      $("hisabParty").value.trim(),
+
+    description:
+      $("hisabDescription").value.trim(),
+
+    type:
+      $("hisabType").value,
+
+    amount: amount
+
+  });
+
+  $("hisabParty").value = "";
+  $("hisabDescription").value = "";
+  $("hisabAmount").value = "";
+
+  saveData();
+}
+
+
+function renderHisab(){
+
+  const table = $("hisabTable");
+
+  if(!table) return;
+
+  const search =
+    ($("hisabSearch")?.value || "")
+    .toLowerCase();
+
+  const rows =
+    data.hisab.filter(function(x){
+
+      return JSON.stringify(x)
+        .toLowerCase()
+        .includes(search);
+
+    });
+
+  table.innerHTML =
+    rows.map(function(x){
+
+      return `
+      <tr>
+
+        <td>${esc(x.date)}</td>
+
+        <td>${esc(x.party)}</td>
+
+        <td>${esc(x.description)}</td>
+
+        <td>${esc(x.type)}</td>
+
+        <td>${Number(x.amount).toFixed(2)}</td>
+
+        <td>
+          <button
+            class="btn-danger"
+            onclick="deleteItem('hisab',${x.id})">
+            Delete
+          </button>
+        </td>
+
+      </tr>
+      `;
+
+    }).join("") ||
+
+    `<tr>
+      <td colspan="6">
+        कोई Hisab entry नहीं मिली।
+      </td>
+    </tr>`;
+}
+
+
+/* =========================
+   SUMMARY
+========================= */
+
+function renderSummary(){
+
+  const date =
+    $("summaryDate")?.value || today();
+
+  const records =
+    data.records.filter(
+      x => x.date === date
+    );
+
+  const jantri =
+    data.jantri.filter(
+      x => x.date === date
+    );
+
+  const hisab =
+    data.hisab.filter(
+      x => x.date === date
+    );
+
+  const credit =
+    hisab
+      .filter(x => x.type === "credit")
+      .reduce(
+        (sum,x) => sum + Number(x.amount),
+        0
+      );
+
+  const debit =
+    hisab
+      .filter(x => x.type === "debit")
+      .reduce(
+        (sum,x) => sum + Number(x.amount),
+        0
+      );
+
+  if($("summaryRecords"))
+    $("summaryRecords").textContent =
+      records.length;
+
+  if($("summaryJantri"))
+    $("summaryJantri").textContent =
+      jantri.length;
+
+  if($("summaryCredit"))
+    $("summaryCredit").textContent =
+      credit.toFixed(2);
+
+  if($("summaryDebit"))
+    $("summaryDebit").textContent =
+      debit.toFixed(2);
+
+  const table =
+    $("summaryTable");
+
+  if(!table) return;
+
+  table.innerHTML =
+    hisab.map(function(x){
+
+      return `
+      <tr>
+
+        <td>${esc(x.date)}</td>
+
+        <td>${esc(x.type)}</td>
+
+        <td>${esc(x.party)}</td>
+
+        <td>${esc(x.description)}</td>
+
+        <td>${Number(x.amount).toFixed(2)}</td>
+
+      </tr>
+      `;
+
+    }).join("") ||
+
+    `<tr>
+      <td colspan="5">
+        इस तारीख की कोई entry नहीं है।
+      </td>
+    </tr>`;
+}
+
+
+/* =========================
+   REPORT
+========================= */
+
+function renderReports(){
+
+  const credit =
+    data.hisab
+      .filter(x => x.type === "credit")
+      .reduce(
+        (sum,x) => sum + Number(x.amount),
+        0
+      );
+
+  const debit =
+    data.hisab
+      .filter(x => x.type === "debit")
+      .reduce(
+        (sum,x) => sum + Number(x.amount),
+        0
+      );
+
+  const box = $("reportBox");
+
+  if(!box) return;
+
+  box.innerHTML = `
+
+    <h3>📊 Overall Report</h3>
+
+    <p>Total Draws:
+      <b>${data.draws.length}</b>
+    </p>
+
+    <p>Total Records:
+      <b>${data.records.length}</b>
+    </p>
+
+    <p>Total Jantri:
+      <b>${data.jantri.length}</b>
+    </p>
+
+    <p>Total Parties:
+      <b>${data.parties.length}</b>
+    </p>
+
+    <p>Total Clients:
+      <b>${data.clients.length}</b>
+    </p>
+
+    <p>Total Credit:
+      <b>${credit.toFixed(2)}</b>
+    </p>
+
+    <p>Total Debit:
+      <b>${debit.toFixed(2)}</b>
+    </p>
+
+    <p>Net Balance:
+      <b>${(credit-debit).toFixed(2)}</b>
+    </p>
+
+  `;
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
+function deleteItem(type,id){
+
+  if(isLocked()) return;
+
+  if(!Array.isArray(data[type]))
+    return;
+
+  if(!confirm("क्या आप इसे delete करना चाहते हैं?"))
+    return;
+
+  data[type] =
+    data[type].filter(
+      x => x.id !== id
+    );
+
+  saveData();
+}
+
+
+/* =========================
+   EXPORT
+========================= */
+
+function exportData(){
+
+  const blob =
+    new Blob(
+      [JSON.stringify(data,null,2)],
+      {type:"application/json"}
+    );
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement("a");
+
+  a.href = url;
+
+  a.download =
+    "MS-SHEET-PRO-BACKUP.json";
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  URL.revokeObjectURL(url);
+}
+
+
+/* =========================
+   IMPORT
+========================= */
+
+function importData(event){
+
+  const file =
+    event.target.files?.[0];
+
+  if(!file) return;
+
+  const reader =
+    new FileReader();
+
+  reader.onload =
+    function(){
+
+      try{
+
+        const imported =
+          JSON.parse(reader.result);
+
+        if(!imported ||
+           typeof imported !== "object"){
+
+          throw new Error("Invalid");
+
+        }
+
+        data = {
+
+          draws:
+            Array.isArray(imported.draws)
+            ? imported.draws : [],
+
+          records:
+            Array.isArray(imported.records)
+            ? imported.records : [],
+
+          jantri:
+            Array.isArray(imported.jantri)
+            ? imported.jantri : [],
+
+          parties:
+            Array.isArray(imported.parties)
+            ? imported.parties : [],
+
+          clients:
+            Array.isArray(imported.clients)
+            ? imported.clients : [],
+
+          hisab:
+            Array.isArray(imported.hisab)
+            ? imported.hisab : [],
+
+          locked:
+            Boolean(imported.locked)
+
+        };
+
+        saveData();
+
+        alert("Backup successfully import हो गया।");
+
+      }catch(error){
+
+        console.error(error);
+
+        alert("Backup file सही नहीं है।");
+
+      }
+
+      event.target.value="";
+
+    };
+
+  reader.readAsText(file);
+}
+
+
+/* =========================
+   REFRESH
+========================= */
+
+function refreshAll(){
+
+  if($("totalDraws"))
+    $("totalDraws").textContent =
+      data.draws.length;
+
+  if($("totalRecords"))
+    $("totalRecords").textContent =
+      data.records.length;
+
+  if($("totalParties"))
+    $("totalParties").textContent =
+      data.parties.length;
+
+  if($("totalClients"))
+    $("totalClients").textContent =
+      data.clients.length;
+
+  if($("lockStatus")){
+
+    $("lockStatus").textContent =
+      data.locked
+      ? "🔒 Records अभी locked हैं।"
+      : "🔓 Records अभी unlocked हैं।";
+
+  }
+
+  if($("lockButton")){
+
+    $("lockButton").textContent =
+      data.locked
+      ? "🔓 Unlock Records"
+      : "🔒 Lock Records";
+
+  }
+
+  fillDrawSelects();
+
+  renderDraws();
+  renderRecords();
+  renderJantri();
+  renderParties();
+  renderClients();
+  renderHisab();
+  renderSummary();
+  renderReports();
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function(){
+
+    loadData();
+
+    const loggedIn =
+      sessionStorage.getItem(
+        "MS_SHEET_LOGIN"
+      ) === "YES";
+
+    if(loggedIn){
+
+      $("loginPage")
+        .classList.add("hidden");
+
+      $("app")
+        .classList.remove("hidden");
+
+    }else{
+
+      $("loginPage")
+        .classList.remove("hidden");
+
+      $("app")
+        .classList.add("hidden");
+
+    }
+
+    if($("drawDate"))
+      $("drawDate").value = today();
+
+    if($("recordDate"))
+      $("recordDate").value = today();
+
+    if($("jantriDate"))
+      $("jantriDate").value = today();
+
+    if($("hisabDate"))
+      $("hisabDate").value = today();
+
+    if($("summaryDate"))
+      $("summaryDate").value = today();
+
+    refreshAll();
+
+  }
+);
+
+</script>
 </body>
 </html>
+          
