@@ -1,1660 +1,1007 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SANVI Admin</title>
-
-<style>
-*{box-sizing:border-box}
-body{
- margin:0;
- font-family:Arial,sans-serif;
- background:#eef5fa;
- color:#18324b
-}
-button,input,select{font:inherit}
-button{
- border:0;
- border-radius:7px;
- padding:10px 14px;
- cursor:pointer
-}
-.primary{background:#159447;color:white}
-.blue{background:#16679d;color:white}
-.danger{background:#c94a4a;color:white}
-.light{background:#e8f0f6;color:#18324b}
-
-#login{
- min-height:100vh;
- display:grid;
- place-items:center;
- padding:20px
-}
-.loginbox{
- width:min(420px,100%);
- background:white;
- padding:30px;
- border-radius:18px;
- box-shadow:0 10px 35px #0002
-}
-.logo{
- text-align:center;
- font-size:30px;
- font-weight:900;
- color:#16679d
-}
-.tag{
- text-align:center;
- color:#70859a;
- margin:5px 0 25px
-}
-label{
- font-weight:bold;
- font-size:13px
-}
-input,select{
- width:100%;
- padding:11px;
- margin:6px 0 12px;
- border:1px solid #cbd9e5;
- border-radius:7px;
- background:white
-}
-.hint{
- background:#fff6d8;
- padding:10px;
- border-radius:7px;
- font-size:13px;
- margin-top:14px
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
 }
 
-#app{display:none}
-
-.top{
- height:62px;
- background:#0e4f7a;
- color:white;
- display:flex;
- align-items:center;
- justify-content:space-between;
- padding:0 18px;
- position:sticky;
- top:0;
- z-index:20
-}
-.top .logo{
- color:white;
- font-size:21px
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
 }
 
-.wrap{
- max-width:1250px;
- margin:auto;
- padding:18px
+rootProject.name = "MSSheet"
+include(":app")
+plugins {
+    id("com.android.application") version "8.6.1" apply false
+    id("org.jetbrains.kotlin.android") version "2.0.21" apply false
+}
+org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
+android.useAndroidX=true
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
 }
 
-.layout{
- display:grid;
- grid-template-columns:225px 1fr;
- gap:18px
+android {
+    namespace = "com.example.mssheet"
+    compileSdk = 35
+
+    defaultConfig {
+        applicationId = "com.example.mssheet"
+        minSdk = 24
+        targetSdk = 35
+        versionCode = 3
+        versionName = "3.0" 
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:theme="@style/AppTheme"
+        android:label="MS Sheet Pro">
+
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+        </activity>
+
+    </application>
+
+ </manifest>
+   <resources>
+
+    <style name="AppTheme"
+        parent="android:style/Theme.Material.Light.NoActionBar">
+
+        <item name="android:fontFamily">sans</item>
+        <item name="android:colorAccent">#2E7D32</item>
+        <item name="android:navigationBarColor">#FFFFFF</item>
+
+    </style>
+
+   </resources>   
+                 package com.example.mssheet
+
+import android.content.ContentValues
+import android.content.Context
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
+
+data class Draw(
+    val id: Long,
+    val name: String,
+    val date: String,
+    val status: String,
+    val result: String
+)
+
+data class Party(
+    val id: Long,
+    val name: String
+)
+
+data class Client(
+    val id: Long,
+    val name: String,
+    val phone: String
+)
+
+data class Record(
+    val id: Long,
+    val drawId: Long,
+    val number: String,
+    val party: String,
+    val client: String,
+    val note: String,
+    val created: String
+)
+
+class DbHelper(context: Context) :
+    SQLiteOpenHelper(context, "mssheet.db", null, 1) {
+
+    override fun onCreate(db: SQLiteDatabase) {
+
+        db.execSQL(
+            """
+            CREATE TABLE draws(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                date TEXT NOT NULL,
+                status TEXT NOT NULL,
+                result TEXT
+            )
+            """.trimIndent()
+        )
+
+        db.execSQL(
+            """
+            CREATE TABLE parties(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL
+            )
+            """.trimIndent()
+        )
+
+        db.execSQL(
+            """
+            CREATE TABLE clients(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                phone TEXT
+            )
+            """.trimIndent()
+        )
+
+        db.execSQL(
+            """
+            CREATE TABLE records(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                drawId INTEGER,
+                number TEXT,
+                party TEXT,
+                client TEXT,
+                note TEXT,
+                created TEXT
+            )
+            """.trimIndent()
+        )
+    }
+
+    override fun onUpgrade(
+        db: SQLiteDatabase,
+        oldVersion: Int,
+        newVersion: Int
+    ) {
+    }
+
+    fun addDraw(
+        name: String,
+        date: String
+    ): Long {
+
+        val values = ContentValues()
+
+        values.put("name", name)
+        values.put("date", date)
+        values.put("status", "OPEN")
+        values.put("result", "")
+
+        return writableDatabase.insert(
+            "draws",
+            null,
+            values
+        )
+    }
+
+    fun getDraws(): List<Draw> {
+
+        val result = mutableListOf<Draw>()
+
+        readableDatabase.rawQuery(
+            "SELECT id,name,date,status,result FROM draws ORDER BY id DESC",
+            null
+        ).use { cursor ->
+
+            while (cursor.moveToNext()) {
+
+                result.add(
+                    Draw(
+                        cursor.getLong(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getString(4) ?: ""
+                    )
+                )
+            }
+        }
+
+        return result
+    }
+
+    fun lockDraw(
+        id: Long,
+        result: String
+    ) {
+
+        writableDatabase.execSQL(
+            "UPDATE draws SET result=?, status='LOCKED' WHERE id=?",
+            arrayOf(result, id)
+        )
+    }
+
+    fun addParty(name: String): Long {
+
+        val values = ContentValues()
+        values.put("name", name)
+
+        return writableDatabase.insert(
+            "parties",
+            null,
+            values
+        )
+    }
+
+    fun getParties(): List<Party> {
+
+        val result = mutableListOf<Party>()
+
+        readableDatabase.rawQuery(
+            "SELECT id,name FROM parties ORDER BY id DESC",
+            null
+        ).use { cursor ->
+
+            while (cursor.moveToNext()) {
+
+                result.add(
+                    Party(
+                        cursor.getLong(0),
+                        cursor.getString(1)
+                    )
+                )
+            }
+        }
+
+        return result
+    }
+
+    fun addClient(
+        name: String,
+        phone: String
+    ): Long {
+
+        val values = ContentValues()
+
+        values.put("name", name)
+        values.put("phone", phone)
+
+        return writableDatabase.insert(
+            "clients",
+            null,
+            values
+        )
+    }
+
+    fun getClients(): List<Client> {
+
+        val result = mutableListOf<Client>()
+
+        readableDatabase.rawQuery(
+            "SELECT id,name,phone FROM clients ORDER BY id DESC",
+            null
+        ).use { cursor ->
+
+            while (cursor.moveToNext()) {
+
+                result.add(
+                    Client(
+                        cursor.getLong(0),
+                        cursor.getString(1),
+                        cursor.getString(2) ?: ""
+                    )
+                )
+            }
+        }
+
+        return result
+    }
+
+    fun addRecord(
+        drawId: Long,
+        number: String,
+        party: String,
+        client: String,
+        note: String,
+        created: String
+    ): Long {
+
+        val values = ContentValues()
+
+        values.put("drawId", drawId)
+        values.put("number", number)
+        values.put("party", party)
+        values.put("client", client)
+        values.put("note", note)
+        values.put("created", created)
+
+        return writableDatabase.insert(
+            "records",
+            null,
+            values
+        )
+    }
+
+    fun getRecords(
+        drawId: Long
+    ): List<Record> {
+
+        val result = mutableListOf<Record>()
+
+        readableDatabase.rawQuery(
+            """
+            SELECT id,drawId,number,party,client,note,created
+            FROM records
+            WHERE drawId=?
+            ORDER BY id DESC
+            """.trimIndent(),
+            arrayOf(drawId.toString())
+        ).use { cursor ->
+
+            while (cursor.moveToNext()) {
+
+                result.add(
+                    Record(
+                        cursor.getLong(0),
+                        cursor.getLong(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getString(4) ?: "",
+                        cursor.getString(5) ?: "",
+                        cursor.getString(6)
+                    )
+                )
+            }
+        }
+
+        return result
+         package com.example.mssheet
+
+import android.graphics.Color
+import android.os.Bundle
+import android.view.Gravity
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var db: DbHelper
+    private lateinit var content: LinearLayout
+
+    private var currentDrawId = -1L
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        db = DbHelper(this)
+
+        showLogin()
+    }
+
+    private fun showLogin() {
+
+        val box = LinearLayout(this)
+
+        box.orientation = LinearLayout.VERTICAL
+        box.gravity = Gravity.CENTER
+        box.setPadding(40, 40, 40, 40)
+
+        val title = TextView(this)
+
+        title.text = "📊 MS SHEET PRO"
+        title.textSize = 30f
+        title.gravity = Gravity.CENTER
+
+        val username = EditText(this)
+        username.hint = "Username"
+
+        val password = EditText(this)
+        password.hint = "Password"
+        password.inputType = 129
+
+        val login = Button(this)
+
+        login.text = "🔐 LOGIN"
+
+        login.setOnClickListener {
+
+            showDashboard()
+        }
+
+        box.addView(title, lp())
+        box.addView(username, lp())
+        box.addView(password, lp())
+        box.addView(login, lp())
+
+        setContentView(box)
+    }
+
+    private fun showDashboard() {
+
+        val root = LinearLayout(this)
+
+        root.orientation = LinearLayout.VERTICAL
+
+        val header = TextView(this)
+
+        header.text = "🏠 MASTER PANEL"
+        header.textSize = 22f
+        header.gravity = Gravity.CENTER_VERTICAL
+        header.setTextColor(Color.WHITE)
+        header.setBackgroundColor(
+            Color.rgb(46, 125, 50)
+        )
+
+        root.addView(
+            header,
+            LinearLayout.LayoutParams(-1, 70)
+        )
+
+        content = LinearLayout(this)
+
+        content.orientation = LinearLayout.VERTICAL
+        content.setPadding(18, 18, 18, 18)
+
+        root.addView(
+            content,
+            LinearLayout.LayoutParams(
+                -1,
+                0,
+                1f
+            )
+        )
+
+        val navigation = LinearLayout(this)
+
+        navigation.orientation =
+            LinearLayout.HORIZONTAL
+
+        val buttons = listOf(
+            "🎯 Draw",
+            "📋 Jantri",
+            "👥 Party",
+            "👤 Clients",
+            "🧾 Hisab"
+        )
+
+        buttons.forEach { label ->
+
+            val button = Button(this)
+
+            button.text = label
+
+            button.setOnClickListener {
+
+                when (label) {
+
+                    "🎯 Draw" ->
+                        drawScreen()
+
+                    "📋 Jantri" ->
+                        jantriScreen()
+
+                    "👥 Party" ->
+                        partyScreen()
+
+                    "👤 Clients" ->
+                        clientScreen()
+
+                    "🧾 Hisab" ->
+                        hisabScreen()
+                }
+            }
+
+            navigation.addView(
+                button,
+                LinearLayout.LayoutParams(
+                    0,
+                    70,
+                    1f
+                )
+            )
+        }
+
+        root.addView(navigation)
+
+        setContentView(root)
+
+        drawScreen()
+    }
+
+    private fun heading(text: String) {
+
+        content.removeAllViews()
+
+        val title = TextView(this)
+
+        title.text = text
+        title.textSize = 24f
+
+        content.addView(
+            title,
+            lp()
+        )
+    }
+
+    private fun drawScreen() {
+
+        heading("🎯 DRAW MASTER")
+
+        val name = EditText(this)
+        name.hint = "Draw Name"
+
+        val date = EditText(this)
+        date.hint = "Date YYYY-MM-DD"
+
+        val create = Button(this)
+        create.text = "➕ CREATE DRAW"
+
+        val list = LinearLayout(this)
+
+        list.orientation =
+            LinearLayout.VERTICAL
+
+        create.setOnClickListener {
+
+            val n = name.text.toString().trim()
+            val d = date.text.toString().trim()
+
+            if (n.isEmpty() || d.isEmpty()) {
+
+                toast("Draw name और date डालें")
+                return@setOnClickListener
+            }
+
+            db.addDraw(n, d)
+
+            name.text.clear()
+            date.text.clear()
+
+            refreshDraws(list)
+        }
+
+        content.addView(name, lp())
+        content.addView(date, lp())
+        content.addView(create, lp())
+        content.addView(list, lp())
+
+        refreshDraws(list)
+    }
+
+    private fun refreshDraws(
+        list: LinearLayout
+    ) {
+
+        list.removeAllViews()
+
+        db.getDraws().forEach { draw ->
+
+            val button = Button(this)
+
+            val icon =
+                if (draw.status == "LOCKED")
+                    "🔒"
+                else
+                    "🟢"
+
+            button.text =
+                "$icon ${draw.name}\n" +
+                "📅 ${draw.date} | ${draw.status}" +
+                if (draw.result.isNotEmpty())
+                    "\n🏁 Result: ${draw.result}"
+                else
+                    ""
+
+            button.setOnClickListener {
+
+                currentDrawId = draw.id
+
+                jantriScreen()
+            }
+
+            list.addView(
+                button,
+                lp()
+            )
+        }
+    }
+
+    private fun jantriScreen() {
+
+        if (currentDrawId < 0) {
+
+            toast("पहले Draw select करें")
+
+            drawScreen()
+
+            return
+        }
+
+        val draw =
+            db.getDraws()
+                .firstOrNull {
+                    it.id == currentDrawId
+                }
+
+        if (draw == null) {
+
+            drawScreen()
+
+            return
+        }
+
+        heading(
+            "📋 JANTRI\n🎯 ${draw.name}"
+        )
+
+        if (draw.status == "LOCKED") {
+
+            content.addView(
+                TextView(this).apply {
+
+                    text =
+                        "🔒 यह Draw LOCKED है\n" +
+                        "Records read-only हैं"
+
+                    textSize = 17f
+                },
+                lp()
+            )
+
+        } else {
+
+            val party = EditText(this)
+            party.hint = "Party Name"
+
+            val client = EditText(this)
+            client.hint = "Client Name"
+
+            val numbers = EditText(this)
+            numbers.hint =
+                "Numbers: 01,02,03"
+
+            val note = EditText(this)
+            note.hint = "Note"
+
+            val save = Button(this)
+
+            save.text =
+                "💾 SAVE NUMBERS"
+
+            save.setOnClickListener {
+
+                val values =
+                    numbers.text.toString()
+                        .split(",", " ", "\n")
+                        .map {
+                            it.trim()
+                        }
+                        .filter {
+                            it.matches(
+                                Regex("\\d{1,2}")
+                            )
+                        }
+
+                values.forEach { number ->
+
+                    db.addRecord(
+                        currentDrawId,
+                        number.padStart(2, '0'),
+                        party.text.toString(),
+                        client.text.toString(),
+                        note.text.toString(),
+                        now()
+                    )
+                }
+
+                toast("Records saved")
+
+                jantriScreen()
+            }
+
+            content.addView(party, lp())
+            content.addView(client, lp())
+            content.addView(numbers, lp())
+            content.addView(note, lp())
+            content.addView(save, lp())
+
+            val from = EditText(this)
+
+            from.hint = "From 00-99"
+            from.inputType = 2
+
+            val to = EditText(this)
+
+            to.hint = "To 00-99"
+            to.inputType = 2
+
+            val range = Button(this)
+
+            range.text =
+                "🔢 ADD NUMBER RANGE"
+
+            range.setOnClickListener {
+
+                val start =
+                    from.text.toString()
+                        .toIntOrNull()
+
+                val end =
+                    to.text.toString()
+                        .toIntOrNull()
+
+                if (
+                    start == null ||
+                    end == null ||
+                    start < 0 ||
+                    end > 99 ||
+                    start > end
+                ) {
+
+                    toast("00 से 99 की valid range डालें")
+
+                    return@setOnClickListener
+                }
+
+                for (n in start..end) {
+
+                    db.addRecord(
+                        currentDrawId,
+                        "%02d".format(n),
+                        party.text.toString(),
+                        client.text.toString(),
+                        note.text.toString(),
+                        now()
+                    )
+                }
+
+                toast("Number range saved")
+
+                jantriScreen()
+            }
+
+            content.addView(from, lp())
+            content.addView(to, lp())
+            content.addView(range, lp())
+
+            val result =
+                EditText(this)
+
+            result.hint =
+                "Result"
+
+            val lock =
+                Button(this)
+
+            lock.text =
+                "🔒 SAVE RESULT & LOCK"
+
+            lock.setOnClickListener {
+
+                val value =
+                    result.text.toString().trim()
+
+                if (value.isEmpty()) {
+
+                    toast("Result डालें")
+
+                    return@setOnClickListener
+                }
+
+                db.lockDraw(
+                    currentDrawId,
+                    value
+                )
+
+                toast("Draw locked")
+
+                jantriScreen()
+            }
+
+            content.addView(result, lp())
+            content.addView(lock, lp())
+        }
+
+        val records =
+            TextView(this)
+
+        records.textSize = 16f
+
+        records.text =
+            db.getRecords(currentDrawId)
+                .joinToString("\n") {
+
+                    "${it.number} | " +
+                    "${it.party} | " +
+                    "${it.client} | " +
+                    it.created
+                }
+                .ifBlank {
+                    "No records"
+                }
+
+        content.addView(
+            records,
+            lp()
+        )
+    }
+
+    private fun partyScreen() {
+
+        heading("👥 PARTY MANAGEMENT")
+
+        val name = EditText(this)
+
+        name.hint = "Party Name"
+
+        val add = Button(this)
+
+        add.text = "➕ ADD PARTY"
+
+        val list = TextView(this)
+
+        list.textSize = 17f
+
+        fun refresh() {
+
+            list.text =
+                db.getParties()
+                    .joinToString("\n") {
+                        "• ${it.name}"
+                    }
+                    .ifBlank {
+                        "No parties"
+                    }
+        }
+
+        add.setOnClickListener {
+
+            if (name.text.isNotBlank()) {
+
+                db.addParty(
+                    name.text.toString().trim()
+                )
+
+                name.text.clear()
+
+                refresh()
+            }
+        }
+
+        content.addView(name, lp())
+        content.addView(add, lp())
+        content.addView(list, lp())
+
+        refresh()
+    }
+
+    private fun clientScreen() {
+
+        heading("👤 CLIENT MANAGEMENT")
+
+        val name = EditText(this)
+
+        name.hint = "Client Name"
+
+        val phone = EditText(this)
+
+        phone.hint = "Phone"
+
+        val add = Button(this)
+
+        add.text = "➕ ADD CLIENT"
+
+        val list = TextView(this)
+
+        list.textSize = 17f
+
+        fun refresh() {
+
+            list.text =
+                db.getClients()
+                    .joinToString("\n") {
+
+                        "• ${it.name} ${it.phone}"
+                    }
+                    .ifBlank {
+                        "No clients"
+                    }
+        }
+
+        add.setOnClickListener {
+
+            if (name.text.isNotBlank()) {
+
+                db.addClient(
+                    name.text.toString().trim(),
+                    phone.text.toString().trim()
+                )
+
+                name.text.clear()
+                phone.text.clear()
+
+                refresh()
+            }
+        }
+
+        content.addView(name, lp())
+        content.addView(phone, lp())
+        content.addView(add, lp())
+        content.addView(list, lp())
+
+        refresh()
+    }
+
+    private fun hisabScreen() {
+
+        heading("🧾 DAILY HISAB")
+
+        val report = TextView(this)
+
+        report.textSize = 17f
+
+        report.text =
+            db.getDraws()
+                .joinToString("\n\n") { draw ->
+
+                    val count =
+                        db.getRecords(draw.id).size
+
+                    "🎯 ${draw.name}\n" +
+                    "📅 ${draw.date}\n" +
+                    "📌 Status: ${draw.status}\n" +
+                    "🏁 Result: ${
+                        draw.result.ifBlank { "—" }
+                    }\n" +
+                    "📋 Records: $count"
+                }
+                .ifBlank {
+                    "No records"
+                }
+
+        content.addView(
+            report,
+            lp()
+        )
+    }
+
+    private fun now(): String {
+
+        return SimpleDateFormat(
+            "yyyy-MM-dd HH:mm",
+            Locale.getDefault()
+        ).format(Date())
+    }
+
+    private fun toast(message: String) {
+
+        Toast.makeText(
+            this,
+            message,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    private fun lp():
+            LinearLayout.LayoutParams {
+
+        return LinearLayout.LayoutParams(
+            -1,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+
+            setMargins(
+                0,
+                6,
+                0,
+                6
+            )
+        }
+    }
 }
-
-aside{
- background:white;
- border-radius:12px;
- padding:10px;
- height:max-content;
- box-shadow:0 2px 12px #0001
+    }
 }
-
-aside button{
- display:block;
- width:100%;
- text-align:left;
- margin:3px 0;
- background:#f1f6fa;
- color:#0e4f7a
 }
-
-aside button.active{
- background:#dcecf8;
- border-left:4px solid #159447;
- font-weight:bold
 }
-
-.page{display:none}
-.page.active{display:block}
-
-.card{
- background:white;
- border-radius:12px;
- padding:18px;
- margin-bottom:18px;
- box-shadow:0 2px 12px #0001
-}
-
-.stats{
- display:grid;
- grid-template-columns:repeat(4,1fr);
- gap:12px
-}
-
-.stat{
- background:#edf6ff;
- border-left:5px solid #16679d;
- padding:16px;
- border-radius:10px
-}
-
-.stat b{
- display:block;
- font-size:25px;
- margin-top:7px
-}
-
-.gridform{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:12px
-}
-
-.toolbar{
- display:flex;
- gap:9px;
- flex-wrap:wrap
-}
-
-.toolbar>*{
- flex:1;
- min-width:140px
-}
-
-table{
- width:100%;
- border-collapse:collapse
-}
-
-th,td{
- padding:9px;
- border-bottom:1px solid #e0e8ef;
- text-align:left
-}
-
-th{
- background:#16679d;
- color:white
-}
-
-.scroll{
- overflow:auto
-}
-
-.notice{
- padding:11px;
- background:#eef8f1;
- border-left:4px solid #159447;
- border-radius:6px;
- margin-bottom:14px;
- font-size:13px
-}
-
-/* 120 CELL GRID */
-
-.mastergrid{
- display:grid;
- grid-template-columns:repeat(10,minmax(65px,1fr));
- border:1px solid #d65a5a
-}
-
-.box{
- height:78px;
- border:1px solid #d65a5a;
- background:white;
- padding:6px;
- cursor:pointer
-}
-
-.box:hover{
- background:#f2fbf6
-}
-
-.lbl{
- font-size:12px;
- color:#963838;
- font-weight:800
-}
-
-.val{
- font-size:18px;
- font-weight:800;
- margin-top:12px
-}
-
-.box.sel{
- outline:3px solid #159447;
- outline-offset:-3px
-}
-
-@media(max-width:850px){
-
- .layout{
-  grid-template-columns:1fr
- }
-
- aside{
-  display:flex;
-  overflow:auto;
-  gap:5px
- }
-
- aside button{
-  min-width:max-content
- }
-
- .stats{
-  grid-template-columns:repeat(2,1fr)
- }
-
- .gridform{
-  grid-template-columns:1fr
- }
-
- .mastergrid{
-  grid-template-columns:repeat(5,minmax(68px,1fr))
- }
-
- .top{
-  height:58px
- }
-}
-</style>
-</head>
-
-<body>
-
-<div id="login">
-
-<div class="loginbox">
-
-<div class="logo">SANVI</div>
-
-<div class="tag">
-ADMIN RECORD MANAGEMENT
-</div>
-
-<label>Username</label>
-
-<input
- id="u"
- placeholder="Username"
->
-
-<label>Password</label>
-
-<input
- id="p"
- type="password"
- placeholder="Password"
->
-
-<button
- class="primary"
- style="width:100%"
- onclick="login()"
->
-LOGIN
-</button>
-
-<div
- id="err"
- style="color:#c94a4a;text-align:center;margin-top:10px"
-></div>
-
-<div class="hint">
-Demo Login:
-<b>admin</b> /
-<b>admin123</b>
-</div>
-
-</div>
-</div>
-
-<div id="app">
-
-<header class="top">
-
-<div>
-
-<div class="logo">
-SANVI
-</div>
-
-<small>
-ADMIN RECORD MANAGEMENT
-</small>
-
-</div>
-
-<button
- class="light"
- onclick="logout()"
->
-Logout
-</button>
-
-</header>
-
-<div class="wrap">
-
-<div class="layout">
-
-<aside>
-
-<button
- class="active"
- onclick="page('dash',this)"
->
-⌂ Dashboard
-</button>
-
-<button
- onclick="page('master',this)"
->
-▣ Master
-</button>
-
-<button
- onclick="page('records',this)"
->
-▤ Record Master
-</button>
-
-<button
- onclick="page('grid',this)"
->
-▦ 1–120 Grid
-</button>
-
-<button
- onclick="page('reports',this)"
->
-▥ Reports
-</button>
-
-<button
- onclick="page('ledger',this)"
->
-₹ Ledger
-</button>
-
-</aside>
-
-<main>
-
-<section
- id="dash"
- class="page active"
->
-
-<div class="card">
-
-<h2>
-Dashboard
-</h2>
-
-<div class="stats">
-
-<div class="stat">
-Customers
-<b id="c1">0</b>
-</div>
-
-<div class="stat">
-Agents
-<b id="c2">0</b>
-</div>
-
-<div class="stat">
-Companies
-<b id="c3">0</b>
-</div>
-
-<div class="stat">
-Records
-<b id="c4">0</b>
-</div>
-
-</div>
-</div>
-
-<div class="card">
-
-<h3>
-Recent Records
-</h3>
-
-<div id="recent">
-No records yet.
-</div>
-
-</div>
-
-</section>
-
-<section
- id="master"
- class="page"
->
-
-<div class="card">
-
-<h2>
-Master
-</h2>
-
-<div class="gridform">
-
-<div>
-
-<h3>
-Customers
-</h3>
-
-<input
- id="customer"
- placeholder="Customer name"
->
-
-<button
- class="primary"
- onclick="add('customers','customer')"
->
-Add
-</button>
-
-<ul id="customers"></ul>
-
-</div>
-
-<div>
-
-<h3>
-Agents
-</h3>
-
-<input
- id="agent"
- placeholder="Agent name"
->
-
-<button
- class="primary"
- onclick="add('agents','agent')"
->
-Add
-</button>
-
-<ul id="agents"></ul>
-
-</div>
-
-<div>
-
-<h3>
-Companies
-</h3>
-
-<input
- id="company"
- placeholder="Company name"
->
-
-<button
- class="primary"
- onclick="add('companies','company')"
->
-Add
-</button>
-
-<ul id="companies"></ul>
-
-</div>
-
-</div>
-
-</div>
-
-  </section>
-  <section id="records" class="page">
-
-<div class="card">
-
-<h2>Game / Record Master</h2>
-
-<div class="gridform">
-
-<div>
-<label>Date</label>
-<input id="rd" type="date">
-</div>
-
-<div>
-<label>Title</label>
-<input id="rt" placeholder="Record title">
-</div>
-
-<div>
-<label>Number / Result</label>
-<input id="rv" placeholder="Record value">
-</div>
-
-</div>
-
-<button
- class="primary"
- onclick="saveRecord()"
->
-Save Record
-</button>
-
-</div>
-
-
-<div class="card">
-
-<h3>Records / History</h3>
-
-<div
- class="scroll"
- id="recordsTable"
->
-No records yet.
-</div>
-
-</div>
-
-</section>
-
-
-<!-- ================= 120 GRID ================= -->
-
-<section id="grid" class="page">
-
-<div class="card">
-
-<h2>
-1–120 Master Grid
-</h2>
-
-<div class="notice">
-Record-entry grid: A1–A0, B1–B0, C1–C0 … L1–L0.
-</div>
-
-<div class="toolbar">
-
-<div>
-<label>Date</label>
-<input
- id="gd"
- type="date"
->
-</div>
-
-<button
- class="blue"
- onclick="loadGrid()"
->
-Load
-</button>
-
-<button
- class="blue"
- onclick="clearGrid()"
->
-Clear Date
-</button>
-
-</div>
-
-
-<div
- id="mg"
- class="mastergrid"
->
-</div>
-
-
-<div
- class="toolbar"
- style="margin-top:12px"
->
-
-<div>
-<label>Selected Cell</label>
-
-<input
- id="sel"
- placeholder="Select a cell"
- readonly
->
-</div>
-
-<div>
-<label>Record Value</label>
-
-<input
- id="gv"
- placeholder="Enter value"
->
-</div>
-
-<button
- class="primary"
- onclick="saveCell()"
->
-Save Cell
-</button>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- ================= REPORTS ================= -->
-
-<section id="reports" class="page">
-
-<div class="card">
-
-<h2>
-Daily / Monthly Reports
-</h2>
-
-<div class="toolbar">
-
-<div>
-<label>Date</label>
-
-<input
- id="repd"
- type="date"
->
-</div>
-
-<button
- class="blue"
- onclick="daily()"
->
-Daily Report
-</button>
-
-<button
- class="blue"
- onclick="monthly()"
->
-Monthly Report
-</button>
-
-</div>
-
-<div id="out"></div>
-
-</div>
-
-</section>
-
-
-<!-- ================= LEDGER ================= -->
-
-<section id="ledger" class="page">
-
-<div class="card">
-
-<h2>
-Ledger & Payment Records
-</h2>
-
-<div class="gridform">
-
-<div>
-<label>Party / Customer</label>
-
-<input
- id="pn"
- placeholder="Party name"
->
-</div>
-
-<div>
-<label>Amount</label>
-
-<input
- id="pa"
- type="number"
- placeholder="Amount"
->
-</div>
-
-<div>
-<label>Note</label>
-
-<input
- id="px"
- placeholder="Payment note"
->
-</div>
-
-</div>
-
-<button
- class="primary"
- onclick="pay()"
->
-Add Payment
-</button>
-
-</div>
-
-
-<div class="card">
-
-<div
- class="scroll"
- id="payTable"
->
-No payment records yet.
-</div>
-
-</div>
-
-</section>
-
-
-</main>
-
-</div>
-
-</div>
-
-</div>
-
-
-<script>
-
-/* ================= DATABASE ================= */
-
-const K = "sanvi_record_manager";
-
-let db = JSON.parse(
- localStorage.getItem(K) ||
- '{"customers":[],"agents":[],"companies":[],"records":[],"payments":[],"grid":{}}'
-);
-
-let selected = "";
-
-const today =
- new Date().toISOString().slice(0,10);
-
-
-/* ================= DEFAULT DATES ================= */
-
-document.getElementById("rd").value = today;
-
-document.getElementById("gd").value = today;
-
-document.getElementById("repd").value = today;
-
-
-/* ================= SAVE DATABASE ================= */
-
-function save(){
-
- localStorage.setItem(
-  K,
-  JSON.stringify(db)
- );
-
- render();
-
-}
-
-
-/* ================= LOGIN ================= */
-
-function login(){
-
- if(
-  document.getElementById("u").value === "admin" &&
-  document.getElementById("p").value === "admin123"
- ){
-
-  document.getElementById("login").style.display =
-   "none";
-
-  document.getElementById("app").style.display =
-   "block";
-
-  render();
-
- }else{
-
-  document.getElementById("err").textContent =
-   "Invalid username or password";
-
- }
-
-}
-
-
-/* ================= LOGOUT ================= */
-
-function logout(){
-
- document.getElementById("app").style.display =
-  "none";
-
- document.getElementById("login").style.display =
-  "grid";
-
-}
-
-
-/* ================= PAGE NAVIGATION ================= */
-
-function page(id,button){
-
- document
-  .querySelectorAll(".page")
-  .forEach(function(x){
-
-   x.classList.remove("active");
-
-  });
-
-
- document
-  .getElementById(id)
-  .classList.add("active");
-
-
- document
-  .querySelectorAll("aside button")
-  .forEach(function(x){
-
-   x.classList.remove("active");
-
-  });
-
-
- button.classList.add("active");
-
-
- if(id === "grid"){
-
-  loadGrid();
-
- }
-
-}
-
-
-/* ================= MASTER ADD ================= */
-
-function add(type,id){
-
- let value =
-  document.getElementById(id).value.trim();
-
- if(!value){
-
-  alert("Please enter a name");
-
-  return;
-
- }
-
- db[type].push(value);
-
- document.getElementById(id).value = "";
-
- save();
-
-}
-
-
-/* ================= MASTER DELETE ================= */
-
-function remove(type,index){
-
- if(
-  confirm("Delete this record?")
- ){
-
-  db[type].splice(index,1);
-
-  save();
-
- }
-
-}
-
-
-/* ================= MASTER LIST ================= */
-
-function list(type,id){
-
- document.getElementById(id).innerHTML =
-  db[type].map(function(x,i){
-
-   return `
-   <li style="margin:7px 0">
-    ${esc(x)}
-    <button
-     class="danger"
-     onclick="remove('${type}',${i})"
-     style="padding:4px 8px"
-    >
-     ×
-    </button>
-   </li>
-   `;
-
-  }).join("");
-
-}
-
-
-/* ================= RECORD SAVE ================= */
-
-function saveRecord(){
-
- let date =
-  document.getElementById("rd").value;
-
- let title =
-  document.getElementById("rt").value.trim();
-
- let value =
-  document.getElementById("rv").value.trim();
-
-
- if(!date || !title){
-
-  alert(
-   "Date and title are required"
-  );
-
-  return;
-
- }
-
-
- db.records.unshift({
-
-  id:Date.now(),
-
-  date:date,
-
-  title:title,
-
-  value:value
-
- });
-
-
- document.getElementById("rt").value = "";
-
- document.getElementById("rv").value = "";
-
- save();
-
-}
-
-
-/* ================= RECORD DELETE ================= */
-
-function delRec(id){
-
- if(
-  confirm("Delete this record?")
- ){
-
-  db.records =
-   db.records.filter(function(x){
-
-    return x.id !== id;
-
-   });
-
-  save();
-
- }
-
-}
-
-
-/* ================= RECORD TABLE ================= */
-
-function renderRecords(){
-
- if(!db.records.length){
-
-  document.getElementById("recordsTable").innerHTML =
-   "No records yet.";
-
-  document.getElementById("recent").innerHTML =
-   "No records yet.";
-
-  return;
-
- }
-
-
- let html = `
-
- <table>
-
- <tr>
-
- <th>Date</th>
-
- <th>Title</th>
-
- <th>Number / Result</th>
-
- <th>Action</th>
-
- </tr>
-
- `;
-
-
- db.records.forEach(function(r){
-
-  html += `
-
-  <tr>
-
-  <td>${esc(r.date)}</td>
-
-  <td>${esc(r.title)}</td>
-
-  <td>${esc(r.value)}</td>
-
-  <td>
-
-  <button
-   class="danger"
-   onclick="delRec(${r.id})"
-  >
-   Delete
-  </button>
-
-  </td>
-
-  </tr>
-
-  `;
-
- });
-
-
- html += "</table>";
-
-
- document.getElementById("recordsTable").innerHTML =
-  html;
-
-
- document.getElementById("recent").innerHTML =
-  html;
-
-}
-
-
-/* ================= BUILD 120 GRID ================= */
-
-function buildGrid(){
-
- let grid =
-  document.getElementById("mg");
-
- grid.innerHTML = "";
-
-
- let letters =
-  "ABCDEFGHIJKL".split("");
-
-
- letters.forEach(function(letter){
-
-  for(
-   let n = 1;
-   n <= 10;
-   n++
-  ){
-
-   let label =
-    letter +
-    (
-     n === 10
-      ? "0"
-      : n
-    );
-
-
-   let box =
-    document.createElement("div");
-
-
-   box.className = "box";
-
-   box.dataset.label = label;
-
-
-   box.innerHTML = `
-
-   <div class="lbl">
-    ${label}
-   </div>
-
-   <div class="val">
-   </div>
-
-   `;
-
-
-   box.onclick = function(){
-
-    selectCell(box);
-
-   };
-
-
-   grid.appendChild(box);
-
-  }
-
- });
-
-}
-
-
-/* ================= LOAD GRID ================= */
-
-function loadGrid(){
-
- buildGrid();
-
-
- let date =
-  document.getElementById("gd").value;
-
-
- let values =
-  db.grid[date] || {};
-
-
- document
-  .querySelectorAll(".box")
-  .forEach(function(box){
-
-   let label =
-    box.dataset.label;
-
-   box.querySelector(".val").textContent =
-    values[label] || "";
-
-  });
-
-}
-
-
-/* ================= SELECT CELL ================= */
-
-function selectCell(box){
-
- document
-  .querySelectorAll(".box")
-  .forEach(function(x){
-
-   x.classList.remove("sel");
-
-  });
-
-
- box.classList.add("sel");
-
-
- selected =
-  box.dataset.label;
-
-
- document.getElementById("sel").value =
-  selected;
-
-
- let date =
-  document.getElementById("gd").value;
-
-
- let values =
-  db.grid[date] || {};
-
-
- document.getElementById("gv").value =
-  values[selected] || "";
-
-}
-
-
-/* ================= SAVE GRID CELL ================= */
-
-function saveCell(){
-
- if(!selected){
-
-  alert(
-   "Please select a grid cell first"
-  );
-
-  return;
-
- }
-
-
- let date =
-  document.getElementById("gd").value;
-
-
- if(!db.grid[date]){
-
-  db.grid[date] = {};
-
- }
-
-
- db.grid[date][selected] =
-  document.getElementById("gv").value.trim();
-
-
- save();
-
- loadGrid();
-
-}
-
-
-/* ================= CLEAR GRID ================= */
-
-function clearGrid(){
-
- let date =
-  document.getElementById("gd").value;
-
-
- if(
-  !confirm(
-   "Clear all grid values for this date?"
-  )
- ){
-
-  return;
-
- }
-
-
- delete db.grid[date];
-
- selected = "";
-
- document.getElementById("sel").value = "";
-
- document.getElementById("gv").value = "";
-
- save();
-
- loadGrid();
-
-}
-
-
-/* ================= PAYMENT ================= */
-
-function pay(){
-
- let name =
-  document.getElementById("pn").value.trim();
-
- let amount =
-  document.getElementById("pa").value;
-
- let note =
-  document.getElementById("px").value.trim();
-
-
- if(!name || !amount){
-
-  alert(
-   "Party and amount are required"
-  );
-
-  return;
-
- }
-
-
- db.payments.unshift({
-
-  id:Date.now(),
-
-  date:today,
-
-  name:name,
-
-  amount:amount,
-
-  note:note
-
- });
-
-
- document.getElementById("pn").value = "";
-
- document.getElementById("pa").value = "";
-
- document.getElementById("px").value = "";
-
- save();
-
-}
-
-
-/* ================= PAYMENT DELETE ================= */
-
-function delPay(id){
-
- if(
-  confirm("Delete payment record?")
- ){
-
-  db.payments =
-   db.payments.filter(function(x){
-
-    return x.id !== id;
-
-   });
-
-  save();
-
- }
-
-}
-
-
-/* ================= PAYMENT TABLE ================= */
-
-function renderPay(){
-
- if(!db.payments.length){
-
-  document.getElementById("payTable").innerHTML =
-   "No payment records yet.";
-
-  return;
-
- }
-
-
- let html = `
-
- <table>
-
- <tr>
-
- <th>Date</th>
-
- <th>Party</th>
-
- <th>Amount</th>
-
- <th>Note</th>
-
- <th>Action</th>
-
- </tr>
-
- `;
-
-
- db.payments.forEach(function(p){
-
-  html += `
-
-  <tr>
-
-  <td>${esc(p.date)}</td>
-
-  <td>${esc(p.name)}</td>
-
-  <td>${esc(p.amount)}</td>
-
-  <td>${esc(p.note)}</td>
-
-  <td>
-
-  <button
-   class="danger"
-   onclick="delPay(${p.id})"
-  >
-   Delete
-  </button>
-
-  </td>
-
-  </tr>
-
-  `;
-
- });
-
-
- html += "</table>";
-
-
- document.getElementById("payTable").innerHTML =
-  html;
-
-}
-
-
-/* ================= DAILY REPORT ================= */
-
-function daily(){
-
- let date =
-  document.getElementById("repd").value;
-
-
- let records =
-  db.records.filter(function(x){
-
-   return x.date === date;
-
-  });
-
-
- document.getElementById("out").innerHTML = `
-
- <div class="card">
-
- <h3>
- Daily Report — ${esc(date)}
- </h3>
-
- <p>
- Total Records:
- <b>${records.length}</b>
- </p>
-
- ${
-  records.length
-  ?
-  records.map(function(x){
-
-   return `
-   ${esc(x.title)}
-   — ${esc(x.value)}
-   <br>
-   `;
-
-  }).join("")
-  :
-  "No records."
-
- }
-
- </div>
-
- `;
-
-}
-
-
-/* ================= MONTHLY REPORT ================= */
-
-function monthly(){
-
- let month =
-  document
-   .getElementById("repd")
-   .value
-   .slice(0,7);
-
-
- let records =
-  db.records.filter(function(x){
-
-   return x.date.startsWith(month);
-
-  });
-
-
- document.getElementById("out").innerHTML = `
-
- <div class="card">
-
- <h3>
- Monthly Report — ${esc(month)}
- </h3>
-
- <p>
- Total Records:
- <b>${records.length}</b>
- </p>
-
- ${
-  records.length
-  ?
-  records.map(function(x){
-
-   return `
-   ${esc(x.date)}
-   —
-   ${esc(x.title)}
-   —
-   ${esc(x.value)}
-   <br>
-   `;
-
-  }).join("")
-  :
-  "No records."
-
- }
-
- </div>
-
- `;
-
-}
-
-
-/* ================= ESCAPE TEXT ================= */
-
-function esc(value){
-
- return String(value ?? "")
-  .replace(
-   /[&<>"']/g,
-   function(m){
-
-    return {
-
-     "&":"&amp;",
-
-     "<":"&lt;",
-
-     ">":"&gt;",
-
-     '"':"&quot;",
-
-     "'":"&#39;"
-
-    }[m];
-
-   }
-  );
-
-}
-
-
-/* ================= RENDER ================= */
-
-function render(){
-
- document.getElementById("c1").textContent =
-  db.customers.length;
-
- document.getElementById("c2").textContent =
-  db.agents.length;
-
- document.getElementById("c3").textContent =
-  db.companies.length;
-
- document.getElementById("c4").textContent =
-  db.records.length;
-
-
- list(
-  "customers",
-  "customers"
- );
-
-
- list(
-  "agents",
-  "agents"
- );
-
-
- list(
-  "companies",
-  "companies"
- );
-
-
- renderRecords();
-
- renderPay();
-
- loadGrid();
-
-}
-
-</script>
-</body>
-  </html>
