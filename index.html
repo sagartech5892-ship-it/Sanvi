@@ -313,21 +313,24 @@ function login() {
     const password = document.getElementById("password").value.trim();
 
     if (username === "admin" && password === "admin") {
-        document.getElementById("login").style.display = "none";
-        document.getElementById("app").style.display = "block";
 
-        refresh();
+        document.getElementById("login").classList.add("hidden");
+        document.getElementById("app").classList.remove("hidden");
+
+        if (typeof refresh === "function") {
+            refresh();
+        }
+
         show("home");
+
     } else {
         alert("गलत Username या Password");
     }
     }
 
-function logout(){
-
+function logout() {
     document.getElementById("app").classList.add("hidden");
     document.getElementById("login").classList.remove("hidden");
-
 }
 function show(id) {
     document.querySelectorAll(".page").forEach(function(page) {
