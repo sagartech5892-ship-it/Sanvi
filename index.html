@@ -292,14 +292,32 @@ placeholder="To 00-99">
 
 <script>
 
-const KEY="ms_sheet_pro_data";
+const KEY = "ms_sheet_pro_data";
 
-let data=JSON.parse(localStorage.getItem(KEY)||'null')||{
-    draws:[],
-    parties:[],
-    clients:[],
-    records:[]
+let data = {
+    draws: [],
+    parties: [],
+    clients: [],
+    records: []
 };
+
+try {
+    const saved = localStorage.getItem(KEY);
+
+    if (saved) {
+        const parsed = JSON.parse(saved);
+
+        if (parsed && typeof parsed === "object") {
+            data.draws = Array.isArray(parsed.draws) ? parsed.draws : [];
+            data.parties = Array.isArray(parsed.parties) ? parsed.parties : [];
+            data.clients = Array.isArray(parsed.clients) ? parsed.clients : [];
+            data.records = Array.isArray(parsed.records) ? parsed.records : [];
+        }
+    }
+} catch (error) {
+    console.log("Saved data reset:", error);
+    localStorage.removeItem(KEY);
+    }
 
 let selectedDraw="";
 
