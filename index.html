@@ -123,12 +123,17 @@ tr:nth-child(even){background:#f2f6f8}
 <h2>🔐 Login</h2>
 <input id="username" placeholder="Username">
 <input id="password" type="password" placeholder="Password">
-<button onclick="login()">🔐 Login</button>
+<<button type="button" onclick="
+document.getElementById('login').style.display='none';
+document.getElementById('app').style.display='block';
+">
+🔐 Login
+</button>>
 </div>
 </section>
 
 <!-- APP -->
-<section id="app" class="hidden">
+<section id="app" style="display:none;">
 
 <div class="card">
 <div class="menu">
