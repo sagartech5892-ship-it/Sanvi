@@ -1,136 +1,187 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MS SHEET PRO</title>
 
 <style>
 *{box-sizing:border-box}
 
 body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#f3f5f7;
-    color:#222;
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f1f5f9;
+  color:#172033;
 }
 
 header{
-    background:#20252b;
-    color:white;
-    padding:18px;
-    text-align:center;
-    font-size:22px;
-    font-weight:bold;
+  background:#172033;
+  color:#fff;
+  padding:16px;
+  text-align:center;
+  font-size:22px;
+  font-weight:700;
 }
 
-.container{
-    max-width:1100px;
-    margin:auto;
-    padding:15px;
+.wrap{
+  max-width:1150px;
+  margin:auto;
+  padding:14px;
 }
 
 .card{
-    background:white;
-    padding:20px;
-    margin-bottom:15px;
-    border-radius:12px;
-    box-shadow:0 2px 10px #0001;
-}
-
-h2{
-    margin-top:0;
-}
-
-input,select,textarea{
-    width:100%;
-    padding:12px;
-    margin:7px 0;
-    border:1px solid #ccc;
-    border-radius:8px;
-    font-size:16px;
-}
-
-button{
-    border:0;
-    padding:11px 15px;
-    margin:5px 3px;
-    border-radius:8px;
-    background:#1976d2;
-    color:white;
-    font-size:15px;
-    cursor:pointer;
-}
-
-button:hover{
-    opacity:.9;
-}
-
-.danger{
-    background:#d32f2f;
-}
-
-.success{
-    background:#2e7d32;
-}
-
-.secondary{
-    background:#555;
+  background:#fff;
+  border-radius:14px;
+  padding:16px;
+  margin-bottom:14px;
+  box-shadow:0 3px 14px #0001;
 }
 
 .hidden{
-    display:none!important;
+  display:none!important;
 }
 
-.menu{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
-    gap:8px;
+.login{
+  max-width:420px;
+  margin:60px auto;
 }
 
-.menu button{
-    margin:0;
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+input,select,textarea,button{
+  width:100%;
+  padding:11px;
+  border:1px solid #cbd5e1;
+  border-radius:9px;
+  font-size:15px;
+}
+
+button{
+  background:#2563eb;
+  color:#fff;
+  border:0;
+  font-weight:600;
+  cursor:pointer;
+}
+
+button.secondary{
+  background:#475569;
+}
+
+button.danger{
+  background:#dc2626;
+}
+
+button.success{
+  background:#16a34a;
+}
+
+nav{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:7px;
+  margin-bottom:14px;
+}
+
+nav button{
+  font-size:13px;
+}
+
+h2{
+  margin-top:0;
+}
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
 }
 
 table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:15px;
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
 }
 
 th,td{
-    border:1px solid #ddd;
-    padding:10px;
-    text-align:left;
+  padding:9px;
+  border-bottom:1px solid #e2e8f0;
+  text-align:left;
+  font-size:14px;
 }
 
 th{
-    background:#eee;
+  background:#f8fafc;
 }
 
-.stat-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:12px;
+.tablewrap{
+  overflow:auto;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
 }
 
 .stat{
-    padding:18px;
-    background:#fafafa;
-    border-radius:10px;
-    border:1px solid #ddd;
+  padding:14px;
+  border-radius:12px;
+  background:#e0f2fe;
 }
 
-.stat strong{
-    display:block;
-    font-size:26px;
-    margin-top:5px;
+.stat b{
+  font-size:22px;
+  display:block;
 }
 
-.empty{
-    padding:20px;
-    text-align:center;
-    color:#777;
+.row{
+  display:flex;
+  gap:8px;
+}
+
+.row>*{
+  flex:1;
+}
+
+.muted{
+  color:#64748b;
+  font-size:13px;
+}
+
+@media(max-width:700px){
+  .grid,.stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  nav{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .row{
+    flex-direction:column;
+  }
+}
+
+@media(max-width:430px){
+  .grid,.stats{
+    grid-template-columns:1fr;
+  }
+
+  nav{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  header{
+    font-size:19px;
+  }
 }
 </style>
 </head>
@@ -139,247 +190,623 @@ th{
 
 <header>📊 MS SHEET PRO</header>
 
-<div class="container">
-
 <!-- LOGIN -->
-<section id="loginPage">
+<div id="loginPage" class="wrap">
 
-<div class="card" style="max-width:450px;margin:30px auto">
+<form class="card login" onsubmit="return login(event)">
 
 <h2>🔐 Login</h2>
 
-<input
-    id="username"
-    type="text"
-    placeholder="Username"
->
+<p class="muted">
+Username: admin &nbsp; Password: admin
+</p>
 
 <input
-    id="password"
-    type="password"
-    placeholder="Password"
+  id="loginUser"
+  placeholder="Username"
+  autocomplete="username"
 >
 
-<button onclick="login()" style="width:100%">
+<br><br>
+
+<input
+  id="loginPass"
+  type="password"
+  placeholder="Password"
+  autocomplete="current-password"
+>
+
+<br><br>
+
+<button type="submit">
 🔐 Login
 </button>
+
+</form>
+
+</div>
+
+
+<!-- APP -->
+<div id="app" class="wrap hidden">
+
+<nav>
+
+<button onclick="showPage('home')">
+🏠 Master Panel
+</button>
+
+<button onclick="showPage('draws')">
+🎯 Draw Management
+</button>
+
+<button onclick="showPage('records')">
+📋 Normal Records
+</button>
+
+<button onclick="showPage('parties')">
+👥 Party
+</button>
+
+<button onclick="showPage('clients')">
+👤 Client
+</button>
+
+<button onclick="showPage('hisab')">
+🧾 Hisab
+</button>
+
+<button onclick="showPage('summary')">
+📅 Date Summary
+</button>
+
+<button onclick="showPage('reports')">
+📊 Reports
+</button>
+
+<button class="danger" onclick="logout()">
+🔒 Logout
+</button>
+
+</nav>
+
+
+<!-- HOME -->
+<section id="home" class="page active">
+
+<div class="card">
+
+<h2>🏠 Master Panel</h2>
+
+<div class="stats">
+
+<div class="stat">
+Draws
+<b id="sDraws">0</b>
+</div>
+
+<div class="stat">
+Records
+<b id="sRecords">0</b>
+</div>
+
+<div class="stat">
+Parties
+<b id="sParties">0</b>
+</div>
+
+<div class="stat">
+Clients
+<b id="sClients">0</b>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>🔒 Result / Record Lock</h3>
+
+<p id="lockText" class="muted">
+Records unlocked.
+</p>
+
+<button id="lockBtn" onclick="toggleLock()">
+Lock records
+</button>
+
+</div>
+
+
+<div class="card">
+
+<h3>💾 Browser Data</h3>
+
+<p class="muted">
+Data इसी browser में LocalStorage में save होता है।
+</p>
+
+<div class="row">
+
+<button onclick="exportData()">
+Export Backup
+</button>
+
+<button
+class="secondary"
+onclick="document.getElementById('importFile').click()"
+>
+Import Backup
+</button>
+
+<button class="danger" onclick="clearData()">
+Clear All
+</button>
+
+</div>
+
+<input
+id="importFile"
+type="file"
+accept=".json"
+class="hidden"
+onchange="importData(event)"
+>
 
 </div>
 
 </section>
 
 
-<!-- APP -->
-<section id="app" class="hidden">
+<!-- DRAW -->
+<section id="draws" class="page">
 
 <div class="card">
 
-<div class="menu">
+<h2>🎯 Draw Management</h2>
 
-<button onclick="showPage('home')">🏠 Home</button>
+<div class="grid">
 
-<button onclick="showPage('draws')">📅 Draws</button>
+<input
+id="drawName"
+placeholder="Draw / Event name"
+>
 
-<button onclick="showPage('party')">👥 Parties</button>
+<input
+id="drawDate"
+type="date"
+>
 
-<button onclick="showPage('clients')">👤 Clients</button>
+<input
+id="drawTime"
+type="time"
+>
 
-<button onclick="showPage('hisab')">🧾 Hisab</button>
-
-<button onclick="showPage('reports')">📊 Reports</button>
-
-<button class="danger" onclick="logout()">🚪 Logout</button>
-
-</div>
-
-</div>
-
-
-<!-- HOME -->
-<div id="home" class="page">
-
-<div class="card">
-
-<h2>🏠 Dashboard</h2>
-
-<div class="stat-grid">
-
-<div class="stat">
-Draws
-<strong id="totalDraws">0</strong>
-</div>
-
-<div class="stat">
-Parties
-<strong id="totalParties">0</strong>
-</div>
-
-<div class="stat">
-Clients
-<strong id="totalClients">0</strong>
-</div>
-
-<div class="stat">
-Records
-<strong id="totalRecords">0</strong>
-</div>
+<input
+id="drawResult"
+placeholder="Result / reference"
+>
 
 </div>
 
-</div>
+<br>
 
-</div>
-
-
-<!-- DRAWS -->
-<div id="draws" class="page hidden">
-
-<div class="card">
-
-<h2>📅 Create Draw / Record</h2>
-
-<input id="drawName" placeholder="Draw / Event Name">
-
-<input id="drawDate" type="date">
-
-<button class="success" onclick="createDraw()">
-➕ Add
+<button onclick="addDraw()">
+Add Draw
 </button>
 
 </div>
 
+
 <div class="card">
 
-<h2>📋 Draw List</h2>
+<input
+id="drawSearch"
+placeholder="🔎 Search draw..."
+oninput="renderDraws()"
+>
 
-<div id="drawList"></div>
+<br><br>
+
+<div class="tablewrap">
+
+<table>
+
+<thead>
+
+<tr>
+<th>Name</th>
+<th>Date</th>
+<th>Time</th>
+<th>Result</th>
+<th>Status</th>
+<th></th>
+</tr>
+
+</thead>
+
+<tbody id="drawTable"></tbody>
+
+</table>
 
 </div>
 
 </div>
+
+</section>
+
+
+<!-- RECORDS -->
+<section id="records" class="page">
+
+<div class="card">
+
+<h2>📋 Draw-wise Normal Records</h2>
+
+<div class="grid">
+
+<select id="recDraw"></select>
+
+<input
+id="recDate"
+type="date"
+>
+
+<input
+id="recParty"
+placeholder="Party name"
+>
+
+<input
+id="recClient"
+placeholder="Client name"
+>
+
+<input
+id="recRef"
+placeholder="Record / reference"
+>
+
+<input
+id="recNote"
+placeholder="Note"
+>
+
+</div>
+
+<br>
+
+<button onclick="addRecord()">
+Save Record
+</button>
+
+</div>
+
+
+<div class="card">
+
+<input
+id="recSearch"
+placeholder="🔎 Search/filter records..."
+oninput="renderRecords()"
+>
+
+<br><br>
+
+<div class="tablewrap">
+
+<table>
+
+<thead>
+
+<tr>
+<th>Date</th>
+<th>Draw</th>
+<th>Party</th>
+<th>Client</th>
+<th>Reference</th>
+<th>Note</th>
+<th></th>
+</tr>
+
+</thead>
+
+<tbody id="recTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
 
 
 <!-- PARTY -->
-<div id="party" class="page hidden">
+<section id="parties" class="page">
 
 <div class="card">
 
-<h2>👥 Add Party</h2>
+<h2>👥 Party</h2>
 
-<input id="partyName" placeholder="Party Name">
+<div class="grid">
 
-<input id="partyMobile" placeholder="Mobile Number">
+<input
+id="partyName"
+placeholder="Party name"
+>
 
-<textarea id="partyNote" placeholder="Note"></textarea>
+<input
+id="partyPhone"
+placeholder="Phone / contact"
+>
 
-<button class="success" onclick="addParty()">
-➕ Add Party
+<input
+id="partyNote"
+placeholder="Note"
+>
+
+</div>
+
+<br>
+
+<button onclick="addParty()">
+Add Party
 </button>
 
 </div>
 
+
 <div class="card">
 
-<h2>👥 Party List</h2>
+<input
+id="partySearch"
+placeholder="🔎 Search party..."
+oninput="renderParties()"
+>
 
-<div id="partyList"></div>
+<br><br>
+
+<div class="tablewrap">
+
+<table>
+
+<thead>
+
+<tr>
+<th>Name</th>
+<th>Contact</th>
+<th>Note</th>
+<th></th>
+</tr>
+
+</thead>
+
+<tbody id="partyTable"></tbody>
+
+</table>
 
 </div>
 
 </div>
 
+</section>
 
-<!-- CLIENTS -->
-<div id="clients" class="page hidden">
+
+<!-- CLIENT -->
+<section id="clients" class="page">
 
 <div class="card">
 
-<h2>👤 Add Client</h2>
+<h2>👤 Client</h2>
 
-<input id="clientName" placeholder="Client Name">
+<div class="grid">
 
-<input id="clientMobile" placeholder="Mobile Number">
+<input
+id="clientName"
+placeholder="Client name"
+>
 
-<input id="clientAddress" placeholder="Address">
+<input
+id="clientPhone"
+placeholder="Phone / contact"
+>
 
-<button class="success" onclick="addClient()">
-➕ Add Client
+<input
+id="clientNote"
+placeholder="Note"
+>
+
+</div>
+
+<br>
+
+<button onclick="addClient()">
+Add Client
 </button>
 
 </div>
 
+
 <div class="card">
 
-<h2>👤 Client List</h2>
+<input
+id="clientSearch"
+placeholder="🔎 Search client..."
+oninput="renderClients()"
+>
 
-<div id="clientList"></div>
+<br><br>
+
+<div class="tablewrap">
+
+<table>
+
+<thead>
+
+<tr>
+<th>Name</th>
+<th>Contact</th>
+<th>Note</th>
+<th></th>
+</tr>
+
+</thead>
+
+<tbody id="clientTable"></tbody>
+
+</table>
 
 </div>
 
 </div>
+
+</section>
 
 
 <!-- HISAB -->
-<div id="hisab" class="page hidden">
+<section id="hisab" class="page">
 
 <div class="card">
 
-<h2>🧾 Hisab / Account Record</h2>
+<h2>🧾 Hisab / Ledger</h2>
 
-<select id="hisabParty">
-<option value="">Party Select करें</option>
-</select>
+<p class="muted">
+यह सामान्य accounting / ledger entry के लिए है।
+</p>
+
+<div class="grid">
 
 <input
-    id="hisabAmount"
-    type="number"
-    placeholder="Amount"
+id="hDate"
+type="date"
 >
 
-<select id="hisabType">
-<option value="credit">Credit</option>
-<option value="debit">Debit</option>
+<input
+id="hParty"
+placeholder="Party"
+>
+
+<input
+id="hDesc"
+placeholder="Description"
+>
+
+<input
+id="hAmount"
+type="number"
+step="0.01"
+placeholder="Amount"
+>
+
+<select id="hType">
+
+<option value="credit">
+Credit
+</option>
+
+<option value="debit">
+Debit
+</option>
+
 </select>
 
-<input id="hisabNote" placeholder="Description">
+</div>
 
-<button class="success" onclick="addHisab()">
-➕ Save
+<br>
+
+<button onclick="addHisab()">
+Add Entry
 </button>
 
 </div>
 
+
 <div class="card">
 
-<h2>📋 Account Records</h2>
+<input
+id="hSearch"
+placeholder="🔎 Search ledger..."
+oninput="renderHisab()"
+>
 
-<div id="hisabList"></div>
+<br><br>
+
+<div class="tablewrap">
+
+<table>
+
+<thead>
+
+<tr>
+<th>Date</th>
+<th>Party</th>
+<th>Description</th>
+<th>Type</th>
+<th>Amount</th>
+<th></th>
+</tr>
+
+</thead>
+
+<tbody id="hisabTable"></tbody>
+
+</table>
 
 </div>
 
 </div>
+
+</section>
+
+
+<!-- SUMMARY -->
+<section id="summary" class="page">
+
+<div class="card">
+
+<h2>📅 Date-wise Summary</h2>
+
+<input
+id="sumDate"
+type="date"
+onchange="renderSummary()"
+>
+
+</div>
+
+<div class="card" id="summaryBox"></div>
+
+</section>
 
 
 <!-- REPORTS -->
-<div id="reports" class="page hidden">
+<section id="reports" class="page">
 
 <div class="card">
 
 <h2>📊 Reports</h2>
 
-<button onclick="showReports()">
-🔄 Refresh Report
+<div class="row">
+
+<button onclick="renderReports()">
+Refresh
 </button>
 
-<button class="secondary" onclick="window.print()">
-🖨️ Print
+<button
+class="secondary"
+onclick="window.print()"
+>
+🖨 Print
 </button>
-
-<div id="reportResult"></div>
 
 </div>
 
 </div>
+
+<div class="card" id="reportBox"></div>
 
 </section>
 
@@ -388,62 +815,114 @@ Records
 
 <script>
 
-/* =========================
-   DATA
-========================= */
+const KEY = "MS_SHEET_PRO_V2";
 
-const KEY = "ms_sheet_pro_data_v2";
-
-const defaultData = {
-    draws: [],
-    parties: [],
-    clients: [],
-    hisab: []
+let state = {
+  draws:[],
+  records:[],
+  parties:[],
+  clients:[],
+  hisab:[],
+  locked:false
 };
 
-let data = loadData();
 
+/* LOAD DATA */
 
-/* =========================
-   STORAGE
-========================= */
+function load(){
 
-function loadData(){
+  try{
 
-    try{
+    const saved =
+      localStorage.getItem(KEY);
 
-        const saved = localStorage.getItem(KEY);
+    if(saved){
 
-        if(!saved){
-            return structuredClone(defaultData);
-        }
+      const parsed =
+        JSON.parse(saved);
 
-        const parsed = JSON.parse(saved);
+      if(parsed && typeof parsed==="object"){
 
-        return {
-            draws: Array.isArray(parsed.draws) ? parsed.draws : [],
-            parties: Array.isArray(parsed.parties) ? parsed.parties : [],
-            clients: Array.isArray(parsed.clients) ? parsed.clients : [],
-            hisab: Array.isArray(parsed.hisab) ? parsed.hisab : []
+        state = {
+          ...state,
+          ...parsed
         };
 
-    }catch(error){
+      }
 
-        console.error(error);
-
-        return structuredClone(defaultData);
     }
+
+  }catch(error){
+
+    console.error(
+      "Data load error:",
+      error
+    );
+
+    localStorage.removeItem(KEY);
+
+  }
+
 }
 
 
-function saveData(){
+/* SAVE DATA */
+
+function save(){
+
+  try{
 
     localStorage.setItem(
-        KEY,
-        JSON.stringify(data)
+      KEY,
+      JSON.stringify(state)
     );
 
-    refreshAll();
+    refresh();
+
+  }catch(error){
+
+    alert(
+      "Data save नहीं हो पाया."
+    );
+
+    console.error(error);
+
+  }
+
+}
+
+
+/* ESCAPE HTML */
+
+function esc(x){
+
+  return String(x ?? "")
+    .replace(
+      /[&<>"']/g,
+      function(m){
+
+        return {
+          "&":"&amp;",
+          "<":"&lt;",
+          ">":"&gt;",
+          '"':"&quot;",
+          "'":"&#39;"
+        }[m];
+
+      }
+    );
+
+}
+
+
+/* TODAY */
+
+function today(){
+
+  return new Date()
+    .toISOString()
+    .slice(0,10);
+
 }
 
 
@@ -451,86 +930,200 @@ function saveData(){
    LOGIN
 ========================= */
 
-function login(){
+function login(event){
 
-    const username =
-        document.getElementById("username").value.trim();
+  if(event){
 
-    const password =
-        document.getElementById("password").value.trim();
+    event.preventDefault();
 
-    if(username === "admin" && password === "admin"){
+  }
 
-        document.getElementById("login").style.display = "none";
+  const userEl =
+    document.getElementById("loginUser");
 
-        document.getElementById("app").classList.remove("hidden");
-        document.getElementById("app").style.display = "block";
+  const passEl =
+    document.getElementById("loginPass");
 
-        showPage("home");
+  const loginEl =
+    document.getElementById("loginPage");
 
-        refreshAll();
+  const appEl =
+    document.getElementById("app");
 
-    }else{
 
-        alert("गलत Username या Password");
+  if(
+    !userEl ||
+    !passEl ||
+    !loginEl ||
+    !appEl
+  ){
 
-    }
-    }
+    alert(
+      "Login page में required element नहीं मिला."
+    );
 
-function logout(){
+    return false;
 
-    document.getElementById("app").style.display = "none";
-    document.getElementById("app").classList.add("hidden");
+  }
 
-    document.getElementById("login").style.display = "block";
 
-    document.getElementById("username").value = "";
-    document.getElementById("password").value = "";
-    }
+  const username =
+    userEl.value.trim();
 
-/* =========================
-   PAGE NAVIGATION
-========================= */
+  const password =
+    passEl.value;
 
-function showPage(id){
 
-    document
-        .querySelectorAll(".page")
-        .forEach(page => {
-            page.classList.add("hidden");
-        });
+  if(
+    username === "admin" &&
+    password === "admin"
+  ){
 
-    const page =
-        document.getElementById(id);
+    sessionStorage.setItem(
+      "ms_login",
+      "1"
+    );
 
-    if(!page){
-        alert("Page नहीं मिली");
-        return;
-    }
 
-    page.classList.remove("hidden");
+    loginEl.classList.add(
+      "hidden"
+    );
 
-    refreshAll();
+    appEl.classList.remove(
+      "hidden"
+    );
+
+
+    passEl.value = "";
+
+
+    refresh();
+
+    showPage("home");
+
+  }else{
+
+    alert(
+      "गलत Username या Password"
+    );
+
+    passEl.focus();
+
+  }
+
+
+  return false;
+
 }
 
 
-/* =========================
-   DASHBOARD
-========================= */
+/* LOGOUT */
 
-function refreshDashboard(){
+function logout(){
 
-    document.getElementById("totalDraws").textContent =
-        data.draws.length;
+  sessionStorage.removeItem(
+    "ms_login"
+  );
 
-    document.getElementById("totalParties").textContent =
-        data.parties.length;
 
-    document.getElementById("totalClients").textContent =
-        data.clients.length;
+  const appEl =
+    document.getElementById("app");
 
-    document.getElementById("totalRecords").textContent =
-        data.hisab.length;
+  const loginEl =
+    document.getElementById("loginPage");
+
+  const passEl =
+    document.getElementById("loginPass");
+
+
+  if(appEl){
+
+    appEl.classList.add(
+      "hidden"
+    );
+
+  }
+
+
+  if(loginEl){
+
+    loginEl.classList.remove(
+      "hidden"
+    );
+
+  }
+
+
+  if(passEl){
+
+    passEl.value = "";
+
+  }
+
+}
+
+
+/* PAGE */
+
+function showPage(id){
+
+  document
+    .querySelectorAll(".page")
+    .forEach(function(page){
+
+      page.classList.remove(
+        "active"
+      );
+
+    });
+
+
+  const target =
+    document.getElementById(id);
+
+
+  if(target){
+
+    target.classList.add(
+      "active"
+    );
+
+  }
+
+
+  refresh();
+
+}
+
+
+/* LOCK */
+
+function toggleLock(){
+
+  state.locked =
+    !state.locked;
+
+  save();
+
+}
+
+
+/* LOCK CHECK */
+
+function guard(){
+
+  if(state.locked){
+
+    alert(
+      "Records locked हैं. पहले Master Panel से unlock करें."
+    );
+
+    return true;
+
+  }
+
+  return false;
+
 }
 
 
@@ -538,68 +1131,553 @@ function refreshDashboard(){
    DRAW
 ========================= */
 
-function createDraw(){
+function addDraw(){
 
-    const name =
-        document.getElementById("drawName").value.trim();
+  if(guard()) return;
 
-    const date =
-        document.getElementById("drawDate").value;
 
-    if(!name || !date){
+  const name =
+    document
+      .getElementById("drawName")
+      .value
+      .trim();
 
-        alert("Name और Date भरें");
 
-        return;
-    }
+  const date =
+    document
+      .getElementById("drawDate")
+      .value ||
+    today();
 
-    data.draws.push({
 
-        id: Date.now(),
+  const time =
+    document
+      .getElementById("drawTime")
+      .value;
 
-        name: name,
 
-        date: date,
+  const result =
+    document
+      .getElementById("drawResult")
+      .value
+      .trim();
 
-        createdAt: new Date().toLocaleString()
 
-    });
+  if(!name){
 
-    document.getElementById("drawName").value = "";
+    alert(
+      "Draw name भरें"
+    );
 
-    document.getElementById("drawDate").value = "";
+    return;
 
-    saveData();
+  }
 
-    alert("Record successfully add हुआ");
+
+  state.draws.push({
+
+    id:Date.now(),
+
+    name:name,
+
+    date:date,
+
+    time:time,
+
+    result:result,
+
+    closed:false
+
+  });
+
+
+  save();
+
+
+  document.getElementById(
+    "drawName"
+  ).value = "";
+
+
+  document.getElementById(
+    "drawResult"
+  ).value = "";
+
+
+  document.getElementById(
+    "drawTime"
+  ).value = "";
+
 }
 
 
+/* DRAW LIST */
+
 function renderDraws(){
 
-    const box =
-        document.getElementById("drawList");
+  const searchEl =
+    document.getElementById(
+      "drawSearch"
+    );
 
-    if(data.draws.length === 0){
+  const table =
+    document.getElementById(
+      "drawTable"
+    );
 
-        box.innerHTML =
-            '<div class="empty">अभी कोई record नहीं है</div>';
 
-        return;
-    }
+  if(!searchEl || !table) return;
 
-    box.innerHTML = `
 
-    <table>
+  const q =
+    searchEl.value
+      .toLowerCase();
 
-    <tr>
-        <th>Name</th>
-        <th>Date</th>
-        <th>Action</th>
-    </tr>
 
-    ${data.draws.map(d => `
+  table.innerHTML =
+    state.draws
+      .filter(function(x){
 
-    <tr>
+        return (
+          x.name +
+          " " +
+          x.date +
+          " " +
+          x.result
+        )
+        .toLowerCase()
+        .includes(q);
 
-        <td>${escape
+      })
+      .map(function(x){
+
+        return `
+        <tr>
+
+        <td>${esc(x.name)}</td>
+
+        <td>${esc(x.date)}</td>
+
+        <td>${esc(x.time)}</td>
+
+        <td>${esc(x.result)}</td>
+
+        <td>
+        ${x.closed ? "Closed" : "Open"}
+        </td>
+
+        <td>
+
+        <button
+        class="secondary"
+        onclick="closeDraw(${x.id})"
+        >
+        ${x.closed ? "Open" : "Close"}
+        </button>
+
+        <button
+        class="danger"
+        onclick="del('draws',${x.id})"
+        >
+        Delete
+        </button>
+
+        </td>
+
+        </tr>
+        `;
+
+      })
+      .join("") ||
+
+    `<tr>
+    <td colspan="6">
+    No data
+    </td>
+    </tr>`;
+
+}
+
+
+/* CLOSE DRAW */
+
+function closeDraw(id){
+
+  if(guard()) return;
+
+
+  const item =
+    state.draws.find(
+      x => x.id === id
+    );
+
+
+  if(item){
+
+    item.closed =
+      !item.closed;
+
+  }
+
+
+  save();
+
+}
+
+
+/* DRAW SELECT */
+
+function fillDraws(){
+
+  const select =
+    document.getElementById(
+      "recDraw"
+    );
+
+
+  if(!select) return;
+
+
+  select.innerHTML =
+    '<option value="">Select draw</option>' +
+
+    state.draws
+      .map(function(x){
+
+        return `
+        <option value="${x.id}">
+        ${esc(x.name)} — ${esc(x.date)}
+        </option>
+        `;
+
+      })
+      .join("");
+
+}
+
+
+/* =========================
+   RECORD
+========================= */
+
+function addRecord(){
+
+  if(guard()) return;
+
+
+  const drawId =
+    Number(
+      document.getElementById(
+        "recDraw"
+      ).value
+    );
+
+
+  const draw =
+    state.draws.find(
+      x => x.id === drawId
+    );
+
+
+  if(!draw){
+
+    alert(
+      "Draw select करें"
+    );
+
+    return;
+
+  }
+
+
+  if(draw.closed){
+
+    alert(
+      "यह draw closed है"
+    );
+
+    return;
+
+  }
+
+
+  const party =
+    document.getElementById(
+      "recParty"
+    ).value
+    .trim();
+
+
+  const client =
+    document.getElementById(
+      "recClient"
+    ).value
+    .trim();
+
+
+  if(!party && !client){
+
+    alert(
+      "Party या Client भरें"
+    );
+
+    return;
+
+  }
+
+
+  state.records.push({
+
+    id:Date.now(),
+
+    drawId:drawId,
+
+    date:
+      document.getElementById(
+        "recDate"
+      ).value || today(),
+
+    party:party,
+
+    client:client,
+
+    ref:
+      document.getElementById(
+        "recRef"
+      ).value.trim(),
+
+    note:
+      document.getElementById(
+        "recNote"
+      ).value.trim()
+
+  });
+
+
+  save();
+
+
+  document.getElementById(
+    "recParty"
+  ).value = "";
+
+
+  document.getElementById(
+    "recClient"
+  ).value = "";
+
+
+  document.getElementById(
+    "recRef"
+  ).value = "";
+
+
+  document.getElementById(
+    "recNote"
+  ).value = "";
+
+}
+
+
+/* RECORD LIST */
+
+function renderRecords(){
+
+  const searchEl =
+    document.getElementById(
+      "recSearch"
+    );
+
+  const table =
+    document.getElementById(
+      "recTable"
+    );
+
+
+  if(!searchEl || !table) return;
+
+
+  const q =
+    searchEl.value.toLowerCase();
+
+
+  table.innerHTML =
+    state.records
+      .filter(function(x){
+
+        return JSON.stringify(x)
+          .toLowerCase()
+          .includes(q);
+
+      })
+      .map(function(x){
+
+        const draw =
+          state.draws.find(
+            y => y.id === x.drawId
+          );
+
+
+        return `
+        <tr>
+
+        <td>${esc(x.date)}</td>
+
+        <td>
+        ${esc(draw?.name || "Deleted draw")}
+        </td>
+
+        <td>${esc(x.party)}</td>
+
+        <td>${esc(x.client)}</td>
+
+        <td>${esc(x.ref)}</td>
+
+        <td>${esc(x.note)}</td>
+
+        <td>
+
+        <button
+        class="danger"
+        onclick="del('records',${x.id})"
+        >
+        Delete
+        </button>
+
+        </td>
+
+        </tr>
+        `;
+
+      })
+      .join("") ||
+
+    `<tr>
+    <td colspan="7">
+    No data
+    </td>
+    </tr>`;
+
+}
+
+
+/* =========================
+   PARTY
+========================= */
+
+function addParty(){
+
+  if(guard()) return;
+
+
+  const name =
+    document.getElementById(
+      "partyName"
+    ).value.trim();
+
+
+  if(!name){
+
+    alert(
+      "Party name भरें"
+    );
+
+    return;
+
+  }
+
+
+  state.parties.push({
+
+    id:Date.now(),
+
+    name:name,
+
+    phone:
+      document.getElementById(
+        "partyPhone"
+      ).value.trim(),
+
+    note:
+      document.getElementById(
+        "partyNote"
+      ).value.trim()
+
+  });
+
+
+  save();
+
+
+  document.getElementById(
+    "partyName"
+  ).value = "";
+
+
+  document.getElementById(
+    "partyPhone"
+  ).value = "";
+
+
+  document.getElementById(
+    "partyNote"
+  ).value = "";
+
+}
+
+
+/* PARTY LIST */
+
+function renderParties(){
+
+  const search =
+    document.getElementById(
+      "partySearch"
+    );
+
+  const table =
+    document.getElementById(
+      "partyTable"
+    );
+
+
+  if(!search || !table) return;
+
+
+  const q =
+    search.value.toLowerCase();
+
+
+  table.innerHTML =
+    state.parties
+      .filter(function(x){
+
+        return (
+          x.name +
+          " " +
+          x.phone +
+          " " +
+          x.note
+        )
+        .toLowerCase()
+        .includes(q);
+
+      })
+      .map(function(x){
+
+        return `
+        <tr>
+
+        <td>${esc(x.name)}</td>
+
+        <td>${esc(x.phone)}</td>
+
+        <td>${esc(x.note)}</td>
+
+        <td>
+
+        <button
+        class="danger"
+        onclick="del('parties',${x.id})"
+        >
+        Delete
