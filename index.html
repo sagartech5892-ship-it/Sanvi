@@ -1,1007 +1,820 @@
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MS Sheet Pro</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#eef5f1;
+    color:#263238;
+}
+header{
+    background:#176b3a;
+    color:white;
+    padding:16px;
+    font-size:22px;
+    font-weight:bold;
+    position:sticky;
+    top:0;
+    z-index:5;
+}
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:15px;
+}
+.card{
+    background:white;
+    border-radius:14px;
+    padding:16px;
+    margin-bottom:15px;
+    box-shadow:0 2px 8px #0001;
+}
+h2{margin-top:0;color:#176b3a}
+input,select,textarea{
+    width:100%;
+    padding:12px;
+    margin:6px 0 10px;
+    border:1px solid #ccd5d0;
+    border-radius:8px;
+    font-size:15px;
+}
+button{
+    border:0;
+    border-radius:9px;
+    padding:11px 14px;
+    margin:4px;
+    background:#218c4b;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+button.danger{background:#c62828}
+button.gray{background:#607d8b}
+button.dark{background:#263238}
+.menu{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+.menu button{
+    min-height:65px;
+    font-size:15px;
+}
+.hidden{display:none}
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+    font-size:14px;
+}
+th{
+    background:#28658f;
+    color:white;
+    padding:10px;
+}
+td{
+    padding:9px;
+    border-bottom:1px solid #ddd;
+}
+tr:nth-child(even){background:#f2f6f8}
+.badge{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+}
+.open{background:#d8f5df;color:#176b3a}
+.locked{background:#eee;color:#333}
+.stat{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+.stat div{
+    background:#f5faf7;
+    padding:15px;
+    border-radius:10px;
+    text-align:center;
+}
+.big{font-size:24px;font-weight:bold;color:#176b3a}
+@media(min-width:700px){
+    .menu{grid-template-columns:repeat(5,1fr)}
+    .stat{grid-template-columns:repeat(4,1fr)}
+}
+</style>
+</head>
+
+<body>
+
+<header>📊 MS SHEET PRO</header>
+
+<div class="container">
+
+<!-- LOGIN -->
+<section id="login">
+<div class="card">
+<h2>🔐 Login</h2>
+<input id="username" placeholder="Username">
+<input id="password" type="password" placeholder="Password">
+<button onclick="login()">🔐 Login</button>
+</div>
+</section>
+
+<!-- APP -->
+<section id="app" class="hidden">
+
+<div class="card">
+<div class="menu">
+<button onclick="show('home')">🏠 Home</button>
+<button onclick="show('draws')">🎯 Draw Master</button>
+<button onclick="show('jantri')">📋 Jantri</button>
+<button onclick="show('party')">👥 Party</button>
+<button onclick="show('clients')">👤 Clients</button>
+<button onclick="show('hisab')">🧾 Hisab</button>
+<button onclick="show('reports')">📊 Reports</button>
+<button class="danger" onclick="logout()">🚪 Logout</button>
+</div>
+</div>
+
+<!-- HOME -->
+<div id="home" class="page">
+<div class="card">
+<h2>🏠 Master Panel</h2>
+
+<div class="stat">
+<div>
+<div class="big" id="drawCount">0</div>
+🎯 Draws
+</div>
+
+<div>
+<div class="big" id="partyCount">0</div>
+👥 Parties
+</div>
+
+<div>
+<div class="big" id="clientCount">0</div>
+👤 Clients
+</div>
+
+<div>
+<div class="big" id="recordCount">0</div>
+📋 Records
+</div>
+</div>
+</div>
+</div>
+
+<!-- DRAW MASTER -->
+<div id="draws" class="page hidden">
+<div class="card">
+<h2>🎯 Draw Master</h2>
+
+<input id="drawName" placeholder="Draw Name">
+<input id="drawDate" type="date">
+
+<button onclick="createDraw()">➕ Create Draw</button>
+
+<div id="drawList"></div>
+</div>
+</div>
+
+<!-- JANTRI -->
+<div id="jantri" class="page hidden">
+
+<div class="card">
+<h2>📋 Jantri</h2>
+
+<select id="drawSelect" onchange="loadRecords()">
+<option value="">🎯 Select Draw</option>
+</select>
+
+<div id="recordForm">
+
+<input id="recordParty" placeholder="👥 Party Name">
+<input id="recordClient" placeholder="👤 Client Name">
+
+<input id="numbers"
+placeholder="Numbers: 01,02,03">
+
+<textarea id="recordNote" placeholder="📝 Note"></textarea>
+
+<button onclick="saveNumbers()">💾 Save Numbers</button>
+
+<hr>
+
+<h3>🔢 Normal Number Range</h3>
+
+<input id="fromNumber" type="number" min="0" max="99"
+placeholder="From 00-99">
+
+<input id="toNumber" type="number" min="0" max="99"
+placeholder="To 00-99">
+
+<button onclick="addRange()">➕ Add Number Range</button>
+
+<hr>
+
+<h3>🏁 Result</h3>
+
+<input id="result" placeholder="Result">
+
+<button onclick="lockSelectedDraw()">
+🔒 Save Result & Lock Draw
+</button>
+
+</div>
+
+<div id="recordTable"></div>
+</div>
+</div>
+
+<!-- PARTY -->
+<div id="party" class="page hidden">
+<div class="card">
+<h2>👥 Party Management</h2>
+
+<input id="partyName" placeholder="Party Name">
+
+<button onclick="addParty()">➕ Add Party</button>
+
+<div id="partyList"></div>
+</div>
+</div>
+
+<!-- CLIENT -->
+<div id="clients" class="page hidden">
+<div class="card">
+<h2>👤 Client Management</h2>
+
+<input id="clientName" placeholder="Client Name">
+<input id="clientPhone" placeholder="Phone">
+
+<button onclick="addClient()">➕ Add Client</button>
+
+<div id="clientList"></div>
+</div>
+</div>
+
+<!-- HISAB -->
+<div id="hisab" class="page hidden">
+<div class="card">
+<h2>🧾 Daily Hisab</h2>
+
+<input id="hisabDate" type="date" onchange="showHisab()">
+
+<div id="hisabResult"></div>
+</div>
+</div>
+
+<!-- REPORT -->
+<div id="reports" class="page hidden">
+<div class="card">
+<h2>📊 Reports</h2>
+
+<button onclick="showAllReport()">📅 All Records</button>
+<button onclick="window.print()">🖨️ Print / Save PDF</button>
+
+<div id="reportResult"></div>
+</div>
+</div>
+
+</section>
+</div>
+
+<script>
+
+const KEY="ms_sheet_pro_data";
+
+let data=JSON.parse(localStorage.getItem(KEY)||'null')||{
+    draws:[],
+    parties:[],
+    clients:[],
+    records:[]
+};
+
+let selectedDraw="";
+
+function saveData(){
+    localStorage.setItem(KEY,JSON.stringify(data));
+    refresh();
 }
 
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
+function login(){
+
+    const u=document.getElementById("username").value;
+    const p=document.getElementById("password").value;
+
+    if(!u || !p){
+        alert("Username और Password डालें");
+        return;
     }
+
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("app").classList.remove("hidden");
+
+    refresh();
+    show("home");
 }
 
-rootProject.name = "MSSheet"
-include(":app")
-plugins {
-    id("com.android.application") version "8.6.1" apply false
-    id("org.jetbrains.kotlin.android") version "2.0.21" apply false
-}
-org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
-android.useAndroidX=true
-plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+function logout(){
+
+    document.getElementById("app").classList.add("hidden");
+    document.getElementById("login").classList.remove("hidden");
+
 }
 
-android {
-    namespace = "com.example.mssheet"
-    compileSdk = 35
+function show(id){
 
-    defaultConfig {
-        applicationId = "com.example.mssheet"
-        minSdk = 24
-        targetSdk = 35
-        versionCode = 3
-        versionName = "3.0" 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    document.querySelectorAll(".page").forEach(x=>{
+        x.classList.add("hidden");
+    });
 
-    <application
-        android:theme="@style/AppTheme"
-        android:label="MS Sheet Pro">
+    document.getElementById(id).classList.remove("hidden");
 
-        <activity
-            android:name=".MainActivity"
-            android:screenOrientation="portrait"
-            android:exported="true">
+    if(id==="draws") renderDraws();
+    if(id==="jantri") renderDrawSelect();
+    if(id==="party") renderParties();
+    if(id==="clients") renderClients();
+    if(id==="hisab") showHisab();
+    if(id==="reports") showAllReport();
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-
-        </activity>
-
-    </application>
-
- </manifest>
-   <resources>
-
-    <style name="AppTheme"
-        parent="android:style/Theme.Material.Light.NoActionBar">
-
-        <item name="android:fontFamily">sans</item>
-        <item name="android:colorAccent">#2E7D32</item>
-        <item name="android:navigationBarColor">#FFFFFF</item>
-
-    </style>
-
-   </resources>   
-                 package com.example.mssheet
-
-import android.content.ContentValues
-import android.content.Context
-import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteOpenHelper
-
-data class Draw(
-    val id: Long,
-    val name: String,
-    val date: String,
-    val status: String,
-    val result: String
-)
-
-data class Party(
-    val id: Long,
-    val name: String
-)
-
-data class Client(
-    val id: Long,
-    val name: String,
-    val phone: String
-)
-
-data class Record(
-    val id: Long,
-    val drawId: Long,
-    val number: String,
-    val party: String,
-    val client: String,
-    val note: String,
-    val created: String
-)
-
-class DbHelper(context: Context) :
-    SQLiteOpenHelper(context, "mssheet.db", null, 1) {
-
-    override fun onCreate(db: SQLiteDatabase) {
-
-        db.execSQL(
-            """
-            CREATE TABLE draws(
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                date TEXT NOT NULL,
-                status TEXT NOT NULL,
-                result TEXT
-            )
-            """.trimIndent()
-        )
-
-        db.execSQL(
-            """
-            CREATE TABLE parties(
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL
-            )
-            """.trimIndent()
-        )
-
-        db.execSQL(
-            """
-            CREATE TABLE clients(
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                phone TEXT
-            )
-            """.trimIndent()
-        )
-
-        db.execSQL(
-            """
-            CREATE TABLE records(
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                drawId INTEGER,
-                number TEXT,
-                party TEXT,
-                client TEXT,
-                note TEXT,
-                created TEXT
-            )
-            """.trimIndent()
-        )
-    }
-
-    override fun onUpgrade(
-        db: SQLiteDatabase,
-        oldVersion: Int,
-        newVersion: Int
-    ) {
-    }
-
-    fun addDraw(
-        name: String,
-        date: String
-    ): Long {
-
-        val values = ContentValues()
-
-        values.put("name", name)
-        values.put("date", date)
-        values.put("status", "OPEN")
-        values.put("result", "")
-
-        return writableDatabase.insert(
-            "draws",
-            null,
-            values
-        )
-    }
-
-    fun getDraws(): List<Draw> {
-
-        val result = mutableListOf<Draw>()
-
-        readableDatabase.rawQuery(
-            "SELECT id,name,date,status,result FROM draws ORDER BY id DESC",
-            null
-        ).use { cursor ->
-
-            while (cursor.moveToNext()) {
-
-                result.add(
-                    Draw(
-                        cursor.getLong(0),
-                        cursor.getString(1),
-                        cursor.getString(2),
-                        cursor.getString(3),
-                        cursor.getString(4) ?: ""
-                    )
-                )
-            }
-        }
-
-        return result
-    }
-
-    fun lockDraw(
-        id: Long,
-        result: String
-    ) {
-
-        writableDatabase.execSQL(
-            "UPDATE draws SET result=?, status='LOCKED' WHERE id=?",
-            arrayOf(result, id)
-        )
-    }
-
-    fun addParty(name: String): Long {
-
-        val values = ContentValues()
-        values.put("name", name)
-
-        return writableDatabase.insert(
-            "parties",
-            null,
-            values
-        )
-    }
-
-    fun getParties(): List<Party> {
-
-        val result = mutableListOf<Party>()
-
-        readableDatabase.rawQuery(
-            "SELECT id,name FROM parties ORDER BY id DESC",
-            null
-        ).use { cursor ->
-
-            while (cursor.moveToNext()) {
-
-                result.add(
-                    Party(
-                        cursor.getLong(0),
-                        cursor.getString(1)
-                    )
-                )
-            }
-        }
-
-        return result
-    }
-
-    fun addClient(
-        name: String,
-        phone: String
-    ): Long {
-
-        val values = ContentValues()
-
-        values.put("name", name)
-        values.put("phone", phone)
-
-        return writableDatabase.insert(
-            "clients",
-            null,
-            values
-        )
-    }
-
-    fun getClients(): List<Client> {
-
-        val result = mutableListOf<Client>()
-
-        readableDatabase.rawQuery(
-            "SELECT id,name,phone FROM clients ORDER BY id DESC",
-            null
-        ).use { cursor ->
-
-            while (cursor.moveToNext()) {
-
-                result.add(
-                    Client(
-                        cursor.getLong(0),
-                        cursor.getString(1),
-                        cursor.getString(2) ?: ""
-                    )
-                )
-            }
-        }
-
-        return result
-    }
-
-    fun addRecord(
-        drawId: Long,
-        number: String,
-        party: String,
-        client: String,
-        note: String,
-        created: String
-    ): Long {
-
-        val values = ContentValues()
-
-        values.put("drawId", drawId)
-        values.put("number", number)
-        values.put("party", party)
-        values.put("client", client)
-        values.put("note", note)
-        values.put("created", created)
-
-        return writableDatabase.insert(
-            "records",
-            null,
-            values
-        )
-    }
-
-    fun getRecords(
-        drawId: Long
-    ): List<Record> {
-
-        val result = mutableListOf<Record>()
-
-        readableDatabase.rawQuery(
-            """
-            SELECT id,drawId,number,party,client,note,created
-            FROM records
-            WHERE drawId=?
-            ORDER BY id DESC
-            """.trimIndent(),
-            arrayOf(drawId.toString())
-        ).use { cursor ->
-
-            while (cursor.moveToNext()) {
-
-                result.add(
-                    Record(
-                        cursor.getLong(0),
-                        cursor.getLong(1),
-                        cursor.getString(2),
-                        cursor.getString(3),
-                        cursor.getString(4) ?: "",
-                        cursor.getString(5) ?: "",
-                        cursor.getString(6)
-                    )
-                )
-            }
-        }
-
-        return result
-         package com.example.mssheet
-
-import android.graphics.Color
-import android.os.Bundle
-import android.view.Gravity
-import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-
-class MainActivity : AppCompatActivity() {
-
-    private lateinit var db: DbHelper
-    private lateinit var content: LinearLayout
-
-    private var currentDrawId = -1L
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        db = DbHelper(this)
-
-        showLogin()
-    }
-
-    private fun showLogin() {
-
-        val box = LinearLayout(this)
-
-        box.orientation = LinearLayout.VERTICAL
-        box.gravity = Gravity.CENTER
-        box.setPadding(40, 40, 40, 40)
-
-        val title = TextView(this)
-
-        title.text = "📊 MS SHEET PRO"
-        title.textSize = 30f
-        title.gravity = Gravity.CENTER
-
-        val username = EditText(this)
-        username.hint = "Username"
-
-        val password = EditText(this)
-        password.hint = "Password"
-        password.inputType = 129
-
-        val login = Button(this)
-
-        login.text = "🔐 LOGIN"
-
-        login.setOnClickListener {
-
-            showDashboard()
-        }
-
-        box.addView(title, lp())
-        box.addView(username, lp())
-        box.addView(password, lp())
-        box.addView(login, lp())
-
-        setContentView(box)
-    }
-
-    private fun showDashboard() {
-
-        val root = LinearLayout(this)
-
-        root.orientation = LinearLayout.VERTICAL
-
-        val header = TextView(this)
-
-        header.text = "🏠 MASTER PANEL"
-        header.textSize = 22f
-        header.gravity = Gravity.CENTER_VERTICAL
-        header.setTextColor(Color.WHITE)
-        header.setBackgroundColor(
-            Color.rgb(46, 125, 50)
-        )
-
-        root.addView(
-            header,
-            LinearLayout.LayoutParams(-1, 70)
-        )
-
-        content = LinearLayout(this)
-
-        content.orientation = LinearLayout.VERTICAL
-        content.setPadding(18, 18, 18, 18)
-
-        root.addView(
-            content,
-            LinearLayout.LayoutParams(
-                -1,
-                0,
-                1f
-            )
-        )
-
-        val navigation = LinearLayout(this)
-
-        navigation.orientation =
-            LinearLayout.HORIZONTAL
-
-        val buttons = listOf(
-            "🎯 Draw",
-            "📋 Jantri",
-            "👥 Party",
-            "👤 Clients",
-            "🧾 Hisab"
-        )
-
-        buttons.forEach { label ->
-
-            val button = Button(this)
-
-            button.text = label
-
-            button.setOnClickListener {
-
-                when (label) {
-
-                    "🎯 Draw" ->
-                        drawScreen()
-
-                    "📋 Jantri" ->
-                        jantriScreen()
-
-                    "👥 Party" ->
-                        partyScreen()
-
-                    "👤 Clients" ->
-                        clientScreen()
-
-                    "🧾 Hisab" ->
-                        hisabScreen()
-                }
-            }
-
-            navigation.addView(
-                button,
-                LinearLayout.LayoutParams(
-                    0,
-                    70,
-                    1f
-                )
-            )
-        }
-
-        root.addView(navigation)
-
-        setContentView(root)
-
-        drawScreen()
-    }
-
-    private fun heading(text: String) {
-
-        content.removeAllViews()
-
-        val title = TextView(this)
-
-        title.text = text
-        title.textSize = 24f
-
-        content.addView(
-            title,
-            lp()
-        )
-    }
-
-    private fun drawScreen() {
-
-        heading("🎯 DRAW MASTER")
-
-        val name = EditText(this)
-        name.hint = "Draw Name"
-
-        val date = EditText(this)
-        date.hint = "Date YYYY-MM-DD"
-
-        val create = Button(this)
-        create.text = "➕ CREATE DRAW"
-
-        val list = LinearLayout(this)
-
-        list.orientation =
-            LinearLayout.VERTICAL
-
-        create.setOnClickListener {
-
-            val n = name.text.toString().trim()
-            val d = date.text.toString().trim()
-
-            if (n.isEmpty() || d.isEmpty()) {
-
-                toast("Draw name और date डालें")
-                return@setOnClickListener
-            }
-
-            db.addDraw(n, d)
-
-            name.text.clear()
-            date.text.clear()
-
-            refreshDraws(list)
-        }
-
-        content.addView(name, lp())
-        content.addView(date, lp())
-        content.addView(create, lp())
-        content.addView(list, lp())
-
-        refreshDraws(list)
-    }
-
-    private fun refreshDraws(
-        list: LinearLayout
-    ) {
-
-        list.removeAllViews()
-
-        db.getDraws().forEach { draw ->
-
-            val button = Button(this)
-
-            val icon =
-                if (draw.status == "LOCKED")
-                    "🔒"
-                else
-                    "🟢"
-
-            button.text =
-                "$icon ${draw.name}\n" +
-                "📅 ${draw.date} | ${draw.status}" +
-                if (draw.result.isNotEmpty())
-                    "\n🏁 Result: ${draw.result}"
-                else
-                    ""
-
-            button.setOnClickListener {
-
-                currentDrawId = draw.id
-
-                jantriScreen()
-            }
-
-            list.addView(
-                button,
-                lp()
-            )
-        }
-    }
-
-    private fun jantriScreen() {
-
-        if (currentDrawId < 0) {
-
-            toast("पहले Draw select करें")
-
-            drawScreen()
-
-            return
-        }
-
-        val draw =
-            db.getDraws()
-                .firstOrNull {
-                    it.id == currentDrawId
-                }
-
-        if (draw == null) {
-
-            drawScreen()
-
-            return
-        }
-
-        heading(
-            "📋 JANTRI\n🎯 ${draw.name}"
-        )
-
-        if (draw.status == "LOCKED") {
-
-            content.addView(
-                TextView(this).apply {
-
-                    text =
-                        "🔒 यह Draw LOCKED है\n" +
-                        "Records read-only हैं"
-
-                    textSize = 17f
-                },
-                lp()
-            )
-
-        } else {
-
-            val party = EditText(this)
-            party.hint = "Party Name"
-
-            val client = EditText(this)
-            client.hint = "Client Name"
-
-            val numbers = EditText(this)
-            numbers.hint =
-                "Numbers: 01,02,03"
-
-            val note = EditText(this)
-            note.hint = "Note"
-
-            val save = Button(this)
-
-            save.text =
-                "💾 SAVE NUMBERS"
-
-            save.setOnClickListener {
-
-                val values =
-                    numbers.text.toString()
-                        .split(",", " ", "\n")
-                        .map {
-                            it.trim()
-                        }
-                        .filter {
-                            it.matches(
-                                Regex("\\d{1,2}")
-                            )
-                        }
-
-                values.forEach { number ->
-
-                    db.addRecord(
-                        currentDrawId,
-                        number.padStart(2, '0'),
-                        party.text.toString(),
-                        client.text.toString(),
-                        note.text.toString(),
-                        now()
-                    )
-                }
-
-                toast("Records saved")
-
-                jantriScreen()
-            }
-
-            content.addView(party, lp())
-            content.addView(client, lp())
-            content.addView(numbers, lp())
-            content.addView(note, lp())
-            content.addView(save, lp())
-
-            val from = EditText(this)
-
-            from.hint = "From 00-99"
-            from.inputType = 2
-
-            val to = EditText(this)
-
-            to.hint = "To 00-99"
-            to.inputType = 2
-
-            val range = Button(this)
-
-            range.text =
-                "🔢 ADD NUMBER RANGE"
-
-            range.setOnClickListener {
-
-                val start =
-                    from.text.toString()
-                        .toIntOrNull()
-
-                val end =
-                    to.text.toString()
-                        .toIntOrNull()
-
-                if (
-                    start == null ||
-                    end == null ||
-                    start < 0 ||
-                    end > 99 ||
-                    start > end
-                ) {
-
-                    toast("00 से 99 की valid range डालें")
-
-                    return@setOnClickListener
-                }
-
-                for (n in start..end) {
-
-                    db.addRecord(
-                        currentDrawId,
-                        "%02d".format(n),
-                        party.text.toString(),
-                        client.text.toString(),
-                        note.text.toString(),
-                        now()
-                    )
-                }
-
-                toast("Number range saved")
-
-                jantriScreen()
-            }
-
-            content.addView(from, lp())
-            content.addView(to, lp())
-            content.addView(range, lp())
-
-            val result =
-                EditText(this)
-
-            result.hint =
-                "Result"
-
-            val lock =
-                Button(this)
-
-            lock.text =
-                "🔒 SAVE RESULT & LOCK"
-
-            lock.setOnClickListener {
-
-                val value =
-                    result.text.toString().trim()
-
-                if (value.isEmpty()) {
-
-                    toast("Result डालें")
-
-                    return@setOnClickListener
-                }
-
-                db.lockDraw(
-                    currentDrawId,
-                    value
-                )
-
-                toast("Draw locked")
-
-                jantriScreen()
-            }
-
-            content.addView(result, lp())
-            content.addView(lock, lp())
-        }
-
-        val records =
-            TextView(this)
-
-        records.textSize = 16f
-
-        records.text =
-            db.getRecords(currentDrawId)
-                .joinToString("\n") {
-
-                    "${it.number} | " +
-                    "${it.party} | " +
-                    "${it.client} | " +
-                    it.created
-                }
-                .ifBlank {
-                    "No records"
-                }
-
-        content.addView(
-            records,
-            lp()
-        )
-    }
-
-    private fun partyScreen() {
-
-        heading("👥 PARTY MANAGEMENT")
-
-        val name = EditText(this)
-
-        name.hint = "Party Name"
-
-        val add = Button(this)
-
-        add.text = "➕ ADD PARTY"
-
-        val list = TextView(this)
-
-        list.textSize = 17f
-
-        fun refresh() {
-
-            list.text =
-                db.getParties()
-                    .joinToString("\n") {
-                        "• ${it.name}"
-                    }
-                    .ifBlank {
-                        "No parties"
-                    }
-        }
-
-        add.setOnClickListener {
-
-            if (name.text.isNotBlank()) {
-
-                db.addParty(
-                    name.text.toString().trim()
-                )
-
-                name.text.clear()
-
-                refresh()
-            }
-        }
-
-        content.addView(name, lp())
-        content.addView(add, lp())
-        content.addView(list, lp())
-
-        refresh()
-    }
-
-    private fun clientScreen() {
-
-        heading("👤 CLIENT MANAGEMENT")
-
-        val name = EditText(this)
-
-        name.hint = "Client Name"
-
-        val phone = EditText(this)
-
-        phone.hint = "Phone"
-
-        val add = Button(this)
-
-        add.text = "➕ ADD CLIENT"
-
-        val list = TextView(this)
-
-        list.textSize = 17f
-
-        fun refresh() {
-
-            list.text =
-                db.getClients()
-                    .joinToString("\n") {
-
-                        "• ${it.name} ${it.phone}"
-                    }
-                    .ifBlank {
-                        "No clients"
-                    }
-        }
-
-        add.setOnClickListener {
-
-            if (name.text.isNotBlank()) {
-
-                db.addClient(
-                    name.text.toString().trim(),
-                    phone.text.toString().trim()
-                )
-
-                name.text.clear()
-                phone.text.clear()
-
-                refresh()
-            }
-        }
-
-        content.addView(name, lp())
-        content.addView(phone, lp())
-        content.addView(add, lp())
-        content.addView(list, lp())
-
-        refresh()
-    }
-
-    private fun hisabScreen() {
-
-        heading("🧾 DAILY HISAB")
-
-        val report = TextView(this)
-
-        report.textSize = 17f
-
-        report.text =
-            db.getDraws()
-                .joinToString("\n\n") { draw ->
-
-                    val count =
-                        db.getRecords(draw.id).size
-
-                    "🎯 ${draw.name}\n" +
-                    "📅 ${draw.date}\n" +
-                    "📌 Status: ${draw.status}\n" +
-                    "🏁 Result: ${
-                        draw.result.ifBlank { "—" }
-                    }\n" +
-                    "📋 Records: $count"
-                }
-                .ifBlank {
-                    "No records"
-                }
-
-        content.addView(
-            report,
-            lp()
-        )
-    }
-
-    private fun now(): String {
-
-        return SimpleDateFormat(
-            "yyyy-MM-dd HH:mm",
-            Locale.getDefault()
-        ).format(Date())
-    }
-
-    private fun toast(message: String) {
-
-        Toast.makeText(
-            this,
-            message,
-            Toast.LENGTH_SHORT
-        ).show()
-    }
-
-    private fun lp():
-            LinearLayout.LayoutParams {
-
-        return LinearLayout.LayoutParams(
-            -1,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        ).apply {
-
-            setMargins(
-                0,
-                6,
-                0,
-                6
-            )
-        }
-    }
 }
+
+function createDraw(){
+
+    const name=document.getElementById("drawName").value.trim();
+    const date=document.getElementById("drawDate").value;
+
+    if(!name || !date){
+        alert("Draw name और date डालें");
+        return;
     }
+
+    data.draws.push({
+        id:Date.now(),
+        name:name,
+        date:date,
+        status:"OPEN",
+        result:""
+    });
+
+    document.getElementById("drawName").value="";
+    document.getElementById("drawDate").value="";
+
+    saveData();
+    renderDraws();
 }
+
+function renderDraws(){
+
+    const box=document.getElementById("drawList");
+
+    if(data.draws.length===0){
+        box.innerHTML="<p>अभी कोई Draw नहीं है।</p>";
+        return;
+    }
+
+    box.innerHTML="<table><tr>"+
+        "<th>🎯 Draw</th>"+
+        "<th>📅 Date</th>"+
+        "<th>Status</th>"+
+        "<th>Action</th>"+
+        "</tr>"+
+
+        data.draws.map(d=>`
+
+        <tr>
+        <td>${escapeHtml(d.name)}</td>
+        <td>${d.date}</td>
+        <td>
+        <span class="badge ${d.status==="LOCKED"?"locked":"open"}">
+        ${d.status==="LOCKED"?"🔒 LOCKED":"🟢 OPEN"}
+        </span>
+        </td>
+        <td>
+        <button onclick="openDraw(${d.id})">📋 Open</button>
+        </td>
+        </tr>
+
+        `).join("")+"</table>";
 }
+
+function openDraw(id){
+
+    selectedDraw=id;
+
+    document.getElementById("drawSelect").value=id;
+
+    show("jantri");
+    renderDrawSelect();
+    document.getElementById("drawSelect").value=id;
+
+    loadRecords();
 }
+
+function renderDrawSelect(){
+
+    const select=document.getElementById("drawSelect");
+
+    select.innerHTML=
+    '<option value="">🎯 Select Draw</option>';
+
+    data.draws.forEach(d=>{
+
+        const option=document.createElement("option");
+
+        option.value=d.id;
+        option.textContent=
+            `${d.name} — ${d.date} — ${d.status}`;
+
+        select.appendChild(option);
+
+    });
+
+    if(selectedDraw)
+        select.value=selectedDraw;
+}
+
+function getSelectedDraw(){
+
+    const id=Number(
+        document.getElementById("drawSelect").value
+    );
+
+    return data.draws.find(d=>d.id===id);
+}
+
+function saveNumbers(){
+
+    const draw=getSelectedDraw();
+
+    if(!draw){
+        alert("पहले Draw select करें");
+        return;
+    }
+
+    if(draw.status==="LOCKED"){
+        alert("यह Draw locked है");
+        return;
+    }
+
+    const nums=document.getElementById("numbers")
+        .value
+        .split(/[,\s\n]+/)
+        .map(x=>x.trim())
+        .filter(x=>/^\d{1,2}$/.test(x));
+
+    if(nums.length===0){
+        alert("Valid numbers डालें");
+        return;
+    }
+
+    const party=document.getElementById("recordParty").value;
+    const client=document.getElementById("recordClient").value;
+    const note=document.getElementById("recordNote").value;
+
+    nums.forEach(n=>{
+
+        data.records.push({
+            id:Date.now()+Math.random(),
+            drawId:draw.id,
+            number=n.padStart(2,"0"),
+            party:party,
+            client:client,
+            note:note,
+            created:new Date().toLocaleString()
+        });
+
+    });
+
+    document.getElementById("numbers").value="";
+
+    saveData();
+    loadRecords();
+
+    alert("Records saved ✅");
+}
+
+function addRange(){
+
+    const draw=getSelectedDraw();
+
+    if(!draw){
+        alert("पहले Draw select करें");
+        return;
+    }
+
+    if(draw.status==="LOCKED"){
+        alert("यह Draw locked है");
+        return;
+    }
+
+    const from=parseInt(
+        document.getElementById("fromNumber").value
+    );
+
+    const to=parseInt(
+        document.getElementById("toNumber").value
+    );
+
+    if(
+        isNaN(from) ||
+        isNaN(to) ||
+        from<0 ||
+        to>99 ||
+        from>to
+    ){
+        alert("00 से 99 की valid range डालें");
+        return;
+    }
+
+    const party=document.getElementById("recordParty").value;
+    const client=document.getElementById("recordClient").value;
+    const note=document.getElementById("recordNote").value;
+
+    for(let n=from;n<=to;n++){
+
+        data.records.push({
+            id:Date.now()+Math.random(),
+            drawId:draw.id,
+            number:String(n).padStart(2,"0"),
+            party:party,
+            client:client,
+            note:note,
+            created:new Date().toLocaleString()
+        });
+
+    }
+
+    saveData();
+    loadRecords();
+
+    alert("Range saved ✅");
+}
+
+function lockSelectedDraw(){
+
+    const draw=getSelectedDraw();
+
+    if(!draw){
+        alert("पहले Draw select करें");
+        return;
+    }
+
+    if(draw.status==="LOCKED"){
+        alert("Draw पहले से locked है");
+        return;
+    }
+
+    const result=document.getElementById("result")
+        .value.trim();
+
+    if(!result){
+        alert("Result डालें");
+        return;
+    }
+
+    if(!confirm(
+        "Result save करके Draw lock करना है?"
+    )) return;
+
+    draw.result=result;
+    draw.status="LOCKED";
+
+    saveData();
+    loadRecords();
+    renderDrawSelect();
+
+    alert("Draw locked 🔒");
+}
+
+function loadRecords(){
+
+    const draw=getSelectedDraw();
+
+    if(!draw){
+
+        document.getElementById("recordTable").innerHTML=
+            "<p>🎯 Draw select करें।</p>";
+
+        return;
+    }
+
+    const records=data.records.filter(
+        r=>r.drawId===draw.id
+    );
+
+    let html=
+    `<p>
+    <b>🎯 ${escapeHtml(draw.name)}</b><br>
+    📅 ${draw.date}<br>
+    Status: ${draw.status==="LOCKED"?"🔒 LOCKED":"🟢 OPEN"}
+    ${draw.result?`<br>🏁 Result: ${escapeHtml(draw.result)}`:""}
+    </p>`;
+
+    if(records.length===0){
+
+        html+="<p>अभी कोई record नहीं है।</p>";
+
+    }else{
+
+        html+=`
+        <table>
+        <tr>
+        <th>Number</th>
+        <th>Party</th>
+        <th>Client</th>
+        <th>Time</th>
+        </tr>
+        `;
+
+        records.forEach(r=>{
+
+            html+=`
+            <tr>
+            <td>${r.number}</td>
+            <td>${escapeHtml(r.party)}</td>
+            <td>${escapeHtml(r.client)}</td>
+            <td>${escapeHtml(r.created)}</td>
+            </tr>
+            `;
+
+        });
+
+        html+="</table>";
+    }
+
+    document.getElementById("recordTable").innerHTML=html;
+}
+
+function addParty(){
+
+    const name=document.getElementById("partyName")
+        .value.trim();
+
+    if(!name){
+        alert("Party name डालें");
+        return;
+    }
+
+    data.parties.push({
+        id:Date.now(),
+        name:name
+    });
+
+    document.getElementById("partyName").value="";
+
+    saveData();
+    renderParties();
+}
+
+function renderParties(){
+
+    const box=document.getElementById("partyList");
+
+    box.innerHTML=
+        data.parties.map(p=>
+        `<p>👥 ${escapeHtml(p.name)}</p>`
+        ).join("")
+        || "<p>No parties</p>";
+}
+
+function addClient(){
+
+    const name=document.getElementById("clientName")
+        .value.trim();
+
+    const phone=document.getElementById("clientPhone")
+        .value.trim();
+
+    if(!name){
+        alert("Client name डालें");
+        return;
+    }
+
+    data.clients.push({
+        id:Date.now(),
+        name:name,
+        phone:phone
+    });
+
+    document.getElementById("clientName").value="";
+    document.getElementById("clientPhone").value="";
+
+    saveData();
+    renderClients();
+}
+
+function renderClients(){
+
+    const box=document.getElementById("clientList");
+
+    box.innerHTML=
+        data.clients.map(c=>
+        `<p>👤 ${escapeHtml(c.name)}
+        ${c.phone?" — "+escapeHtml(c.phone):""}</p>`
+        ).join("")
+        || "<p>No clients</p>";
+}
+
+function showHisab(){
+
+    const date=
+        document.getElementById("hisabDate").value;
+
+    let draws=data.draws;
+
+    if(date){
+        draws=draws.filter(d=>d.date===date);
+    }
+
+    const box=document.getElementById("hisabResult");
+
+    if(draws.length===0){
+        box.innerHTML="<p>इस तारीख का कोई record नहीं है।</p>";
+        return;
+    }
+
+    box.innerHTML=draws.map(d=>{
+
+        const records=data.records.filter(
+            r=>r.drawId===d.id
+        );
+
+        return `
+        <div class="card">
+        <h3>🎯 ${escapeHtml(d.name)}</h3>
+        📅 ${d.date}<br>
+        📌 Status: ${d.status}<br>
+        🏁 Result: ${escapeHtml(d.result||"—")}<br>
+        📋 Records: ${records.length}
+        </div>
+        `;
+
+    }).join("");
+}
+
+function showAllReport(){
+
+    const box=document.getElementById("reportResult");
+
+    box.innerHTML=data.draws.map(d=>{
+
+        const records=data.records.filter(
+            r=>r.drawId===d.id
+        );
+
+        return `
+        <div class="card">
+        <h3>🎯 ${escapeHtml(d.name)}</h3>
+        📅 ${d.date}<br>
+        📌 ${d.status}<br>
+        📋 ${records.length} records
+        </div>
+        `;
+
+    }).join("") || "<p>No data</p>";
+}
+
+function refresh(){
+
+    document.getElementById("drawCount").textContent=
+        data.draws.length;
+
+    document.getElementById("partyCount").textContent=
+        data.parties.length;
+
+    document.getElementById("clientCount").textContent=
+        data.clients.length;
+
+    document.getElementById("recordCount").textContent=
+        data.records.length;
+
+    renderDraws();
+    renderParties();
+    renderClients();
+    renderDrawSelect();
+}
+
+function escapeHtml(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+</script>
+
+</body>
+    </html>
