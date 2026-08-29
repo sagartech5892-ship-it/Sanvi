@@ -461,13 +461,10 @@ function login(){
 
     if(username === "admin" && password === "admin"){
 
-        document
-            .getElementById("loginPage")
-            .classList.add("hidden");
+        document.getElementById("login").style.display = "none";
 
-        document
-            .getElementById("app")
-            .classList.remove("hidden");
+        document.getElementById("app").classList.remove("hidden");
+        document.getElementById("app").style.display = "block";
 
         showPage("home");
 
@@ -478,22 +475,18 @@ function login(){
         alert("गलत Username या Password");
 
     }
-}
-
+    }
 
 function logout(){
 
-    document
-        .getElementById("app")
-        .classList.add("hidden");
+    document.getElementById("app").style.display = "none";
+    document.getElementById("app").classList.add("hidden");
 
-    document
-        .getElementById("loginPage")
-        .classList.remove("hidden");
+    document.getElementById("login").style.display = "block";
 
+    document.getElementById("username").value = "";
     document.getElementById("password").value = "";
-}
-
+    }
 
 /* =========================
    PAGE NAVIGATION
