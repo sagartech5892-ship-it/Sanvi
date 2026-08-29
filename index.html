@@ -1,99 +1,97 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>MS SHEET PRO</title>
 
 <style>
-*{box-sizing:border-box}
+
+*{
+  box-sizing:border-box;
+}
 
 body{
   margin:0;
-  font-family:Arial,sans-serif;
+  font-family:Arial, sans-serif;
   background:#f1f5f9;
   color:#172033;
 }
 
 header{
   background:#172033;
-  color:#fff;
+  color:white;
   padding:16px;
   text-align:center;
   font-size:22px;
-  font-weight:700;
+  font-weight:bold;
 }
 
-.wrap{
-  max-width:1150px;
+.container{
+  max-width:1100px;
   margin:auto;
-  padding:14px;
+  padding:15px;
 }
 
 .card{
-  background:#fff;
+  background:white;
+  padding:18px;
+  margin-bottom:15px;
   border-radius:14px;
-  padding:16px;
-  margin-bottom:14px;
-  box-shadow:0 3px 14px #0001;
+  box-shadow:0 3px 12px #0002;
 }
 
 .hidden{
-  display:none!important;
+  display:none !important;
 }
 
-.login{
-  max-width:420px;
-  margin:60px auto;
+.login-box{
+  max-width:400px;
+  margin:70px auto;
 }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
-}
-
-input,select,textarea,button{
+input,
+select,
+textarea,
+button{
   width:100%;
-  padding:11px;
+  padding:12px;
+  margin-top:8px;
+  border-radius:8px;
   border:1px solid #cbd5e1;
-  border-radius:9px;
   font-size:15px;
 }
 
 button{
   background:#2563eb;
-  color:#fff;
-  border:0;
-  font-weight:600;
+  color:white;
+  border:none;
+  font-weight:bold;
   cursor:pointer;
 }
 
-button.secondary{
-  background:#475569;
+button:hover{
+  opacity:.9;
 }
 
-button.danger{
+.btn-danger{
   background:#dc2626;
 }
 
-button.success{
+.btn-success{
   background:#16a34a;
 }
 
-nav{
+.btn-dark{
+  background:#334155;
+}
+
+.menu{
   display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:7px;
-  margin-bottom:14px;
-}
-
-nav button{
-  font-size:13px;
-}
-
-h2{
-  margin-top:0;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin-bottom:15px;
 }
 
 .page{
@@ -104,25 +102,10 @@ h2{
   display:block;
 }
 
-table{
-  width:100%;
-  border-collapse:collapse;
-  background:#fff;
-}
-
-th,td{
-  padding:9px;
-  border-bottom:1px solid #e2e8f0;
-  text-align:left;
-  font-size:14px;
-}
-
-th{
-  background:#f8fafc;
-}
-
-.tablewrap{
-  overflow:auto;
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
 }
 
 .stats{
@@ -132,14 +115,40 @@ th{
 }
 
 .stat{
-  padding:14px;
-  border-radius:12px;
   background:#e0f2fe;
+  padding:15px;
+  border-radius:12px;
 }
 
-.stat b{
-  font-size:22px;
+.stat strong{
   display:block;
+  font-size:25px;
+  margin-top:5px;
+}
+
+.table-wrap{
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:650px;
+}
+
+th,
+td{
+  padding:10px;
+  border-bottom:1px solid #e2e8f0;
+  text-align:left;
+}
+
+th{
+  background:#f8fafc;
+}
+
+.search{
+  margin-bottom:12px;
 }
 
 .row{
@@ -151,86 +160,102 @@ th{
   flex:1;
 }
 
-.muted{
-  color:#64748b;
+.small{
   font-size:13px;
+  color:#64748b;
 }
 
 @media(max-width:700px){
-  .grid,.stats{
-    grid-template-columns:1fr 1fr;
+
+  .menu{
+    grid-template-columns:repeat(2,1fr);
   }
 
-  nav{
-    grid-template-columns:repeat(3,1fr);
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
   }
 
   .row{
     flex-direction:column;
   }
+
 }
 
 @media(max-width:430px){
-  .grid,.stats{
-    grid-template-columns:1fr;
-  }
 
-  nav{
-    grid-template-columns:repeat(2,1fr);
+  .stats{
+    grid-template-columns:1fr;
   }
 
   header{
     font-size:19px;
   }
+
 }
+
 </style>
 </head>
 
 <body>
 
-<header>📊 MS SHEET PRO</header>
+<header>
+📊 MS SHEET PRO
+</header>
 
-<!-- LOGIN -->
-<div id="loginPage" class="wrap">
 
-<form class="card login" onsubmit="return login(event)">
+<!-- ================= LOGIN ================= -->
 
-<h2>🔐 Login</h2>
+<div id="loginPage" class="container">
 
-<p class="muted">
-Username: admin &nbsp; Password: admin
-</p>
+  <div class="card login-box">
 
-<input
-  id="loginUser"
-  placeholder="Username"
-  autocomplete="username"
->
+    <h2>🔐 Login</h2>
 
-<br><br>
+    <p class="small">
+      Demo Login: admin / admin
+    </p>
 
-<input
-  id="loginPass"
-  type="password"
-  placeholder="Password"
-  autocomplete="current-password"
->
+    <form onsubmit="return login(event)">
 
-<br><br>
+      <input
+        type="text"
+        id="loginUser"
+        placeholder="Username"
+        autocomplete="username"
+        required
+      >
 
-<button type="submit">
-🔐 Login
-</button>
+      <input
+        type="password"
+        id="loginPass"
+        placeholder="Password"
+        autocomplete="current-password"
+        required
+      >
 
-</form>
+      <button type="submit">
+        🔐 Login
+      </button>
+
+    </form>
+
+  </div>
 
 </div>
 
 
-<!-- APP -->
-<div id="app" class="wrap hidden">
+<!-- ================= MAIN APP ================= -->
 
-<nav>
+<div id="app" class="container hidden">
+
+
+<!-- MENU -->
+
+<div class="menu">
 
 <button onclick="showPage('home')">
 🏠 Master Panel
@@ -241,7 +266,11 @@ Username: admin &nbsp; Password: admin
 </button>
 
 <button onclick="showPage('records')">
-📋 Normal Records
+📋 Records
+</button>
+
+<button onclick="showPage('jantri')">
+📒 Jantri
 </button>
 
 <button onclick="showPage('parties')">
@@ -257,21 +286,24 @@ Username: admin &nbsp; Password: admin
 </button>
 
 <button onclick="showPage('summary')">
-📅 Date Summary
+📅 Summary
 </button>
 
 <button onclick="showPage('reports')">
 📊 Reports
 </button>
 
-<button class="danger" onclick="logout()">
-🔒 Logout
+<button
+  class="btn-danger"
+  onclick="logout()">
+  🔒 Logout
 </button>
 
-</nav>
+</div>
 
 
-<!-- HOME -->
+<!-- ================= HOME ================= -->
+
 <section id="home" class="page active">
 
 <div class="card">
@@ -282,22 +314,22 @@ Username: admin &nbsp; Password: admin
 
 <div class="stat">
 Draws
-<b id="sDraws">0</b>
+<strong id="totalDraws">0</strong>
 </div>
 
 <div class="stat">
 Records
-<b id="sRecords">0</b>
+<strong id="totalRecords">0</strong>
 </div>
 
 <div class="stat">
 Parties
-<b id="sParties">0</b>
+<strong id="totalParties">0</strong>
 </div>
 
 <div class="stat">
 Clients
-<b id="sClients">0</b>
+<strong id="totalClients">0</strong>
 </div>
 
 </div>
@@ -307,14 +339,16 @@ Clients
 
 <div class="card">
 
-<h3>🔒 Result / Record Lock</h3>
+<h3>🔒 Record Lock</h3>
 
-<p id="lockText" class="muted">
-Records unlocked.
+<p id="lockStatus">
+Records अभी unlocked हैं।
 </p>
 
-<button id="lockBtn" onclick="toggleLock()">
-Lock records
+<button
+  id="lockButton"
+  onclick="toggleLock()">
+  🔒 Lock Records
 </button>
 
 </div>
@@ -322,37 +356,28 @@ Lock records
 
 <div class="card">
 
-<h3>💾 Browser Data</h3>
-
-<p class="muted">
-Data इसी browser में LocalStorage में save होता है।
-</p>
+<h3>💾 Data Backup</h3>
 
 <div class="row">
 
 <button onclick="exportData()">
-Export Backup
+⬇️ Export Backup
 </button>
 
 <button
-class="secondary"
-onclick="document.getElementById('importFile').click()"
->
-Import Backup
-</button>
-
-<button class="danger" onclick="clearData()">
-Clear All
+  class="btn-dark"
+  onclick="document.getElementById('importFile').click()">
+  ⬆️ Import Backup
 </button>
 
 </div>
 
 <input
-id="importFile"
-type="file"
-accept=".json"
-class="hidden"
-onchange="importData(event)"
+  type="file"
+  id="importFile"
+  accept=".json"
+  class="hidden"
+  onchange="importData(event)"
 >
 
 </div>
@@ -360,7 +385,8 @@ onchange="importData(event)"
 </section>
 
 
-<!-- DRAW -->
+<!-- ================= DRAW MANAGEMENT ================= -->
+
 <section id="draws" class="page">
 
 <div class="card">
@@ -370,31 +396,29 @@ onchange="importData(event)"
 <div class="grid">
 
 <input
-id="drawName"
-placeholder="Draw / Event name"
+  id="drawName"
+  placeholder="Event / Draw Name"
 >
 
 <input
-id="drawDate"
-type="date"
+  id="drawDate"
+  type="date"
 >
 
 <input
-id="drawTime"
-type="time"
+  id="drawTime"
+  type="time"
 >
 
 <input
-id="drawResult"
-placeholder="Result / reference"
+  id="drawResult"
+  placeholder="Result / Reference"
 >
 
 </div>
 
-<br>
-
 <button onclick="addDraw()">
-Add Draw
+➕ Add Draw
 </button>
 
 </div>
@@ -403,14 +427,13 @@ Add Draw
 <div class="card">
 
 <input
-id="drawSearch"
-placeholder="🔎 Search draw..."
-oninput="renderDraws()"
+  class="search"
+  id="drawSearch"
+  placeholder="🔎 Search Draw"
+  oninput="renderDraws()"
 >
 
-<br><br>
-
-<div class="tablewrap">
+<div class="table-wrap">
 
 <table>
 
@@ -422,12 +445,14 @@ oninput="renderDraws()"
 <th>Time</th>
 <th>Result</th>
 <th>Status</th>
-<th></th>
+<th>Action</th>
 </tr>
 
 </thead>
 
-<tbody id="drawTable"></tbody>
+<tbody id="drawTable">
+
+</tbody>
 
 </table>
 
@@ -438,48 +463,53 @@ oninput="renderDraws()"
 </section>
 
 
-<!-- RECORDS -->
+<!-- ================= RECORDS ================= -->
+
 <section id="records" class="page">
 
 <div class="card">
 
-<h2>📋 Draw-wise Normal Records</h2>
+<h2>📋 Normal Records</h2>
 
 <div class="grid">
 
-<select id="recDraw"></select>
+<select id="recordDraw">
+
+<option value="">
+Select Event / Draw
+</option>
+
+</select>
 
 <input
-id="recDate"
-type="date"
+  id="recordDate"
+  type="date"
 >
 
 <input
-id="recParty"
-placeholder="Party name"
+  id="recordParty"
+  placeholder="Party Name"
 >
 
 <input
-id="recClient"
-placeholder="Client name"
+  id="recordClient"
+  placeholder="Client Name"
 >
 
 <input
-id="recRef"
-placeholder="Record / reference"
+  id="recordReference"
+  placeholder="Reference"
 >
 
 <input
-id="recNote"
-placeholder="Note"
+  id="recordNote"
+  placeholder="Note"
 >
 
 </div>
 
-<br>
-
 <button onclick="addRecord()">
-Save Record
+💾 Save Record
 </button>
 
 </div>
@@ -488,14 +518,13 @@ Save Record
 <div class="card">
 
 <input
-id="recSearch"
-placeholder="🔎 Search/filter records..."
-oninput="renderRecords()"
+  class="search"
+  id="recordSearch"
+  placeholder="🔎 Search Records"
+  oninput="renderRecords()"
 >
 
-<br><br>
-
-<div class="tablewrap">
+<div class="table-wrap">
 
 <table>
 
@@ -508,12 +537,106 @@ oninput="renderRecords()"
 <th>Client</th>
 <th>Reference</th>
 <th>Note</th>
-<th></th>
+<th>Action</th>
 </tr>
 
 </thead>
 
-<tbody id="recTable"></tbody>
+<tbody id="recordTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+                      </section>
+                      <!-- ================= JANTRI ================= -->
+
+<section id="jantri" class="page">
+
+<div class="card">
+
+<h2>📒 Jantri / General Register</h2>
+
+<p class="small">
+यह सामान्य रिकॉर्ड और reference entries के लिए है।
+</p>
+
+<div class="grid">
+
+<select id="jantriDraw">
+<option value="">
+Select Event / Draw
+</option>
+</select>
+
+<input
+  id="jantriDate"
+  type="date"
+>
+
+<input
+  id="jantriTitle"
+  placeholder="Entry Title"
+>
+
+<input
+  id="jantriValue"
+  placeholder="Value / Reference"
+>
+
+<input
+  id="jantriParty"
+  placeholder="Party Name"
+>
+
+<input
+  id="jantriNote"
+  placeholder="Note"
+>
+
+</div>
+
+<button onclick="addJantri()">
+➕ Add Jantri Entry
+</button>
+
+</div>
+
+
+<div class="card">
+
+<input
+  class="search"
+  id="jantriSearch"
+  placeholder="🔎 Search Jantri"
+  oninput="renderJantri()"
+>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+<th>Date</th>
+<th>Draw</th>
+<th>Title</th>
+<th>Value</th>
+<th>Party</th>
+<th>Note</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody id="jantriTable">
+
+</tbody>
 
 </table>
 
@@ -524,36 +647,35 @@ oninput="renderRecords()"
 </section>
 
 
-<!-- PARTY -->
+<!-- ================= PARTY ================= -->
+
 <section id="parties" class="page">
 
 <div class="card">
 
-<h2>👥 Party</h2>
+<h2>👥 Party Management</h2>
 
 <div class="grid">
 
 <input
-id="partyName"
-placeholder="Party name"
+  id="partyName"
+  placeholder="Party Name"
 >
 
 <input
-id="partyPhone"
-placeholder="Phone / contact"
+  id="partyPhone"
+  placeholder="Phone / Contact"
 >
 
 <input
-id="partyNote"
-placeholder="Note"
+  id="partyNote"
+  placeholder="Note"
 >
 
 </div>
 
-<br>
-
 <button onclick="addParty()">
-Add Party
+➕ Add Party
 </button>
 
 </div>
@@ -562,14 +684,13 @@ Add Party
 <div class="card">
 
 <input
-id="partySearch"
-placeholder="🔎 Search party..."
-oninput="renderParties()"
+  class="search"
+  id="partySearch"
+  placeholder="🔎 Search Party"
+  oninput="renderParties()"
 >
 
-<br><br>
-
-<div class="tablewrap">
+<div class="table-wrap">
 
 <table>
 
@@ -577,14 +698,16 @@ oninput="renderParties()"
 
 <tr>
 <th>Name</th>
-<th>Contact</th>
+<th>Phone</th>
 <th>Note</th>
-<th></th>
+<th>Action</th>
 </tr>
 
 </thead>
 
-<tbody id="partyTable"></tbody>
+<tbody id="partyTable">
+
+</tbody>
 
 </table>
 
@@ -595,36 +718,35 @@ oninput="renderParties()"
 </section>
 
 
-<!-- CLIENT -->
+<!-- ================= CLIENT ================= -->
+
 <section id="clients" class="page">
 
 <div class="card">
 
-<h2>👤 Client</h2>
+<h2>👤 Client Management</h2>
 
 <div class="grid">
 
 <input
-id="clientName"
-placeholder="Client name"
+  id="clientName"
+  placeholder="Client Name"
 >
 
 <input
-id="clientPhone"
-placeholder="Phone / contact"
+  id="clientPhone"
+  placeholder="Phone / Contact"
 >
 
 <input
-id="clientNote"
-placeholder="Note"
+  id="clientNote"
+  placeholder="Note"
 >
 
 </div>
 
-<br>
-
 <button onclick="addClient()">
-Add Client
+➕ Add Client
 </button>
 
 </div>
@@ -633,14 +755,13 @@ Add Client
 <div class="card">
 
 <input
-id="clientSearch"
-placeholder="🔎 Search client..."
-oninput="renderClients()"
+  class="search"
+  id="clientSearch"
+  placeholder="🔎 Search Client"
+  oninput="renderClients()"
 >
 
-<br><br>
-
-<div class="tablewrap">
+<div class="table-wrap">
 
 <table>
 
@@ -648,14 +769,16 @@ oninput="renderClients()"
 
 <tr>
 <th>Name</th>
-<th>Contact</th>
+<th>Phone</th>
 <th>Note</th>
-<th></th>
+<th>Action</th>
 </tr>
 
 </thead>
 
-<tbody id="clientTable"></tbody>
+<tbody id="clientTable">
+
+</tbody>
 
 </table>
 
@@ -666,42 +789,43 @@ oninput="renderClients()"
 </section>
 
 
-<!-- HISAB -->
+<!-- ================= HISAB ================= -->
+
 <section id="hisab" class="page">
 
 <div class="card">
 
 <h2>🧾 Hisab / Ledger</h2>
 
-<p class="muted">
-यह सामान्य accounting / ledger entry के लिए है।
+<p class="small">
+सामान्य accounting / ledger record के लिए।
 </p>
 
 <div class="grid">
 
 <input
-id="hDate"
-type="date"
+  id="hisabDate"
+  type="date"
 >
 
 <input
-id="hParty"
-placeholder="Party"
+  id="hisabParty"
+  placeholder="Party Name"
 >
 
 <input
-id="hDesc"
-placeholder="Description"
+  id="hisabDescription"
+  placeholder="Description"
 >
 
 <input
-id="hAmount"
-type="number"
-step="0.01"
-placeholder="Amount"
+  id="hisabAmount"
+  type="number"
+  step="0.01"
+  placeholder="Amount"
 >
 
-<select id="hType">
+<select id="hisabType">
 
 <option value="credit">
 Credit
@@ -715,10 +839,8 @@ Debit
 
 </div>
 
-<br>
-
 <button onclick="addHisab()">
-Add Entry
+💾 Save Hisab
 </button>
 
 </div>
@@ -727,14 +849,13 @@ Add Entry
 <div class="card">
 
 <input
-id="hSearch"
-placeholder="🔎 Search ledger..."
-oninput="renderHisab()"
+  class="search"
+  id="hisabSearch"
+  placeholder="🔎 Search Hisab"
+  oninput="renderHisab()"
 >
 
-<br><br>
-
-<div class="tablewrap">
+<div class="table-wrap">
 
 <table>
 
@@ -746,12 +867,14 @@ oninput="renderHisab()"
 <th>Description</th>
 <th>Type</th>
 <th>Amount</th>
-<th></th>
+<th>Action</th>
 </tr>
 
 </thead>
 
-<tbody id="hisabTable"></tbody>
+<tbody id="hisabTable">
+
+</tbody>
 
 </table>
 
@@ -762,7 +885,8 @@ oninput="renderHisab()"
 </section>
 
 
-<!-- SUMMARY -->
+<!-- ================= DATE SUMMARY ================= -->
+
 <section id="summary" class="page">
 
 <div class="card">
@@ -770,19 +894,76 @@ oninput="renderHisab()"
 <h2>📅 Date-wise Summary</h2>
 
 <input
-id="sumDate"
-type="date"
-onchange="renderSummary()"
+  id="summaryDate"
+  type="date"
+  onchange="renderSummary()"
 >
 
 </div>
 
-<div class="card" id="summaryBox"></div>
+
+<div class="card">
+
+<div class="stats">
+
+<div class="stat">
+Records
+<strong id="summaryRecords">0</strong>
+</div>
+
+<div class="stat">
+Jantri
+<strong id="summaryJantri">0</strong>
+</div>
+
+<div class="stat">
+Credit
+<strong id="summaryCredit">0</strong>
+</div>
+
+<div class="stat">
+Debit
+<strong id="summaryDebit">0</strong>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+<th>Date</th>
+<th>Type</th>
+<th>Party</th>
+<th>Description</th>
+<th>Amount</th>
+</tr>
+
+</thead>
+
+<tbody id="summaryTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
 
 </section>
 
 
-<!-- REPORTS -->
+<!-- ================= REPORTS ================= -->
+
 <section id="reports" class="page">
 
 <div class="card">
@@ -792,13 +973,12 @@ onchange="renderSummary()"
 <div class="row">
 
 <button onclick="renderReports()">
-Refresh
+🔄 Refresh Report
 </button>
 
 <button
-class="secondary"
-onclick="window.print()"
->
+  class="btn-dark"
+  onclick="window.print()">
 🖨 Print
 </button>
 
@@ -806,122 +986,145 @@ onclick="window.print()"
 
 </div>
 
-<div class="card" id="reportBox"></div>
 
-</section>
+<div class="card">
+
+<div id="reportBox">
+
+Report यहाँ दिखाई देगा।
 
 </div>
 
+</div>
+
+  </section>
+  <!-- ================= PART 3 : JAVASCRIPT ================= -->
 
 <script>
 
-const KEY = "MS_SHEET_PRO_V2";
+const STORAGE_KEY = "MS_SHEET_PRO_DATA_V3";
 
-let state = {
-  draws:[],
-  records:[],
-  parties:[],
-  clients:[],
-  hisab:[],
-  locked:false
+let data = {
+  draws: [],
+  records: [],
+  jantri: [],
+  parties: [],
+  clients: [],
+  hisab: [],
+  locked: false
 };
 
 
-/* LOAD DATA */
+/* =========================
+   BASIC HELPERS
+========================= */
 
-function load(){
+function $(id){
+  return document.getElementById(id);
+}
+
+function today(){
+  const d = new Date();
+  const m = String(d.getMonth()+1).padStart(2,"0");
+  const day = String(d.getDate()).padStart(2,"0");
+  return d.getFullYear()+"-"+m+"-"+day;
+}
+
+function esc(value){
+  return String(value ?? "").replace(/[&<>"']/g,function(c){
+    return {
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#039;"
+    }[c];
+  });
+}
+
+
+/* =========================
+   LOAD / SAVE
+========================= */
+
+function loadData(){
 
   try{
 
     const saved =
-      localStorage.getItem(KEY);
+      localStorage.getItem(STORAGE_KEY);
 
     if(saved){
 
-      const parsed =
+      const old =
         JSON.parse(saved);
 
-      if(parsed && typeof parsed==="object"){
+      if(old && typeof old === "object"){
 
-        state = {
-          ...state,
-          ...parsed
+        data = {
+          ...data,
+          ...old
         };
 
       }
 
     }
 
+    if(!Array.isArray(data.draws))
+      data.draws=[];
+
+    if(!Array.isArray(data.records))
+      data.records=[];
+
+    if(!Array.isArray(data.jantri))
+      data.jantri=[];
+
+    if(!Array.isArray(data.parties))
+      data.parties=[];
+
+    if(!Array.isArray(data.clients))
+      data.clients=[];
+
+    if(!Array.isArray(data.hisab))
+      data.hisab=[];
+
   }catch(error){
 
-    console.error(
-      "Data load error:",
-      error
-    );
+    console.error(error);
 
-    localStorage.removeItem(KEY);
+    data = {
+      draws:[],
+      records:[],
+      jantri:[],
+      parties:[],
+      clients:[],
+      hisab:[],
+      locked:false
+    };
 
   }
 
 }
 
 
-/* SAVE DATA */
-
-function save(){
+function saveData(){
 
   try{
 
     localStorage.setItem(
-      KEY,
-      JSON.stringify(state)
+      STORAGE_KEY,
+      JSON.stringify(data)
     );
 
-    refresh();
+    refreshAll();
 
   }catch(error){
 
-    alert(
-      "Data save नहीं हो पाया."
-    );
+    alert("Browser में data save नहीं हो पाया।");
 
     console.error(error);
 
   }
-
-}
-
-
-/* ESCAPE HTML */
-
-function esc(x){
-
-  return String(x ?? "")
-    .replace(
-      /[&<>"']/g,
-      function(m){
-
-        return {
-          "&":"&amp;",
-          "<":"&lt;",
-          ">":"&gt;",
-          '"':"&quot;",
-          "'":"&#39;"
-        }[m];
-
-      }
-    );
-
-}
-
-
-/* TODAY */
-
-function today(){
-
-  return new Date()
-    .toISOString()
-    .slice(0,10);
 
 }
 
@@ -933,189 +1136,114 @@ function today(){
 function login(event){
 
   if(event){
-
     event.preventDefault();
-
   }
-
-  const userEl =
-    document.getElementById("loginUser");
-
-  const passEl =
-    document.getElementById("loginPass");
-
-  const loginEl =
-    document.getElementById("loginPage");
-
-  const appEl =
-    document.getElementById("app");
-
-
-  if(
-    !userEl ||
-    !passEl ||
-    !loginEl ||
-    !appEl
-  ){
-
-    alert(
-      "Login page में required element नहीं मिला."
-    );
-
-    return false;
-
-  }
-
 
   const username =
-    userEl.value.trim();
+    $("loginUser").value.trim();
 
   const password =
-    passEl.value;
+    $("loginPass").value;
 
-
-  if(
-    username === "admin" &&
-    password === "admin"
-  ){
+  if(username === "admin" && password === "admin"){
 
     sessionStorage.setItem(
-      "ms_login",
-      "1"
+      "MS_SHEET_LOGIN",
+      "YES"
     );
 
+    $("loginPage").classList.add("hidden");
 
-    loginEl.classList.add(
-      "hidden"
-    );
+    $("app").classList.remove("hidden");
 
-    appEl.classList.remove(
-      "hidden"
-    );
-
-
-    passEl.value = "";
-
-
-    refresh();
+    $("loginPass").value="";
 
     showPage("home");
 
+    refreshAll();
+
   }else{
 
-    alert(
-      "गलत Username या Password"
-    );
+    alert("गलत Username या Password");
 
-    passEl.focus();
+    $("loginPass").focus();
 
   }
 
-
   return false;
-
 }
 
-
-/* LOGOUT */
 
 function logout(){
 
   sessionStorage.removeItem(
-    "ms_login"
+    "MS_SHEET_LOGIN"
   );
 
+  $("app").classList.add("hidden");
 
-  const appEl =
-    document.getElementById("app");
+  $("loginPage").classList.remove("hidden");
 
-  const loginEl =
-    document.getElementById("loginPage");
+  $("loginUser").value="";
 
-  const passEl =
-    document.getElementById("loginPass");
-
-
-  if(appEl){
-
-    appEl.classList.add(
-      "hidden"
-    );
-
-  }
-
-
-  if(loginEl){
-
-    loginEl.classList.remove(
-      "hidden"
-    );
-
-  }
-
-
-  if(passEl){
-
-    passEl.value = "";
-
-  }
+  $("loginPass").value="";
 
 }
 
 
-/* PAGE */
+/* =========================
+   PAGE NAVIGATION
+========================= */
 
-function showPage(id){
+function showPage(pageId){
 
   document
     .querySelectorAll(".page")
     .forEach(function(page){
 
-      page.classList.remove(
-        "active"
-      );
+      page.classList.remove("active");
 
     });
 
 
-  const target =
-    document.getElementById(id);
+  const page =
+    $(pageId);
 
+  if(!page){
 
-  if(target){
+    alert("Page नहीं मिली: "+pageId);
 
-    target.classList.add(
-      "active"
-    );
+    return;
 
   }
 
+  page.classList.add("active");
 
-  refresh();
+  refreshAll();
 
 }
 
 
-/* LOCK */
+/* =========================
+   LOCK
+========================= */
 
 function toggleLock(){
 
-  state.locked =
-    !state.locked;
+  data.locked =
+    !data.locked;
 
-  save();
+  saveData();
 
 }
 
 
-/* LOCK CHECK */
+function isLocked(){
 
-function guard(){
-
-  if(state.locked){
+  if(data.locked){
 
     alert(
-      "Records locked हैं. पहले Master Panel से unlock करें."
+      "Records locked हैं। Master Panel से Unlock करें।"
     );
 
     return true;
@@ -1128,55 +1256,40 @@ function guard(){
 
 
 /* =========================
-   DRAW
+   DRAW MANAGEMENT
 ========================= */
 
 function addDraw(){
 
-  if(guard()) return;
-
+  if(isLocked()) return;
 
   const name =
-    document
-      .getElementById("drawName")
-      .value
-      .trim();
-
+    $("drawName").value.trim();
 
   const date =
-    document
-      .getElementById("drawDate")
-      .value ||
-    today();
-
+    $("drawDate").value || today();
 
   const time =
-    document
-      .getElementById("drawTime")
-      .value;
-
+    $("drawTime").value;
 
   const result =
-    document
-      .getElementById("drawResult")
-      .value
-      .trim();
+    $("drawResult").value.trim();
 
 
   if(!name){
 
-    alert(
-      "Draw name भरें"
-    );
+    alert("Event / Draw Name भरें।");
+
+    $("drawName").focus();
 
     return;
 
   }
 
 
-  state.draws.push({
+  data.draws.push({
 
-    id:Date.now(),
+    id: Date.now(),
 
     name:name,
 
@@ -1191,68 +1304,50 @@ function addDraw(){
   });
 
 
-  save();
+  $("drawName").value="";
 
+  $("drawTime").value="";
 
-  document.getElementById(
-    "drawName"
-  ).value = "";
+  $("drawResult").value="";
 
-
-  document.getElementById(
-    "drawResult"
-  ).value = "";
-
-
-  document.getElementById(
-    "drawTime"
-  ).value = "";
+  saveData();
 
 }
 
 
-/* DRAW LIST */
-
 function renderDraws(){
 
-  const searchEl =
-    document.getElementById(
-      "drawSearch"
-    );
-
   const table =
-    document.getElementById(
-      "drawTable"
-    );
+    $("drawTable");
+
+  if(!table) return;
 
 
-  if(!searchEl || !table) return;
-
-
-  const q =
-    searchEl.value
+  const search =
+    ($("drawSearch")?.value || "")
       .toLowerCase();
 
 
-  table.innerHTML =
-    state.draws
+  const rows =
+    data.draws
       .filter(function(x){
 
         return (
-          x.name +
-          " " +
-          x.date +
-          " " +
-          x.result
+          String(x.name)+" "+
+          String(x.date)+" "+
+          String(x.result)
         )
         .toLowerCase()
-        .includes(q);
+        .includes(search);
 
-      })
-      .map(function(x){
+      });
 
-        return `
-        <tr>
+
+  table.innerHTML =
+    rows.map(function(x){
+
+      return `
+      <tr>
 
         <td>${esc(x.name)}</td>
 
@@ -1263,54 +1358,45 @@ function renderDraws(){
         <td>${esc(x.result)}</td>
 
         <td>
-        ${x.closed ? "Closed" : "Open"}
+          ${x.closed ? "🔒 Closed" : "🟢 Open"}
         </td>
 
         <td>
 
-        <button
-        class="secondary"
-        onclick="closeDraw(${x.id})"
-        >
-        ${x.closed ? "Open" : "Close"}
-        </button>
+          <button
+            class="btn-dark"
+            onclick="toggleDraw(${x.id})">
+            ${x.closed ? "Open" : "Close"}
+          </button>
 
-        <button
-        class="danger"
-        onclick="del('draws',${x.id})"
-        >
-        Delete
-        </button>
+          <button
+            class="btn-danger"
+            onclick="deleteItem('draws',${x.id})">
+            Delete
+          </button>
 
         </td>
 
-        </tr>
-        `;
+      </tr>
+      `;
 
-      })
-      .join("") ||
+    }).join("") ||
 
     `<tr>
-    <td colspan="6">
-    No data
-    </td>
+      <td colspan="6">
+        कोई Draw नहीं मिला।
+      </td>
     </tr>`;
 
 }
 
 
-/* CLOSE DRAW */
+function toggleDraw(id){
 
-function closeDraw(id){
-
-  if(guard()) return;
-
+  if(isLocked()) return;
 
   const item =
-    state.draws.find(
-      x => x.id === id
-    );
-
+    data.draws.find(x => x.id === id);
 
   if(item){
 
@@ -1319,365 +1405,35 @@ function closeDraw(id){
 
   }
 
-
-  save();
+  saveData();
 
 }
 
 
-/* DRAW SELECT */
+/* =========================
+   DRAW SELECTS
+========================= */
 
-function fillDraws(){
+function fillDrawSelects(){
 
-  const select =
-    document.getElementById(
-      "recDraw"
-    );
+  const recordDraw =
+    $("recordDraw");
 
-
-  if(!select) return;
+  const jantriDraw =
+    $("jantriDraw");
 
 
-  select.innerHTML =
-    '<option value="">Select draw</option>' +
+  const html =
+    `<option value="">
+      Select Event / Draw
+    </option>` +
 
-    state.draws
+    data.draws
       .map(function(x){
 
         return `
         <option value="${x.id}">
-        ${esc(x.name)} — ${esc(x.date)}
-        </option>
-        `;
-
-      })
-      .join("");
-
-}
-
-
-/* =========================
-   RECORD
-========================= */
-
-function addRecord(){
-
-  if(guard()) return;
-
-
-  const drawId =
-    Number(
-      document.getElementById(
-        "recDraw"
-      ).value
-    );
-
-
-  const draw =
-    state.draws.find(
-      x => x.id === drawId
-    );
-
-
-  if(!draw){
-
-    alert(
-      "Draw select करें"
-    );
-
-    return;
-
-  }
-
-
-  if(draw.closed){
-
-    alert(
-      "यह draw closed है"
-    );
-
-    return;
-
-  }
-
-
-  const party =
-    document.getElementById(
-      "recParty"
-    ).value
-    .trim();
-
-
-  const client =
-    document.getElementById(
-      "recClient"
-    ).value
-    .trim();
-
-
-  if(!party && !client){
-
-    alert(
-      "Party या Client भरें"
-    );
-
-    return;
-
-  }
-
-
-  state.records.push({
-
-    id:Date.now(),
-
-    drawId:drawId,
-
-    date:
-      document.getElementById(
-        "recDate"
-      ).value || today(),
-
-    party:party,
-
-    client:client,
-
-    ref:
-      document.getElementById(
-        "recRef"
-      ).value.trim(),
-
-    note:
-      document.getElementById(
-        "recNote"
-      ).value.trim()
-
-  });
-
-
-  save();
-
-
-  document.getElementById(
-    "recParty"
-  ).value = "";
-
-
-  document.getElementById(
-    "recClient"
-  ).value = "";
-
-
-  document.getElementById(
-    "recRef"
-  ).value = "";
-
-
-  document.getElementById(
-    "recNote"
-  ).value = "";
-
-}
-
-
-/* RECORD LIST */
-
-function renderRecords(){
-
-  const searchEl =
-    document.getElementById(
-      "recSearch"
-    );
-
-  const table =
-    document.getElementById(
-      "recTable"
-    );
-
-
-  if(!searchEl || !table) return;
-
-
-  const q =
-    searchEl.value.toLowerCase();
-
-
-  table.innerHTML =
-    state.records
-      .filter(function(x){
-
-        return JSON.stringify(x)
-          .toLowerCase()
-          .includes(q);
-
-      })
-      .map(function(x){
-
-        const draw =
-          state.draws.find(
-            y => y.id === x.drawId
-          );
-
-
-        return `
-        <tr>
-
-        <td>${esc(x.date)}</td>
-
-        <td>
-        ${esc(draw?.name || "Deleted draw")}
-        </td>
-
-        <td>${esc(x.party)}</td>
-
-        <td>${esc(x.client)}</td>
-
-        <td>${esc(x.ref)}</td>
-
-        <td>${esc(x.note)}</td>
-
-        <td>
-
-        <button
-        class="danger"
-        onclick="del('records',${x.id})"
-        >
-        Delete
-        </button>
-
-        </td>
-
-        </tr>
-        `;
-
-      })
-      .join("") ||
-
-    `<tr>
-    <td colspan="7">
-    No data
-    </td>
-    </tr>`;
-
-}
-
-
-/* =========================
-   PARTY
-========================= */
-
-function addParty(){
-
-  if(guard()) return;
-
-
-  const name =
-    document.getElementById(
-      "partyName"
-    ).value.trim();
-
-
-  if(!name){
-
-    alert(
-      "Party name भरें"
-    );
-
-    return;
-
-  }
-
-
-  state.parties.push({
-
-    id:Date.now(),
-
-    name:name,
-
-    phone:
-      document.getElementById(
-        "partyPhone"
-      ).value.trim(),
-
-    note:
-      document.getElementById(
-        "partyNote"
-      ).value.trim()
-
-  });
-
-
-  save();
-
-
-  document.getElementById(
-    "partyName"
-  ).value = "";
-
-
-  document.getElementById(
-    "partyPhone"
-  ).value = "";
-
-
-  document.getElementById(
-    "partyNote"
-  ).value = "";
-
-}
-
-
-/* PARTY LIST */
-
-function renderParties(){
-
-  const search =
-    document.getElementById(
-      "partySearch"
-    );
-
-  const table =
-    document.getElementById(
-      "partyTable"
-    );
-
-
-  if(!search || !table) return;
-
-
-  const q =
-    search.value.toLowerCase();
-
-
-  table.innerHTML =
-    state.parties
-      .filter(function(x){
-
-        return (
-          x.name +
-          " " +
-          x.phone +
-          " " +
-          x.note
-        )
-        .toLowerCase()
-        .includes(q);
-
-      })
-      .map(function(x){
-
-        return `
-        <tr>
-
-        <td>${esc(x.name)}</td>
-
-        <td>${esc(x.phone)}</td>
-
-        <td>${esc(x.note)}</td>
-
-        <td>
-
-        <button
-        class="danger"
-        onclick="del('parties',${x.id})"
-        >
-        Delete
+          ${esc(x.name)} —
+          </script>
+</body>
+</html>
