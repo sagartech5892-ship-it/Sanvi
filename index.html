@@ -333,10 +333,9 @@ function logout(){
     document.getElementById("login").classList.remove("hidden");
 
 }
-
-    function show(id) {
+function show(id) {
     document.querySelectorAll(".page").forEach(function(page) {
-        page.style.display = "none";
+        page.classList.add("hidden");
     });
 
     const page = document.getElementById(id);
@@ -346,7 +345,7 @@ function logout(){
         return;
     }
 
-    page.style.display = "block";
+    page.classList.remove("hidden");
 
     if (id === "draws" && typeof renderDraws === "function") {
         renderDraws();
@@ -372,6 +371,7 @@ function logout(){
         showAllReport();
     }
     }
+    
 function createDraw(){
 
     const name=document.getElementById("drawName").value.trim();
