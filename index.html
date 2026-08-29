@@ -3,110 +3,134 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MS Sheet Pro</title>
+<title>MS SHEET PRO</title>
 
 <style>
 *{box-sizing:border-box}
+
 body{
     margin:0;
     font-family:Arial,sans-serif;
-    background:#eef5f1;
-    color:#263238;
+    background:#f3f5f7;
+    color:#222;
 }
+
 header{
-    background:#176b3a;
+    background:#20252b;
     color:white;
-    padding:16px;
+    padding:18px;
+    text-align:center;
     font-size:22px;
     font-weight:bold;
-    position:sticky;
-    top:0;
-    z-index:5;
 }
+
 .container{
     max-width:1100px;
     margin:auto;
     padding:15px;
 }
+
 .card{
     background:white;
-    border-radius:14px;
-    padding:16px;
+    padding:20px;
     margin-bottom:15px;
-    box-shadow:0 2px 8px #0001;
+    border-radius:12px;
+    box-shadow:0 2px 10px #0001;
 }
-h2{margin-top:0;color:#176b3a}
+
+h2{
+    margin-top:0;
+}
+
 input,select,textarea{
     width:100%;
     padding:12px;
-    margin:6px 0 10px;
-    border:1px solid #ccd5d0;
+    margin:7px 0;
+    border:1px solid #ccc;
     border-radius:8px;
-    font-size:15px;
+    font-size:16px;
 }
+
 button{
     border:0;
-    border-radius:9px;
-    padding:11px 14px;
-    margin:4px;
-    background:#218c4b;
+    padding:11px 15px;
+    margin:5px 3px;
+    border-radius:8px;
+    background:#1976d2;
     color:white;
-    font-weight:bold;
+    font-size:15px;
     cursor:pointer;
 }
-button.danger{background:#c62828}
-button.gray{background:#607d8b}
-button.dark{background:#263238}
+
+button:hover{
+    opacity:.9;
+}
+
+.danger{
+    background:#d32f2f;
+}
+
+.success{
+    background:#2e7d32;
+}
+
+.secondary{
+    background:#555;
+}
+
+.hidden{
+    display:none!important;
+}
+
 .menu{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:10px;
+    grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+    gap:8px;
 }
+
 .menu button{
-    min-height:65px;
-    font-size:15px;
+    margin:0;
 }
-.hidden{display:none}
+
 table{
     width:100%;
     border-collapse:collapse;
-    margin-top:10px;
-    font-size:14px;
+    margin-top:15px;
 }
-th{
-    background:#28658f;
-    color:white;
+
+th,td{
+    border:1px solid #ddd;
     padding:10px;
+    text-align:left;
 }
-td{
-    padding:9px;
-    border-bottom:1px solid #ddd;
+
+th{
+    background:#eee;
 }
-tr:nth-child(even){background:#f2f6f8}
-.badge{
-    display:inline-block;
-    padding:5px 9px;
-    border-radius:20px;
-    font-size:12px;
-    font-weight:bold;
-}
-.open{background:#d8f5df;color:#176b3a}
-.locked{background:#eee;color:#333}
-.stat{
+
+.stat-grid{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:10px;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:12px;
 }
-.stat div{
-    background:#f5faf7;
-    padding:15px;
+
+.stat{
+    padding:18px;
+    background:#fafafa;
     border-radius:10px;
-    text-align:center;
+    border:1px solid #ddd;
 }
-.big{font-size:24px;font-weight:bold;color:#176b3a}
-@media(min-width:700px){
-    .menu{grid-template-columns:repeat(5,1fr)}
-    .stat{grid-template-columns:repeat(4,1fr)}
+
+.stat strong{
+    display:block;
+    font-size:26px;
+    margin-top:5px;
+}
+
+.empty{
+    padding:20px;
+    text-align:center;
+    color:#777;
 }
 </style>
 </head>
@@ -118,762 +142,471 @@ tr:nth-child(even){background:#f2f6f8}
 <div class="container">
 
 <!-- LOGIN -->
-<section id="login">
-<div class="card">
+<section id="loginPage">
+
+<div class="card" style="max-width:450px;margin:30px auto">
+
 <h2>🔐 Login</h2>
-<input id="username" placeholder="Username">
-<input id="password" type="password" placeholder="Password">
-<button type="button" onclick="login()">
+
+<input
+    id="username"
+    type="text"
+    placeholder="Username"
+>
+
+<input
+    id="password"
+    type="password"
+    placeholder="Password"
+>
+
+<button onclick="login()" style="width:100%">
 🔐 Login
 </button>
+
 </div>
+
 </section>
+
 
 <!-- APP -->
 <section id="app" class="hidden">
+
 <div class="card">
+
 <div class="menu">
-<button onclick="show('home')">🏠 Home</button>
-<button onclick="show('draws')">🎯 Draw Master</button>
-<button onclick="show('jantri')">📋 Jantri</button>
-<button onclick="show('party')">👥 Party</button>
-<button onclick="show('clients')">👤 Clients</button>
-<button onclick="show('hisab')">🧾 Hisab</button>
-<button onclick="show('reports')">📊 Reports</button>
+
+<button onclick="showPage('home')">🏠 Home</button>
+
+<button onclick="showPage('draws')">📅 Draws</button>
+
+<button onclick="showPage('party')">👥 Parties</button>
+
+<button onclick="showPage('clients')">👤 Clients</button>
+
+<button onclick="showPage('hisab')">🧾 Hisab</button>
+
+<button onclick="showPage('reports')">📊 Reports</button>
+
 <button class="danger" onclick="logout()">🚪 Logout</button>
+
 </div>
+
 </div>
+
 
 <!-- HOME -->
 <div id="home" class="page">
+
 <div class="card">
-<h2>🏠 Master Panel</h2>
+
+<h2>🏠 Dashboard</h2>
+
+<div class="stat-grid">
 
 <div class="stat">
-<div>
-<div class="big" id="drawCount">0</div>
-🎯 Draws
+Draws
+<strong id="totalDraws">0</strong>
 </div>
 
-<div>
-<div class="big" id="partyCount">0</div>
-👥 Parties
+<div class="stat">
+Parties
+<strong id="totalParties">0</strong>
 </div>
 
-<div>
-<div class="big" id="clientCount">0</div>
-👤 Clients
+<div class="stat">
+Clients
+<strong id="totalClients">0</strong>
 </div>
 
-<div>
-<div class="big" id="recordCount">0</div>
-📋 Records
-</div>
-</div>
-</div>
+<div class="stat">
+Records
+<strong id="totalRecords">0</strong>
 </div>
 
-<!-- DRAW MASTER -->
+</div>
+
+</div>
+
+</div>
+
+
+<!-- DRAWS -->
 <div id="draws" class="page hidden">
-<div class="card">
-<h2>🎯 Draw Master</h2>
 
-<input id="drawName" placeholder="Draw Name">
+<div class="card">
+
+<h2>📅 Create Draw / Record</h2>
+
+<input id="drawName" placeholder="Draw / Event Name">
+
 <input id="drawDate" type="date">
 
-<button onclick="createDraw()">➕ Create Draw</button>
-
-<div id="drawList"></div>
-</div>
-</div>
-
-<!-- JANTRI -->
-<div id="jantri" class="page hidden">
-
-<div class="card">
-<h2>📋 Jantri</h2>
-
-<select id="drawSelect" onchange="loadRecords()">
-<option value="">🎯 Select Draw</option>
-</select>
-
-<div id="recordForm">
-
-<input id="recordParty" placeholder="👥 Party Name">
-<input id="recordClient" placeholder="👤 Client Name">
-
-<input id="numbers"
-placeholder="Numbers: 01,02,03">
-
-<textarea id="recordNote" placeholder="📝 Note"></textarea>
-
-<button onclick="saveNumbers()">💾 Save Numbers</button>
-
-<hr>
-
-<h3>🔢 Normal Number Range</h3>
-
-<input id="fromNumber" type="number" min="0" max="99"
-placeholder="From 00-99">
-
-<input id="toNumber" type="number" min="0" max="99"
-placeholder="To 00-99">
-
-<button onclick="addRange()">➕ Add Number Range</button>
-
-<hr>
-
-<h3>🏁 Result</h3>
-
-<input id="result" placeholder="Result">
-
-<button onclick="lockSelectedDraw()">
-🔒 Save Result & Lock Draw
+<button class="success" onclick="createDraw()">
+➕ Add
 </button>
 
 </div>
 
-<div id="recordTable"></div>
+<div class="card">
+
+<h2>📋 Draw List</h2>
+
+<div id="drawList"></div>
+
 </div>
+
 </div>
+
 
 <!-- PARTY -->
 <div id="party" class="page hidden">
+
 <div class="card">
-<h2>👥 Party Management</h2>
+
+<h2>👥 Add Party</h2>
 
 <input id="partyName" placeholder="Party Name">
 
-<button onclick="addParty()">➕ Add Party</button>
+<input id="partyMobile" placeholder="Mobile Number">
+
+<textarea id="partyNote" placeholder="Note"></textarea>
+
+<button class="success" onclick="addParty()">
+➕ Add Party
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>👥 Party List</h2>
 
 <div id="partyList"></div>
-</div>
+
 </div>
 
-<!-- CLIENT -->
+</div>
+
+
+<!-- CLIENTS -->
 <div id="clients" class="page hidden">
+
 <div class="card">
-<h2>👤 Client Management</h2>
+
+<h2>👤 Add Client</h2>
 
 <input id="clientName" placeholder="Client Name">
-<input id="clientPhone" placeholder="Phone">
 
-<button onclick="addClient()">➕ Add Client</button>
+<input id="clientMobile" placeholder="Mobile Number">
+
+<input id="clientAddress" placeholder="Address">
+
+<button class="success" onclick="addClient()">
+➕ Add Client
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>👤 Client List</h2>
 
 <div id="clientList"></div>
+
 </div>
+
 </div>
+
 
 <!-- HISAB -->
 <div id="hisab" class="page hidden">
+
 <div class="card">
-<h2>🧾 Daily Hisab</h2>
 
-<input id="hisabDate" type="date" onchange="showHisab()">
+<h2>🧾 Hisab / Account Record</h2>
 
-<div id="hisabResult"></div>
+<select id="hisabParty">
+<option value="">Party Select करें</option>
+</select>
+
+<input
+    id="hisabAmount"
+    type="number"
+    placeholder="Amount"
+>
+
+<select id="hisabType">
+<option value="credit">Credit</option>
+<option value="debit">Debit</option>
+</select>
+
+<input id="hisabNote" placeholder="Description">
+
+<button class="success" onclick="addHisab()">
+➕ Save
+</button>
+
 </div>
+
+<div class="card">
+
+<h2>📋 Account Records</h2>
+
+<div id="hisabList"></div>
+
 </div>
 
-<!-- REPORT -->
+</div>
+
+
+<!-- REPORTS -->
 <div id="reports" class="page hidden">
+
 <div class="card">
+
 <h2>📊 Reports</h2>
 
-<button onclick="showAllReport()">📅 All Records</button>
-<button onclick="window.print()">🖨️ Print / Save PDF</button>
+<button onclick="showReports()">
+🔄 Refresh Report
+</button>
+
+<button class="secondary" onclick="window.print()">
+🖨️ Print
+</button>
 
 <div id="reportResult"></div>
+
 </div>
+
 </div>
 
 </section>
+
 </div>
+
 
 <script>
 
-const KEY = "ms_sheet_pro_data";
+/* =========================
+   DATA
+========================= */
 
-let data = {
+const KEY = "ms_sheet_pro_data_v2";
+
+const defaultData = {
     draws: [],
     parties: [],
     clients: [],
-    records: []
+    hisab: []
 };
 
-try {
-    const saved = localStorage.getItem(KEY);
+let data = loadData();
 
-    if (saved) {
+
+/* =========================
+   STORAGE
+========================= */
+
+function loadData(){
+
+    try{
+
+        const saved = localStorage.getItem(KEY);
+
+        if(!saved){
+            return structuredClone(defaultData);
+        }
+
         const parsed = JSON.parse(saved);
 
-        if (parsed && typeof parsed === "object") {
-            data.draws = Array.isArray(parsed.draws) ? parsed.draws : [];
-            data.parties = Array.isArray(parsed.parties) ? parsed.parties : [];
-            data.clients = Array.isArray(parsed.clients) ? parsed.clients : [];
-            data.records = Array.isArray(parsed.records) ? parsed.records : [];
-        }
-    }
-} catch (error) {
-    console.log("Saved data reset:", error);
-    localStorage.removeItem(KEY);
-    }
+        return {
+            draws: Array.isArray(parsed.draws) ? parsed.draws : [],
+            parties: Array.isArray(parsed.parties) ? parsed.parties : [],
+            clients: Array.isArray(parsed.clients) ? parsed.clients : [],
+            hisab: Array.isArray(parsed.hisab) ? parsed.hisab : []
+        };
 
-try {
-    const saved = localStorage.getItem(KEY);
+    }catch(error){
 
-    if (saved) {
-        const parsed = JSON.parse(saved);
+        console.error(error);
 
-        if (parsed && typeof parsed === "object") {
-            data.draws = Array.isArray(parsed.draws) ? parsed.draws : [];
-            data.parties = Array.isArray(parsed.parties) ? parsed.parties : [];
-            data.clients = Array.isArray(parsed.clients) ? parsed.clients : [];
-            data.records = Array.isArray(parsed.records) ? parsed.records : [];
-        }
+        return structuredClone(defaultData);
     }
-} catch (error) {
-    console.log("Saved data reset:", error);
-    localStorage.removeItem(KEY);
-    }
+}
 
-let selectedDraw="";
 
 function saveData(){
-    localStorage.setItem(KEY,JSON.stringify(data));
-    refresh();
+
+    localStorage.setItem(
+        KEY,
+        JSON.stringify(data)
+    );
+
+    refreshAll();
 }
 
-function login() {
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value.trim();
 
-    if (username === "admin" && password === "admin") {
+/* =========================
+   LOGIN
+========================= */
 
-        document.getElementById("login").classList.add("hidden");
-        document.getElementById("app").classList.remove("hidden");
+function login(){
 
-        if (typeof refresh === "function") {
-            refresh();
-        }
+    const username =
+        document.getElementById("username").value.trim();
 
-        show("home");
+    const password =
+        document.getElementById("password").value.trim();
 
-    } else {
+    if(username === "admin" && password === "admin"){
+
+        document
+            .getElementById("loginPage")
+            .classList.add("hidden");
+
+        document
+            .getElementById("app")
+            .classList.remove("hidden");
+
+        showPage("home");
+
+        refreshAll();
+
+    }else{
+
         alert("गलत Username या Password");
-    }
-    }
 
-function logout() {
-    document.getElementById("app").classList.add("hidden");
-    document.getElementById("login").classList.remove("hidden");
+    }
 }
-function show(id) {
-    document.querySelectorAll(".page").forEach(function(page) {
-        page.classList.add("hidden");
-    });
 
-    const page = document.getElementById(id);
 
-    if (!page) {
-        alert("Page नहीं मिली: " + id);
+function logout(){
+
+    document
+        .getElementById("app")
+        .classList.add("hidden");
+
+    document
+        .getElementById("loginPage")
+        .classList.remove("hidden");
+
+    document.getElementById("password").value = "";
+}
+
+
+/* =========================
+   PAGE NAVIGATION
+========================= */
+
+function showPage(id){
+
+    document
+        .querySelectorAll(".page")
+        .forEach(page => {
+            page.classList.add("hidden");
+        });
+
+    const page =
+        document.getElementById(id);
+
+    if(!page){
+        alert("Page नहीं मिली");
         return;
     }
 
     page.classList.remove("hidden");
 
-    if (id === "draws" && typeof renderDraws === "function") {
-        renderDraws();
-    }
+    refreshAll();
+}
 
-    if (id === "jantri" && typeof renderDrawSelect === "function") {
-        renderDrawSelect();
-    }
 
-    if (id === "party" && typeof renderParties === "function") {
-        renderParties();
-    }
+/* =========================
+   DASHBOARD
+========================= */
 
-    if (id === "clients" && typeof renderClients === "function") {
-        renderClients();
-    }
+function refreshDashboard(){
 
-    if (id === "hisab" && typeof showHisab === "function") {
-        showHisab();
-    }
+    document.getElementById("totalDraws").textContent =
+        data.draws.length;
 
-    if (id === "reports" && typeof showAllReport === "function") {
-        showAllReport();
-    }
-    }
-    
+    document.getElementById("totalParties").textContent =
+        data.parties.length;
+
+    document.getElementById("totalClients").textContent =
+        data.clients.length;
+
+    document.getElementById("totalRecords").textContent =
+        data.hisab.length;
+}
+
+
+/* =========================
+   DRAW
+========================= */
+
 function createDraw(){
 
-    const name=document.getElementById("drawName").value.trim();
-    const date=document.getElementById("drawDate").value;
+    const name =
+        document.getElementById("drawName").value.trim();
+
+    const date =
+        document.getElementById("drawDate").value;
 
     if(!name || !date){
-        alert("Draw name और date डालें");
+
+        alert("Name और Date भरें");
+
         return;
     }
 
     data.draws.push({
-        id:Date.now(),
-        name:name,
-        date:date,
-        status:"OPEN",
-        result:""
+
+        id: Date.now(),
+
+        name: name,
+
+        date: date,
+
+        createdAt: new Date().toLocaleString()
+
     });
 
-    document.getElementById("drawName").value="";
-    document.getElementById("drawDate").value="";
+    document.getElementById("drawName").value = "";
+
+    document.getElementById("drawDate").value = "";
 
     saveData();
-    renderDraws();
+
+    alert("Record successfully add हुआ");
 }
+
 
 function renderDraws(){
 
-    const box=document.getElementById("drawList");
+    const box =
+        document.getElementById("drawList");
 
-    if(data.draws.length===0){
-        box.innerHTML="<p>अभी कोई Draw नहीं है।</p>";
-        return;
-    }
+    if(data.draws.length === 0){
 
-    box.innerHTML="<table><tr>"+
-        "<th>🎯 Draw</th>"+
-        "<th>📅 Date</th>"+
-        "<th>Status</th>"+
-        "<th>Action</th>"+
-        "</tr>"+
-
-        data.draws.map(d=>`
-
-        <tr>
-        <td>${escapeHtml(d.name)}</td>
-        <td>${d.date}</td>
-        <td>
-        <span class="badge ${d.status==="LOCKED"?"locked":"open"}">
-        ${d.status==="LOCKED"?"🔒 LOCKED":"🟢 OPEN"}
-        </span>
-        </td>
-        <td>
-        <button onclick="openDraw(${d.id})">📋 Open</button>
-        </td>
-        </tr>
-
-        `).join("")+"</table>";
-}
-
-function openDraw(id){
-
-    selectedDraw=id;
-
-    document.getElementById("drawSelect").value=id;
-
-    show("jantri");
-    renderDrawSelect();
-    document.getElementById("drawSelect").value=id;
-
-    loadRecords();
-}
-
-function renderDrawSelect(){
-
-    const select=document.getElementById("drawSelect");
-
-    select.innerHTML=
-    '<option value="">🎯 Select Draw</option>';
-
-    data.draws.forEach(d=>{
-
-        const option=document.createElement("option");
-
-        option.value=d.id;
-        option.textContent=
-            `${d.name} — ${d.date} — ${d.status}`;
-
-        select.appendChild(option);
-
-    });
-
-    if(selectedDraw)
-        select.value=selectedDraw;
-}
-
-function getSelectedDraw(){
-
-    const id=Number(
-        document.getElementById("drawSelect").value
-    );
-
-    return data.draws.find(d=>d.id===id);
-}
-
-function saveNumbers(){
-
-    const draw=getSelectedDraw();
-
-    if(!draw){
-        alert("पहले Draw select करें");
-        return;
-    }
-
-    if(draw.status==="LOCKED"){
-        alert("यह Draw locked है");
-        return;
-    }
-
-    const nums=document.getElementById("numbers")
-        .value
-        .split(/[,\s\n]+/)
-        .map(x=>x.trim())
-        .filter(x=>/^\d{1,2}$/.test(x));
-
-    if(nums.length===0){
-        alert("Valid numbers डालें");
-        return;
-    }
-
-    const party=document.getElementById("recordParty").value;
-    const client=document.getElementById("recordClient").value;
-    const note=document.getElementById("recordNote").value;
-
-    nums.forEach(n=>{
-
-        data.records.push({
-            id:Date.now()+Math.random(),
-            drawId:draw.id,
-            number=n.padStart(2,"0"),
-            party:party,
-            client:client,
-            note:note,
-            created:new Date().toLocaleString()
-        });
-
-    });
-
-    document.getElementById("numbers").value="";
-
-    saveData();
-    loadRecords();
-
-    alert("Records saved ✅");
-}
-
-function addRange(){
-
-    const draw=getSelectedDraw();
-
-    if(!draw){
-        alert("पहले Draw select करें");
-        return;
-    }
-
-    if(draw.status==="LOCKED"){
-        alert("यह Draw locked है");
-        return;
-    }
-
-    const from=parseInt(
-        document.getElementById("fromNumber").value
-    );
-
-    const to=parseInt(
-        document.getElementById("toNumber").value
-    );
-
-    if(
-        isNaN(from) ||
-        isNaN(to) ||
-        from<0 ||
-        to>99 ||
-        from>to
-    ){
-        alert("00 से 99 की valid range डालें");
-        return;
-    }
-
-    const party=document.getElementById("recordParty").value;
-    const client=document.getElementById("recordClient").value;
-    const note=document.getElementById("recordNote").value;
-
-    for(let n=from;n<=to;n++){
-
-        data.records.push({
-            id:Date.now()+Math.random(),
-            drawId:draw.id,
-            number:String(n).padStart(2,"0"),
-            party:party,
-            client:client,
-            note:note,
-            created:new Date().toLocaleString()
-        });
-
-    }
-
-    saveData();
-    loadRecords();
-
-    alert("Range saved ✅");
-}
-
-function lockSelectedDraw(){
-
-    const draw=getSelectedDraw();
-
-    if(!draw){
-        alert("पहले Draw select करें");
-        return;
-    }
-
-    if(draw.status==="LOCKED"){
-        alert("Draw पहले से locked है");
-        return;
-    }
-
-    const result=document.getElementById("result")
-        .value.trim();
-
-    if(!result){
-        alert("Result डालें");
-        return;
-    }
-
-    if(!confirm(
-        "Result save करके Draw lock करना है?"
-    )) return;
-
-    draw.result=result;
-    draw.status="LOCKED";
-
-    saveData();
-    loadRecords();
-    renderDrawSelect();
-
-    alert("Draw locked 🔒");
-}
-
-function loadRecords(){
-
-    const draw=getSelectedDraw();
-
-    if(!draw){
-
-        document.getElementById("recordTable").innerHTML=
-            "<p>🎯 Draw select करें।</p>";
+        box.innerHTML =
+            '<div class="empty">अभी कोई record नहीं है</div>';
 
         return;
     }
 
-    const records=data.records.filter(
-        r=>r.drawId===draw.id
-    );
+    box.innerHTML = `
 
-    let html=
-    `<p>
-    <b>🎯 ${escapeHtml(draw.name)}</b><br>
-    📅 ${draw.date}<br>
-    Status: ${draw.status==="LOCKED"?"🔒 LOCKED":"🟢 OPEN"}
-    ${draw.result?`<br>🏁 Result: ${escapeHtml(draw.result)}`:""}
-    </p>`;
+    <table>
 
-    if(records.length===0){
+    <tr>
+        <th>Name</th>
+        <th>Date</th>
+        <th>Action</th>
+    </tr>
 
-        html+="<p>अभी कोई record नहीं है।</p>";
+    ${data.draws.map(d => `
 
-    }else{
+    <tr>
 
-        html+=`
-        <table>
-        <tr>
-        <th>Number</th>
-        <th>Party</th>
-        <th>Client</th>
-        <th>Time</th>
-        </tr>
-        `;
-
-        records.forEach(r=>{
-
-            html+=`
-            <tr>
-            <td>${r.number}</td>
-            <td>${escapeHtml(r.party)}</td>
-            <td>${escapeHtml(r.client)}</td>
-            <td>${escapeHtml(r.created)}</td>
-            </tr>
-            `;
-
-        });
-
-        html+="</table>";
-    }
-
-    document.getElementById("recordTable").innerHTML=html;
-}
-
-function addParty(){
-
-    const name=document.getElementById("partyName")
-        .value.trim();
-
-    if(!name){
-        alert("Party name डालें");
-        return;
-    }
-
-    data.parties.push({
-        id:Date.now(),
-        name:name
-    });
-
-    document.getElementById("partyName").value="";
-
-    saveData();
-    renderParties();
-}
-
-function renderParties(){
-
-    const box=document.getElementById("partyList");
-
-    box.innerHTML=
-        data.parties.map(p=>
-        `<p>👥 ${escapeHtml(p.name)}</p>`
-        ).join("")
-        || "<p>No parties</p>";
-}
-
-function addClient(){
-
-    const name=document.getElementById("clientName")
-        .value.trim();
-
-    const phone=document.getElementById("clientPhone")
-        .value.trim();
-
-    if(!name){
-        alert("Client name डालें");
-        return;
-    }
-
-    data.clients.push({
-        id:Date.now(),
-        name:name,
-        phone:phone
-    });
-
-    document.getElementById("clientName").value="";
-    document.getElementById("clientPhone").value="";
-
-    saveData();
-    renderClients();
-}
-
-function renderClients(){
-
-    const box=document.getElementById("clientList");
-
-    box.innerHTML=
-        data.clients.map(c=>
-        `<p>👤 ${escapeHtml(c.name)}
-        ${c.phone?" — "+escapeHtml(c.phone):""}</p>`
-        ).join("")
-        || "<p>No clients</p>";
-}
-
-function showHisab(){
-
-    const date=
-        document.getElementById("hisabDate").value;
-
-    let draws=data.draws;
-
-    if(date){
-        draws=draws.filter(d=>d.date===date);
-    }
-
-    const box=document.getElementById("hisabResult");
-
-    if(draws.length===0){
-        box.innerHTML="<p>इस तारीख का कोई record नहीं है।</p>";
-        return;
-    }
-
-    box.innerHTML=draws.map(d=>{
-
-        const records=data.records.filter(
-            r=>r.drawId===d.id
-        );
-
-        return `
-        <div class="card">
-        <h3>🎯 ${escapeHtml(d.name)}</h3>
-        📅 ${d.date}<br>
-        📌 Status: ${d.status}<br>
-        🏁 Result: ${escapeHtml(d.result||"—")}<br>
-        📋 Records: ${records.length}
-        </div>
-        `;
-
-    }).join("");
-}
-
-function showAllReport(){
-
-    const box=document.getElementById("reportResult");
-
-    box.innerHTML=data.draws.map(d=>{
-
-        const records=data.records.filter(
-            r=>r.drawId===d.id
-        );
-
-        return `
-        <div class="card">
-        <h3>🎯 ${escapeHtml(d.name)}</h3>
-        📅 ${d.date}<br>
-        📌 ${d.status}<br>
-        📋 ${records.length} records
-        </div>
-        `;
-
-    }).join("") || "<p>No data</p>";
-}
-
-function refresh(){
-
-    document.getElementById("drawCount").textContent=
-        data.draws.length;
-
-    document.getElementById("partyCount").textContent=
-        data.parties.length;
-
-    document.getElementById("clientCount").textContent=
-        data.clients.length;
-
-    document.getElementById("recordCount").textContent=
-        data.records.length;
-
-    renderDraws();
-    renderParties();
-    renderClients();
-    renderDrawSelect();
-}
-
-function escapeHtml(value){
-
-    return String(value)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-}
-
-</script>
-
-</body>
-    </html>
+        <td>${escape
