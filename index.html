@@ -313,9 +313,10 @@ function login() {
     const password = document.getElementById("password").value.trim();
 
     if (username === "admin" && password === "admin") {
-        document.getElementById("login").classList.add("hidden");
-        document.getElementById("app").classList.remove("hidden");
+        document.getElementById("login").style.display = "none";
+        document.getElementById("app").style.display = "block";
 
+        refresh();
         show("home");
     } else {
         alert("गलत Username या Password");
